@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { login } from "../../services/auth";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+
+const useStyles = makeStyles((theme) => ({
+  loginform: {
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1),
+      width: 200,
+    },
+  },
+}));
 
 const LoginForm = ({ authenticated, setAuthenticated }) => {
+  const classes = useStyles();
   const [errors, setErrors] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,23 +49,25 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
         ))}
       </div>
       <div>
-        <label htmlFor="email">Email</label>
-        <input
+        <TextField
           name="email"
           type="text"
-          placeholder="Email"
           value={email}
           onChange={updateEmail}
+          id="filled-basic"
+          label="Email"
+          variant="filled"
         />
       </div>
       <div>
-        <label htmlFor="password">Password</label>
-        <input
+        <TextField
           name="password"
           type="password"
-          placeholder="Password"
           value={password}
           onChange={updatePassword}
+          id="filled-basic"
+          label="Password"
+          variant="filled"
         />
         <button type="submit">Login</button>
       </div>
