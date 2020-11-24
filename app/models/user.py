@@ -1,15 +1,24 @@
 from .db import db
+from sqlalchemy import Column, Integer, String, ForeignKey, Text
+from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from .class_user import class_user
 
 class User(db.Model, UserMixin):
   __tablename__ = 'users'
 
-  id = db.Column(db.Integer, primary_key = True)
-  username = db.Column(db.String(40), nullable = False, unique = True)
-  email = db.Column(db.String(255), nullable = False, unique = True)
-  hashed_password = db.Column(db.String(255), nullable = False)
+  id = Column(Integer, primary_key=True)
+  username = Column(String(40), nullable=True)
+  first_name = Column(String(40), nullable=False)
+  last_name = Column(String(40), nullable=False)
+  email = Column(String(255), nullable=False, unique=True)
+  avatar_url = Column(Text, nullable=True)
+  role_id = Column(Integer, ForeignKey('roles.id'), nullable=False)
+  hashed_password = Column(String(255), nullable=False)
 
+  role = relationship('Role', back_populates='user')
+  classroom = relationship('Class', secondary=class_user, back_populates='member')
 
   @property
   def password(self):
