@@ -1,44 +1,80 @@
 from .db import db
-from sqlalchemy import Column, Integer, String, ForeignKey, Text
-from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from .class_user import class_user
+from .classroom_user import classroom_user
+from .group_student import group_student
+
 
 class User(db.Model, UserMixin):
-  __tablename__ = 'users'
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(40), nullable=True)
+    first_name = db.Column(db.String(40), nullable=False)
+    last_name = db.Column(db.String(40), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
+    avatar_url = db.Column(db.Text, nullable=True)
+    hashed_password = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(50), nullable=False)
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(
+        db.DateTime,
+        server_default=db.func.now(),
+        server_onupdate=db.func.now()
+    )
 
-  id = Column(Integer, primary_key=True)
-  username = Column(String(40), nullable=True)
-  first_name = Column(String(40), nullable=False)
-  last_name = Column(String(40), nullable=False)
-  email = Column(String(255), nullable=False, unique=True)
-  avatar_url = Column(Text, nullable=True)
-  role_id = Column(Integer, ForeignKey('roles.id'), nullable=False)
-  hashed_password = Column(String(255), nullable=False)
+    __mapper_args__ = {
+        'polymorphic_on': role,
+        'polymorphic_identity': 'user'
+    }
 
-  role = relationship('Role', back_populates='user')
-  classroom = relationship('Class', secondary=class_user, back_populates='member')
-  student_question = relationship('Question', back_populates="student")
-  answer = relationship('Answer', back_populates="instructor")
+    @property
+    def password(self):
+        return self.hashed_password
 
-  @property
-  def password(self):
-    return self.hashed_password
+    @password.setter
+    def password(self, password):
+        self.hashed_password = generate_password_hash(password)
 
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
-  @password.setter
-  def password(self, password):
-    self.hashed_password = generate_password_hash(password)
-
-
-  def check_password(self, password):
-    return check_password_hash(self.password, password)
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email
+        }
 
 
-  def to_dict(self):
-    return {
-      "id": self.id,
-      "username": self.username,
-      "email": self.email
+class Instructor(User):
+    answers = db.relationship('Answer', back_populates='instructor')
+    classrooms = db.relationship(
+        'Classroom',
+        secondary=classroom_user,
+        back_populates='instructors'
+    )
+    __mapper_args__ = {
+        'polymorphic_identity': 'instructor'
+    }
+
+
+class Student(User):
+    check_ins = db.relationship('CheckIn', back_populates='student')
+    classrooms = db.relationship(
+        'Classroom',
+        secondary=classroom_user,
+        back_populates='students'
+    )
+    questions = db.relationship(
+        'Question',
+        foreign_keys='Question.student_id',
+        back_populates="student"
+    )
+    groups = db.relationship(
+        'Group',
+        secondary=group_student,
+        back_populates="members"
+    )
+    __mapper_args__ = {
+        'polymorphic_identity': 'student'
     }
