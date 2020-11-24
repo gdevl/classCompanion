@@ -5,10 +5,8 @@ Defines the join table between users and classes
 """
 
 
-class_user = db.Table(
-    'class_user',
+classroom_user = db.Table(
+    'classroom_user',
     db.Column('class_id', db.Integer, db.ForeignKey('classes.id')),
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
 )
-
-
