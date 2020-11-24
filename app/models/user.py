@@ -19,6 +19,8 @@ class User(db.Model, UserMixin):
 
   role = relationship('Role', back_populates='user')
   classroom = relationship('Class', secondary=class_user, back_populates='member')
+  student_question = relationship('Question', back_populates="student")
+  answer = relationship('Answer', back_populates="instructor")
 
   @property
   def password(self):

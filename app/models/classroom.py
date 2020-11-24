@@ -1,5 +1,6 @@
 from .db import db
 from sqlalchemy import Column, String, Integer, Text, Boolean
+from sqlalchemy.orm import relationship
 from .class_user import class_user
 
 class Classroom(db.Model):
@@ -14,4 +15,5 @@ class Classroom(db.Model):
     meeting_pw = Column(String(255), nullable=True)
     active = Column(Boolean, default=True)
 
-    member = relationship('User', secondary=class_user, back_populates='classroom')
+    member = relationship("User", secondary=class_user, back_populates="classroom")
+    question = relationship("Question", back_populates="classroom")

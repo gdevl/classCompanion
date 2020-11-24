@@ -1,5 +1,5 @@
 from .db import db
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 
@@ -14,6 +14,7 @@ class Question(db.Model):
     class_id = Column(Integer, ForeignKey("classes.id"))
     resolved = Column(Boolean, default=False)
 
-    student = relationship("User", back_populates='question')
-    instructor = relationship("User", back_populates='question')
+    student = relationship("User", back_populates="student_question")
+    # instructor = relationship("User", back_populates="instructor_question")
     classroom = relationship("Classroom", back_populates="question")
+    answer = relationship("Answer", back_populates="question")
