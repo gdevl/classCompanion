@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash
-from app.models import db, Instructor
+from app.models import db, User, Instructor, Student
 
 # Adds a demo user, you can add other users here if you want
 
@@ -12,10 +12,17 @@ def seed_users():
         last_name="mo",
         email='demo@aa.io',
         password='password',
-        role='instructor'
     )
 
-    db.session.add(demo)
+    demo_student = Student(
+        username='Student',
+        first_name="Stu",
+        last_name="Dent",
+        email='student@aa.io',
+        password='password',
+    )
+
+    db.session.add_all([demo, demo_student])
 
     db.session.commit()
 
@@ -29,13 +36,11 @@ def truncate_tables():
     db.session.execute(
         '''TRUNCATE
         users
-        , instructors
-        , students
         , classroom_user
         , questions
         , answers
         , classes
-        , checkins
+        , check_ins
         , group_students
         , groups;'''
     )

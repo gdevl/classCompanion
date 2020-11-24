@@ -8,6 +8,12 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
     active = db.Column(db.Boolean, default=True)
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(
+        db.DateTime,
+        server_default=db.func.now(),
+        server_onupdate=db.func.now()
+    )
 
     members = db.relationship(
-        'Student', secondary=group_student, back_populates="group")
+        'Student', secondary=group_student, back_populates="groups")

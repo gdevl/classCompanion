@@ -13,17 +13,28 @@ class Classroom(db.Model):
     meeting_link = db.Column(db.String(255), nullable=True)
     meeting_pw = db.Column(db.String(255), nullable=True)
     active = db.Column(db.Boolean, default=True)
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(
+        db.DateTime,
+        server_default=db.func.now(),
+        server_onupdate=db.func.now()
+    )
 
-    members = db.relationship(
+    students = db.relationship(
         "Student",
         secondary=classroom_user,
-        back_populates="classroom"
+        back_populates="classrooms"
     )
-    question = db.relationship(
+    questions = db.relationship(
         "Question",
         back_populates="classroom"
     )
-    check_in = db.relationship(
+    check_ins = db.relationship(
         "CheckIn",
         back_populates="classroom"
+    )
+    instructors = db.relationship(
+        "Instructor",
+        secondary=classroom_user,
+        back_populates="classrooms"
     )
