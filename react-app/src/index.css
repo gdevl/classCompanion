@@ -1,1 +1,30 @@
 /* TODO Add site wide styles */
+html,
+body {
+  /* background-color: #f6f5f7; */
+  /* background-color: #457B9D; */
+  box-sizing: border-box;
+  height: 100%;
+  padding: 10px;
+  margin: 0px;
+}
+
+#root {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* display: grid;
+    grid-gap: 3px;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 60px auto 60px;
+    grid-template-areas:
+        "h h h h h h h h h h h h"
+        "m c c c c c c c c c c c"
+        "f f f f f f f f f f f f"; */
+}
+
+.makeStyles-loginform-1 {
+    /* outline: 1px solid yellow; */
+}
