@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import { authenticate } from "./services/auth";
+import EditProfile from './components/edit_profile/EditProfile'
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -53,6 +54,8 @@ function App() {
       >
         <User />
       </ProtectedRoute>
+      {/* remove 'test' route below after finishing modal */}
+      <Route path='/test' exact={true}><EditProfile /></Route>
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <h1>My Home Page</h1>
       </ProtectedRoute>
