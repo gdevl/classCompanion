@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import { authenticate } from "./services/auth";
+import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -28,9 +29,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <ProtectedRoute authenticated={authenticated}>
+      {/* <ProtectedRoute authenticated={authenticated}>
         <NavBar setAuthenticated={setAuthenticated} />
-      </ProtectedRoute>
+      </ProtectedRoute> */}
       <Route path="/login" exact={true}>
         <LoginForm
           authenticated={authenticated}
@@ -54,8 +55,9 @@ function App() {
         <User />
       </ProtectedRoute>
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-        <h1>My Home Page</h1>
+        <InstructorClassrooms />
       </ProtectedRoute>
+
     </BrowserRouter>
   );
 }
