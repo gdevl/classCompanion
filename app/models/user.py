@@ -48,7 +48,6 @@ class User(db.Model, UserMixin):
             "last_name": self.last_name,
             "email": self.email,
             "avatar_url": self.avatar_url,
-            "classes": self.classrooms,
         }
 
     def get_user_classrooms(self):

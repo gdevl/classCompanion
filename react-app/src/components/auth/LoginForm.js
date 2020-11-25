@@ -28,6 +28,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
   const [errors, setErrors] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [needsSignUp, setNeedsSignUp] = useState(false);
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -37,6 +38,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
     } else {
       setErrors(user.errors);
     }
+    console.log("user: ", user);
   };
 
   const updateEmail = (e) => {
@@ -46,6 +48,15 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
   const updatePassword = (e) => {
     setPassword(e.target.value);
   };
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    setNeedsSignUp(true);
+  };
+
+  if (needsSignUp) {
+    return <Redirect to="/signup" />;
+  }
 
   if (authenticated) {
     return <Redirect to="/" />;
@@ -96,6 +107,18 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
             startIcon={<VerifiedUserIcon />}
           >
             Login
+          </Button>
+        </Box>
+        <Box>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            className={classes.button}
+            startIcon={<VerifiedUserIcon />}
+            onClick={handleSignUp}
+          >
+            Signup
           </Button>
         </Box>
       </form>
