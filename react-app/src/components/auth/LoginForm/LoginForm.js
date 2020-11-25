@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { login } from "../../services/auth";
+import { login } from "../../../services/auth";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import Hero from "../Hero";
+import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+import LoginFormHeader from "./LoginFormHeader";
 
 const useStyles = makeStyles((theme) => ({
   loginform: {
@@ -65,7 +66,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
   return (
     <>
       <Box>
-        <Hero />
+        <LoginFormHeader />
       </Box>
       <form className={classes.loginform} onSubmit={onLogin}>
         <Box>
@@ -106,19 +107,19 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
             className={classes.button}
             startIcon={<VerifiedUserIcon />}
           >
-            Login
+            Log In
           </Button>
         </Box>
         <Box>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             size="large"
             className={classes.button}
-            startIcon={<VerifiedUserIcon />}
+            startIcon={<SupervisedUserCircleIcon />}
             onClick={handleSignUp}
           >
-            Signup
+            Register
           </Button>
         </Box>
       </form>
