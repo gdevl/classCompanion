@@ -97,6 +97,11 @@ const useStyles = makeStyles((theme) => ({
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+  },
+
+  transferListGridContainer: {
+    margin: 'auto',
+    backgroundColor: 'white'
   }
 
 }));
@@ -116,12 +121,63 @@ const InstructorClassrooms = () => {
   const [classDescription, setClassDescription] = useState('')
   const [classTime, setClassTime] = useState('')
   const [addStudentModalOpen, setAddStudentModalOpen] = useState(false)
-  // const [checked, setChecked] = useState([]);
+  const [checked, setChecked] = useState([]);
   // const [left, setLeft] = useState([0, 1, 2, 3]);
   // const [right, setRight] = useState([4, 5, 6, 7]);
+  const [left, setLeft] = useState(['Ryan', 'Gabe']);
+  const [right, setRight] = useState(['Ranson', 'Warren']);
+  const [transferListDisplay, setTransferListDisplay] = useState('none')
+
+  // FUNCTIONALITY FOR THE TRANSFER LIST --------------------------------------------------------
+
+  function not(a, b) {
+    return a.filter((value) => b.indexOf(value) === -1);
+  }
+
+  function intersection(a, b) {
+    return a.filter((value) => b.indexOf(value) !== -1);
+  }
+
+  const leftChecked = intersection(checked, left);
+  const rightChecked = intersection(checked, right);
+
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
+  const handleAllRight = () => {
+    setRight(right.concat(left));
+    setLeft([]);
+  };
+
+  const handleCheckedRight = () => {
+    setRight(right.concat(leftChecked));
+    setLeft(not(left, leftChecked));
+    setChecked(not(checked, leftChecked));
+  };
+
+  const handleCheckedLeft = () => {
+    setLeft(left.concat(rightChecked));
+    setRight(not(right, rightChecked));
+    setChecked(not(checked, rightChecked));
+  };
+
+  const handleAllLeft = () => {
+    setLeft(left.concat(right));
+    setRight([]);
+  };
 
 
-
+  // ------------------------------------------------------------------------------
 
   const handleDeactivateConfirmation = () => {
     setDialogOpen(true);
@@ -156,7 +212,7 @@ const InstructorClassrooms = () => {
   const handleInputChange = (e) => {
     if(e.target.id === 'name-input') {
       setClassName(e.target.value)
-      console.log(className)
+      // console.log(className)
     } else if(e.target.id === 'description-input') {
       setClassDescription(e.target.value)
     } else {
@@ -203,6 +259,10 @@ const InstructorClassrooms = () => {
   }, [])
 
 
+
+  // CONTENT OF THE 'CREATE A CLASS' MODAL -------------------------------------------------------------------------------------------------------------------------------------
+
+
   const addClassBody = (
     <div className={classes.classModal}>
       <h2 id="simple-modal-title">Class Info:</h2>
@@ -233,16 +293,41 @@ const InstructorClassrooms = () => {
     </div>
   );
 
-  const addStudentBody = (
-    <div className={classes.classModal}>
-      <h2 id="simple-modal-title">Class Info:</h2>
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    </div>
+
+  // FUNCTION THAT GENERATES THE TRANSFER LIST CONTENT---------------------------------------------------------------------------------------------------------------------------------
+
+  const customList = (items) => (
+    <Paper className={classes.enrollStudentsTransferList}>
+      <List dense component="div" role="list">
+        {items.map((value) => {
+          const labelId = `transfer-list-item-${value}-label`;
+
+          return (
+            <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
+              <ListItemIcon>
+                <Checkbox
+                  checked={checked.indexOf(value) !== -1}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{ 'aria-labelledby': labelId }}
+                />
+              </ListItemIcon>
+              {/* <ListItemText id={labelId} primary={`List item ${value + 1}`} /> */}
+              <ListItemText id={labelId} primary={value} />
+            </ListItem>
+          );
+        })}
+        <ListItem />
+      </List>
+    </Paper>
   );
 
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-  console.log(classrooms)
+  // console.log(classrooms)
   return (
     <>
       <div className={classes.addClassContainer}>
@@ -260,6 +345,7 @@ const InstructorClassrooms = () => {
           {classrooms.map((classroom, idx) => {
             // console.log('CLASSROOM', classroom.classSize)
             return (
+              <>
               <Card className={classes.paper}>
                 <CardContent className={classes.cardcontent}>
                   <div className="classroom-data">
@@ -277,9 +363,15 @@ const InstructorClassrooms = () => {
                 </CardContent>
                 <CardActions className="classroom-buttons-container">
                   <Button variant="contained" color="primary" style={{ color: "white" }} size="small">View</Button>
-                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small">Enroll Students</Button>
+                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
                   <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleDeactivateConfirmation}>Deactivate</Button>
                 </CardActions>
+              </Card>
+
+
+
+                {/* CODE FOR THE DELETE CLASS DIALOG BOX */}
+
                 <Dialog
                   open={dialogOpen}
                   onClose={handleDialogClose}
@@ -296,6 +388,13 @@ const InstructorClassrooms = () => {
                     </Button>
                   </DialogActions>
                 </Dialog>
+
+
+
+
+                {/* CODE FOR THE ADD A CLASS MODAL */}
+
+
                 <Modal
                   open={modalOpen}
                   onClose={handleCloseModal}
@@ -304,15 +403,67 @@ const InstructorClassrooms = () => {
                 >
                   {addClassBody}
                 </Modal>
-                <Modal
-                  open={addStudentModalOpen}
-                  onClose={handleCloseStudentModal}
-                  aria-labelledby="simple-modal-title"
-                  aria-describedby="simple-modal-description"
-                >
-                  {addStudentBody}
+
+
+
+
+
+                  {/* CODE FOR THE TRANSFER LIST AND MODAL THAT CONTAINS IT */}
+
+                  <Modal
+                    open={addStudentModalOpen}
+                    onClose={handleCloseStudentModal}
+                  >
+                   <Grid container spacing={2} justify="center" alignItems="center" className={classes.transferListGridContainer}>
+                    <Grid item>{customList(left)}</Grid>
+                    <Grid item>
+                      <Grid container direction="column" alignItems="center">
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          className={classes.button}
+                          onClick={handleAllRight}
+                          disabled={left.length === 0}
+                          aria-label="move all right"
+                        >
+                          ≫
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          className={classes.button}
+                          onClick={handleCheckedRight}
+                          disabled={leftChecked.length === 0}
+                          aria-label="move selected right"
+                        >
+                          &gt;
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          className={classes.button}
+                          onClick={handleCheckedLeft}
+                          disabled={rightChecked.length === 0}
+                          aria-label="move selected left"
+                        >
+                          &lt;
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          className={classes.button}
+                          onClick={handleAllLeft}
+                          disabled={right.length === 0}
+                          aria-label="move all left"
+                        >
+                          ≪
+                        </Button>
+                      </Grid>
+                    </Grid>
+                    <Grid item>{customList(right)}</Grid>
+                  </Grid>
                 </Modal>
-              </Card>
+              </>
             )
           })}
       </div>
