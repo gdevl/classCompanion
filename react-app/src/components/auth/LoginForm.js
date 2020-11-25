@@ -69,7 +69,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
             type="text"
             value={email}
             onChange={updateEmail}
-            id="filled-basic"
+            id="email"
             label="Email"
             variant="filled"
           />
@@ -81,7 +81,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
             type="password"
             value={password}
             onChange={updatePassword}
-            id="filled-basic"
+            id="password"
             label="Password"
             variant="filled"
           />

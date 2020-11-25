@@ -16,3 +16,11 @@ class CheckIn(db.Model):
 
     student = db.relationship('Student', back_populates='check_ins')
     classroom = db.relationship('Classroom', back_populates='check_ins')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "student_id": self.student_id,
+            "class_id": self.class_id,
+            "created_on": self.created_on
+        }

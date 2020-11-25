@@ -38,3 +38,24 @@ class Classroom(db.Model):
         secondary=classroom_user,
         back_populates="classrooms"
     )
+    groups = db.relationship(
+        "Group",
+        back_populates="classroom"
+    )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "daily_objective": self.daily_objective,
+            "description": self.description,
+            "meeting_link": self.meeting_link,
+            "meeting_pw": self.meeting_pw,
+            "active": self.active,
+            "image_url": self.class_image_url,
+            "questions": self.questions,
+            "instructors": self.instructors,
+            "students": self.students,
+            "groups": self.groups,
+            "check_ins": self.check_ins
+        }

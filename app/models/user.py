@@ -27,6 +27,8 @@ class User(db.Model, UserMixin):
         'polymorphic_identity': 'user'
     }
 
+    # define some instance methods for getting the stuff we want
+
     @property
     def password(self):
         return self.hashed_password
@@ -42,7 +44,16 @@ class User(db.Model, UserMixin):
         return {
             "id": self.id,
             "username": self.username,
-            "email": self.email
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "avatar_url": self.avatar_url,
+            "classes": self.classrooms,
+        }
+
+    def get_user_classrooms(self):
+        return {
+            "classrooms": [self.classrooms],
         }
 
 
