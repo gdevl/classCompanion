@@ -9,6 +9,7 @@ import UsersList from "./components/UsersList";
 import User from "./components/User";
 import { authenticate } from "./services/auth";
 import EditProfile from './components/edit_profile/EditProfile'
+import Footer from './components/footer/Footer'
 
 const siteTitle = "ClassCorral";
 
@@ -58,7 +59,10 @@ function App() {
         <User />
       </ProtectedRoute>
       {/* remove 'test' route below after finishing modal */}
-      <Route path='/test' exact={true}><EditProfile /></Route>
+      <Route path='/test' exact={true}>
+        <EditProfile />
+        <Footer />
+      </Route>
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <div className="outlined">My Home Page</div>
       </ProtectedRoute>
