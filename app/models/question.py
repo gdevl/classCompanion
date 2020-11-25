@@ -31,3 +31,15 @@ class Question(db.Model):
         "Answer",
         back_populates="question"
     )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "student_id": self.student_id,
+            "class_id": self.class_id,
+            "resolved": self.resolved,
+            "student": self.student,
+            "classroom": self.classroom,
+            "answers": self.answers
+        }

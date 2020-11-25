@@ -18,3 +18,12 @@ class Answer(db.Model):
 
     question = db.relationship("Question", back_populates="answers")
     instructor = db.relationship("Instructor", back_populates="answers")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "question_id": self.question_id,
+            "instructor_id": self.instructor_id,
+            "active": self.active
+        }
