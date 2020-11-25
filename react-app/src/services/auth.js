@@ -37,7 +37,8 @@ export const signUp = async (
   first_name,
   last_name,
   email,
-  password
+  password,
+  role
 ) => {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
@@ -50,6 +51,7 @@ export const signUp = async (
       last_name,
       email,
       password,
+      role,
     }),
   });
   const result = await response.json();

@@ -5,6 +5,10 @@ import SignUpFormHeader from "./SignUpFormHeader";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 
@@ -32,6 +36,7 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [role, setRole] = useState("");
   const [signedUp, setSignedUp] = useState(false);
 
   const onSignUp = async (e) => {
@@ -42,7 +47,8 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
         first_name,
         last_name,
         email,
-        password
+        password,
+        role
       );
       if (!user.errors) {
         setAuthenticated(true);
@@ -77,6 +83,10 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
     setRepeatPassword(e.target.value);
   };
 
+  const updateRole = (e) => {
+    setRole(e.target.value);
+  };
+
   if (authenticated) {
     return <Redirect to="/" />;
   }
@@ -96,15 +106,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             <div>{error}</div>
           ))}
         </Box>
-        {/* <div>
-          <label>User Name</label>
-          <input
-            type="text"
-            name="username"
-            onChange={updateUsername}
-            value={username}
-          ></input>
-        </div> */}
         <Box>
           <TextField
             className={classes.inputs}
@@ -117,15 +118,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             variant="filled"
           />
         </Box>
-        {/* <div>
-          <label>First Name</label>
-          <input
-            type="text"
-            name="first_name"
-            onChange={updateFirstName}
-            value={first_name}
-          ></input>
-        </div> */}
         <Box>
           <TextField
             className={classes.inputs}
@@ -138,15 +130,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             variant="filled"
           />
         </Box>
-        {/* <div>
-          <label>Last Name</label>
-          <input
-            type="text"
-            name="last_name"
-            onChange={updateLastName}
-            value={last_name}
-          ></input>
-        </div> */}
         <Box>
           <TextField
             className={classes.inputs}
@@ -159,15 +142,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             variant="filled"
           />
         </Box>
-        {/* <div>
-          <label>Email</label>
-          <input
-            type="text"
-            name="email"
-            onChange={updateEmail}
-            value={email}
-          ></input>
-        </div> */}
         <Box>
           <TextField
             className={classes.inputs}
@@ -180,15 +154,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             variant="filled"
           />
         </Box>
-        {/* <div>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            onChange={updatePassword}
-            value={password}
-          ></input>
-        </div> */}
         <Box>
           <TextField
             className={classes.inputs}
@@ -201,16 +166,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             variant="filled"
           />
         </Box>
-        {/* <div>
-          <label>Repeat Password</label>
-          <input
-            type="password"
-            name="repeat_password"
-            onChange={updateRepeatPassword}
-            value={repeatPassword}
-            required={true}
-          ></input>
-        </div> */}
         <Box>
           <TextField
             className={classes.inputs}
@@ -222,7 +177,20 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             variant="filled"
           />
         </Box>
-        {/* <button type="submit">Sign Up</button> */}
+        <Box>
+          <FormControl variant="filled" className={classes.formControl}>
+            <InputLabel id="role-select">Your Role</InputLabel>
+            <Select
+              labelId="role-select"
+              id="user_role"
+              value={role}
+              onChange={(e) => updateRole(e)}
+            >
+              <MenuItem value={"student"}>Student</MenuItem>
+              <MenuItem value={"instructor"}>Instructor</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         <Box>
           <Button
             variant="contained"
