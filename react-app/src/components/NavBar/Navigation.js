@@ -12,6 +12,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import LogoutButton from "../auth/LogoutButton";
+import { logout } from "../../services/auth";
 
 const useStyles = makeStyles((theme) => ({
   navigation: {
@@ -26,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navigation = ({ title }) => {
+const Navigation = ({ setAuthenticated }) => {
+  const { user } = useParams();
   let { userSlug } = useParams();
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
@@ -45,12 +48,19 @@ const Navigation = ({ title }) => {
     setAnchorEl(null);
   };
 
+  const handleLogout = async (e) => {
+    await logout();
+    setAuthenticated(false);
+  };
+
+  console.log(user);
+
   return (
     <div className={classes.navigation}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title} align="center">
-            {userSlug}
+            {user}
           </Typography>
           {auth && (
             <div>
@@ -78,8 +88,8 @@ const Navigation = ({ title }) => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>My Profile</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
           )}
