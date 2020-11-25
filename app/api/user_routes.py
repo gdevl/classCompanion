@@ -23,3 +23,8 @@ def user(id):
 @login_required
 def defaultView():
     return current_user.to_dict()
+
+
+# @user_routes.route('/me', methods=["PUT"])
+# @login_required
+# def update_user(id):
