@@ -25,6 +25,6 @@ body {
         "f f f f f f f f f f f f"; */
 }
 
-.makeStyles-loginform-1 {
-    /* outline: 1px solid yellow; */
+.outlined {
+  outline: 1px solid red;
 }

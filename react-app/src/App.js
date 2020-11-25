@@ -3,10 +3,13 @@ import { BrowserRouter, Route } from "react-router-dom";
 import LoginForm from "./components/auth/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import NavBar from "./components/NavBar";
+import Navigation from "./components/NavBar/Navigation";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import { authenticate } from "./services/auth";
+
+const siteTitle = "ClassCorral";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -29,7 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       <ProtectedRoute authenticated={authenticated}>
-        <NavBar setAuthenticated={setAuthenticated} />
+        <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
       </ProtectedRoute>
       <Route path="/login" exact={true}>
         <LoginForm
@@ -54,7 +57,7 @@ function App() {
         <User />
       </ProtectedRoute>
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-        <h1>My Home Page</h1>
+        <div className="outlined">My Home Page</div>
       </ProtectedRoute>
     </BrowserRouter>
   );
