@@ -129,8 +129,8 @@ const EditProfile = () => {
             >
                 <Fade in={open}>
                     <Typography variant='h5'>
-                        {/* <form className={classes.paper} noValidate autoComplete='off' onSubmit={updateProfile}> */}
-                        <form className={classes.paper} noValidate onSubmit={updateProfile} autoComplete='off'>
+                        <form className={classes.paper} noValidate autoComplete='off' onSubmit={updateProfile}>
+                            {/* <form className={classes.paper} noValidate autoComplete='off'> */}
                             <Button size='large' variant='contained' onClick={handleClose} className={classes.exitBtn} variant='outlined'>x</Button>
                             <Avatar alt="" src={avatarUrl} className={classes.avatar} size='large'></Avatar>
                             <Typography variant='h4' className={classes.editHeading}>
