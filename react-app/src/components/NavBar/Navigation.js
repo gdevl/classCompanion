@@ -53,14 +53,12 @@ const Navigation = ({ setAuthenticated }) => {
     setAuthenticated(false);
   };
 
-  console.log(user);
-
   return (
     <div className={classes.navigation}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title} align="center">
-            {user}
+            User
           </Typography>
           {auth && (
             <div>
