@@ -60,6 +60,4 @@ class Classroom(db.Model):
             "groups": [
                 group.to_dict() for group in self.groups if group.active],
             "check_ins": [check_in.to_dict() for check_in in self.check_ins],
-            "answers": [
-                answers.to_dict() for answer in self.answers if answer.active]
         }

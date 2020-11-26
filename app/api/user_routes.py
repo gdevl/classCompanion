@@ -24,11 +24,6 @@ def classes(id):
     user = User.query.get(id)
     classrooms = user.get_user_classrooms()
 
-    # data = {
-    #     "classes": [classroom.to_dict() for classroom in classrooms],
-    #     "students": {},
-    #     "groups": {}
-    # }
     return {"classes": classrooms}
 
 
@@ -36,8 +31,3 @@ def classes(id):
 @login_required
 def defaultView():
     return current_user.id.to_dict()
-
-
-# @user_routes.route('/me', methods=["PUT"])
-# @login_required
-# def update_user(id):
