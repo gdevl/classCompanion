@@ -56,7 +56,8 @@ function App() {
         <User />
       </ProtectedRoute>
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-        <div className="outlined">My Home Page</div>
+        {/* <div className="outlined">My Home Page</div> */}
+        <User />
       </ProtectedRoute>
     </BrowserRouter>
   );
