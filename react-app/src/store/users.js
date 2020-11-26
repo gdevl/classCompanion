@@ -1,8 +1,32 @@
-// SET_CURRENT_USER
-// SET_ACTIVE_CLASS
-// SET_ACTIVE_CLASS_DETAILS
+export const SET_CURRENT_USER = "classCorral/users/user";
+export const SET_CURRENT_CLASSROOM = "classCorral/users/classroom";
 
-export const SET_CURRENT_USER = "SET_CURRENT_USER";
-export const SET_ACTIVE_CLASS = "SET_ACTIVE_CLASS";
+export const setCurrentUser = (user) => {
+  return { type: SET_CURRENT_USER, user };
+};
 
-export const setCurrentUser = (state) => {};
+export const setActiveClassRoom = (classroom) => {
+  return {
+    type: SET_CURRENT_CLASSROOM,
+    classroom,
+  };
+};
+
+export default function reducer(state = {}, action) {
+  switch (action.type) {
+    case SET_CURRENT_USER: {
+      return {
+        ...state,
+        current_user: action.user,
+      };
+    }
+    case SET_CURRENT_CLASSROOM: {
+      return {
+        ...state,
+        active_class: action.classroom,
+      };
+    }
+    default:
+      return state;
+  }
+}

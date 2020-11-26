@@ -48,11 +48,13 @@ class User(db.Model, UserMixin):
             "last_name": self.last_name,
             "email": self.email,
             "avatar_url": self.avatar_url,
+            "role": self.role,
         }
 
     def get_user_classrooms(self):
         return {
-            "classrooms": [self.classrooms],
+            "classrooms": [
+                classroom.to_dict() for classroom in self.classrooms],
         }
 
 

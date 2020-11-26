@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from flask_login import login_required, current_user
-from app.models import User
+from app.models import User, Classroom
 
 user_routes = Blueprint('users', __name__)
 
@@ -19,12 +19,15 @@ def user(id):
     return user.to_dict()
 
 
+@user_routes.route('/<int:id>/classrooms')
+def classes(id):
+    user = User.query.get(id)
+    classrooms = user.get_user_classrooms()
+
+    return {"classes": classrooms}
+
+
 @user_routes.route('/me')
 @login_required
 def defaultView():
-    return current_user.to_dict()
-
-
-# @user_routes.route('/me', methods=["PUT"])
-# @login_required
-# def update_user(id):
+    return current_user.id.to_dict()
