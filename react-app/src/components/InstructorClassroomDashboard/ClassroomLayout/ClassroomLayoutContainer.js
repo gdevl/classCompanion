@@ -94,10 +94,10 @@ const groups = {
   grouped: false,
   groupSize: 3,
 }
-export default function ClassroomLayoutContainer() {
+export default function ClassroomLayoutContainer({ props }) {
   return (
     <Box className='classroomLayoutContainer'>
-      <ClassroomLayout props={{users, groups}} />
+      <ClassroomLayout props={ props } />
     </Box>
   )
 }

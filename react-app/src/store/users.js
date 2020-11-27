@@ -6,7 +6,7 @@ export const setCurrentUser = (user) => {
   return { type: SET_CURRENT_USER, user };
 };
 
-export const setActiveClassRoom = (classroom) => {
+export const setCurrentClassRoom = (classroom) => {
   return {
     type: SET_CURRENT_CLASSROOM,
     classroom,
@@ -46,7 +46,7 @@ export default function reducer(state = {}, action) {
     case SET_CURRENT_CLASSROOM: {
       return {
         ...state,
-        active_class: action.classroom,
+        current_class: action.classroom,
       };
     }
     case SET_CURRENT_CLASSROOMS: {
