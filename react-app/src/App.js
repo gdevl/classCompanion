@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Box from '@material-ui/core/Box';
 import { useDispatch } from "react-redux";
 import { setCurrentUser, fetchClassrooms, setUserClasses } from "../src/store/users";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -71,11 +72,11 @@ function App() {
       </ProtectedRoute>
 
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-      <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-
-        <InstructorLayout />
-
-        <Footer />
+        <Box className='appConainer'>
+          <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
+          <InstructorLayout />
+          <Footer />
+        </Box>
       </ProtectedRoute>
 
       {/* <ProtectedRoute authenticated={authenticated}>
