@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Typography, Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -12,12 +12,11 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
     },
     paper: {
-        backgroundColor: theme.palette.background.paper,
-        // backgroundColor: 'white',
-        border: '2px solid #000',
+        backgroundColor: 'white',
+        outline: '0',
+        border: '2px solid white',
         borderRadius: '5px',
         boxShadow: theme.shadows[5],
-        // padding: theme.spacing(4, 10, 4),
         paddingLeft: '5rem',
         paddingRight: '5rem',
         paddingTop: '2rem',
@@ -25,16 +24,16 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+
+    },
+    editHeading: {
+        marginBottom: '1rem'
     },
     element: {
         padding: '1rem',
     },
-    icon: {
-
-
-    },
     button: {
-        marginTop: '1.5rem',
+        marginTop: '2rem',
     },
     btnContainer: {
         position: 'relative',
@@ -43,15 +42,44 @@ const useStyles = makeStyles((theme) => ({
     },
     exitBtn: {
         position: 'relative',
-        bottom: '2rem',
-        left: '9.6rem',
+        bottom: '1.95rem',
+        left: '8.5rem',
+        border: 'none',
+        paddingRight: '0px',
+        paddingLeft: '0px',
+    },
+    avatar: {
+        marginBottom: '1rem',
+        width: theme.spacing(7),
+        height: theme.spacing(7)
     }
 }));
 
-function EditProfile() {
+const EditProfile = () => {
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [avatarUrl, setAvatarUrl] = useState("");
+
+    // access current_user id object from redux store
+    // ---------------------------------------
+    const id = localStorage.getItem('USERID')
+    // ---------------------------------------
+    //check form submission for updateProfile call
+    const updateProfile = async (username, email, password, avatarUrl) => {
+        const response = await fetch(`/api/users/${id}/update`, {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password, avatarUrl }),
+
+        });
+        if (response.ok) {
+            window.location.reload()
+        }
+    };
 
     const handleOpen = () => {
         setOpen(true);
@@ -60,6 +88,25 @@ function EditProfile() {
     const handleClose = () => {
         setOpen(false);
     };
+
+
+    const updateUsername = (e) => {
+        setUsername(e.target.value);
+    };
+
+    const updateEmail = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const updatePassword = (e) => {
+        setPassword(e.target.value);
+    };
+
+    const updateAvatarUrl = (e) => {
+        setAvatarUrl(e.target.value);
+    };
+
+
 
     return (
 
@@ -81,43 +128,21 @@ function EditProfile() {
                 }}
             >
                 <Fade in={open}>
-                    <div className={classes.paper}>
-                        {/* <div className={classes.btnContainer}> */}
-                        <Button variant='contained' onClick={handleClose} className={classes.exitBtn} variant='outlined'>x</Button>
-                        {/* </div> */}
-                        <Typography variant='h4'>
-                            Edit Profile
-                        </Typography>
-                        <div className={classes.element}>
-                            <Typography variant='h5'>
-                                <form className={classes.root} noValidate autoComplete='off'>
-                                    <TextField id='standard-basic' label='Full Name' />
-                                </form>
+                    <Typography variant='h5'>
+                        <form className={classes.paper} noValidate autoComplete='off' onSubmit={updateProfile}>
+                            {/* <form className={classes.paper} noValidate autoComplete='off'> */}
+                            <Button size='large' variant='contained' onClick={handleClose} className={classes.exitBtn} variant='outlined'>x</Button>
+                            <Avatar alt="" src={avatarUrl} className={classes.avatar} size='large'></Avatar>
+                            <Typography variant='h4' className={classes.editHeading}>
+                                Edit Profile
                             </Typography>
-                        </div>
-                        <div className={classes.element}>
-                            <Typography variant='h5'>
-                                <form className={classes.root} noValidate autoComplete='off'>
-                                    <TextField id='standard-basic' label='Email' />
-                                </form>
-                            </Typography>
-                        </div>
-                        <div className={classes.element}>
-                            <Typography variant='h5'>
-                                <form className={classes.root} noValidate autoComplete='off'>
-                                    <TextField id='standard-basic' label='Password' />
-                                </form>
-                            </Typography>
-                        </div>
-                        <div className={classes.element}>
-                            <Typography variant='h5'>
-                                <form className={classes.root} noValidate autoComplete='off'>
-                                    <TextField id='standard-basic' label='Avatar URL' />
-                                </form>
-                            </Typography>
-                        </div>
-                        <Button variant='contained' color='primary' className={classes.button}>Submit</Button>
-                    </div>
+                            <TextField id='standard-basic' value={username} onChange={updateUsername} label='Username' autoFocus />
+                            <TextField id='standard-basic' value={email} onChange={updateEmail} label='Email' />
+                            <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' />
+                            <TextField id='standard-basic' value={avatarUrl} onChange={updateAvatarUrl} label='Avatar URL' />
+                            <Button variant='contained' color='primary' className={classes.button}>Submit</Button>
+                        </form>
+                    </Typography>
                 </Fade>
             </Modal>
 
