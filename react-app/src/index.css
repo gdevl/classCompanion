@@ -71,3 +71,6 @@ body {
   align-items: center;
   /* margin-left: 5px */
 }
+.outlined {
+  outline: 1px solid red;
+}

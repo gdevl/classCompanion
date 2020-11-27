@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../src/store/users";
 import { BrowserRouter, Route } from "react-router-dom";
-import LoginForm from "./components/auth/LoginForm";
-import SignUpForm from "./components/auth/SignUpForm";
-import NavBar from "./components/NavBar";
+import LoginForm from "./components/auth/LoginForm/LoginForm";
+import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
+import Navigation from "./components/NavBar/Navigation";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import { authenticate } from "./services/auth";
 import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
 import StudentClassrooms from "./components/classrooms/StudentClassrooms";
+import Footer from './components/footer/Footer'
+import EditProfile from "./components/edit_profile/EditProfile";
+
+
+const siteTitle = "ClassCorral";
 
 function App() {
+  const dispatch = useDispatch();
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
@@ -20,9 +28,11 @@ function App() {
       if (!user.errors) {
         setAuthenticated(true);
       }
+      console.log("user: ", user);
       setLoaded(true);
+      dispatch(setCurrentUser(user));
     })();
-  }, []);
+  }, [authenticated]);
 
   if (!loaded) {
     return null;
@@ -30,16 +40,17 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* <ProtectedRoute authenticated={authenticated}>
-        <NavBar setAuthenticated={setAuthenticated} />
-      </ProtectedRoute> */}
+
+      <ProtectedRoute authenticated={authenticated}>
+        <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
+      </ProtectedRoute>
       <Route path="/login" exact={true}>
         <LoginForm
           authenticated={authenticated}
           setAuthenticated={setAuthenticated}
         />
       </Route>
-      <Route path="/sign-up" exact={true}>
+      <Route path="/signup" exact={true}>
         <SignUpForm
           authenticated={authenticated}
           setAuthenticated={setAuthenticated}
@@ -55,12 +66,23 @@ function App() {
       >
         <User />
       </ProtectedRoute>
+      {/* remove 'test' route below after finishing modal */}
+      <Route path='/testing' exact={true}>
+        <EditProfile />
+        <Footer />
+      </Route>
+      <Route path="/test" exact={true}>
+        <EditProfile />
+      </Route>
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-        <InstructorClassrooms />
+        {/* <InstructorClassrooms /> */}
         {/* <StudentClassrooms /> */}
+        {/* <div className="outlined">My Home Page</div> */}
+        <User />
       </ProtectedRoute>
 
     </BrowserRouter>
+
   );
 }
 
