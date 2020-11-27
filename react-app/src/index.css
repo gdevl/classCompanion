@@ -69,5 +69,5 @@ body {
 .plus-icon{
   display: flex;
   align-items: center;
-  margin-left: 15px
+  /* margin-left: 5px */
 }

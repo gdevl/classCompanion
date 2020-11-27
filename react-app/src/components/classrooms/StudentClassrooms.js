@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-
+const userId = 2
 
 const StudentClassrooms = () => {
 
@@ -92,34 +92,32 @@ const StudentClassrooms = () => {
 
   console.log(classrooms)
   return (
-
     <>
       <div className={classes.outlined}>
-
-          {classrooms.map((classroom, idx) => {
-            // console.log('CLASSROOM', classroom.classSize)
-            return (
-              <Card className={classes.paper}>
-                <CardContent className={classes.cardcontent}>
-                  <div className="classroom-data">
-                    <div className="classroom-name">
-                      <h2>
-                        {classroom.className}: {classroom.ClassTime}
-                      </h2>
-                    </div>
-                    <div className="classroom-size">
-                      <h4>
-                        Class Size: {classroom.ClassSize}
-                      </h4>
-                    </div>
+        {classrooms.map((classroom, idx) => {
+          // console.log('CLASSROOM', classroom.classSize)
+          return (
+            <Card className={classes.paper}>
+              <CardContent className={classes.cardcontent}>
+                <div className="classroom-data">
+                  <div className="classroom-name">
+                    <h2>
+                      {classroom.className}: {classroom.ClassTime}
+                    </h2>
                   </div>
-                </CardContent>
-                <CardActions className="classroom-buttons-container">
-                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small">View</Button>
-                </CardActions>
-              </Card>
-            )
-          })}
+                  <div className="classroom-size">
+                    <h4>
+                      Class Size: {classroom.ClassSize}
+                    </h4>
+                  </div>
+                </div>
+              </CardContent>
+              <CardActions className="classroom-buttons-container">
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small">View</Button>
+              </CardActions>
+            </Card>
+          )
+        })}
       </div>
     </>
   )

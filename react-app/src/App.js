@@ -8,6 +8,7 @@ import UsersList from "./components/UsersList";
 import User from "./components/User";
 import { authenticate } from "./services/auth";
 import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
+import StudentClassrooms from "./components/classrooms/StudentClassrooms";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -56,6 +57,7 @@ function App() {
       </ProtectedRoute>
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <InstructorClassrooms />
+        {/* <StudentClassrooms /> */}
       </ProtectedRoute>
 
     </BrowserRouter>

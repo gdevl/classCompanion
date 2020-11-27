@@ -19,6 +19,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
+import { useHistory } from 'react-router-dom'
+import zIndex from '@material-ui/core/styles/zIndex';
+
+// import AddClass from './AddClass.js';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -90,18 +94,23 @@ const useStyles = makeStyles((theme) => ({
 
   enrollStudentsModal: {
     position: 'absolute',
-    top: 300,
-    left: 550,
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
+    top: 100,
+    left: 450,
+    width: 700,
+    height: 500,
+    // backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+    backgroundColor: 'whitesmoke',
   },
 
   transferListGridContainer: {
     margin: 'auto',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    // position: 'absolute',
+    // top: 200,
+    // left: 200
   }
 
 }));
@@ -113,6 +122,7 @@ const userId = 1
 const InstructorClassrooms = () => {
 
   const classes = useStyles()
+  const history = useHistory();
 
   const [classrooms, setClassrooms] = useState([])
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -122,8 +132,6 @@ const InstructorClassrooms = () => {
   const [classTime, setClassTime] = useState('')
   const [addStudentModalOpen, setAddStudentModalOpen] = useState(false)
   const [checked, setChecked] = useState([]);
-  // const [left, setLeft] = useState([0, 1, 2, 3]);
-  // const [right, setRight] = useState([4, 5, 6, 7]);
   const [left, setLeft] = useState(['Ryan', 'Gabe']);
   const [right, setRight] = useState(['Ranson', 'Warren']);
   const [transferListDisplay, setTransferListDisplay] = useState('none')
@@ -175,6 +183,13 @@ const InstructorClassrooms = () => {
     setLeft(left.concat(right));
     setRight([]);
   };
+
+  const handleViewClick = async (e) => {
+    // await history.replace(`/api/users/classes/class`)
+    // console.log(e.target.id)
+    alert(`re-routing to math class: ${e}`)
+    console.log(e)
+  }
 
 
   // ------------------------------------------------------------------------------
@@ -327,6 +342,12 @@ const InstructorClassrooms = () => {
   //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+  const tListHeadings = (
+    <div>
+
+    </div>
+  );
+
   // console.log(classrooms)
   return (
     <>
@@ -340,133 +361,135 @@ const InstructorClassrooms = () => {
           </Button>
         </div>
       </div>
+
       <div className={classes.outlined}>
-
-          {classrooms.map((classroom, idx) => {
-            // console.log('CLASSROOM', classroom.classSize)
-            return (
-              <>
-              <Card className={classes.paper}>
-                <CardContent className={classes.cardcontent}>
-                  <div className="classroom-data">
-                    <div className="classroom-name">
-                      <h2>
-                        {classroom.className}: {classroom.ClassTime}
-                      </h2>
-                    </div>
-                    <div className="classroom-size">
-                      <h4>
-                        Class Size: {classroom.ClassSize}
-                      </h4>
-                    </div>
+        {classrooms.map((classroom, idx) => {
+          // console.log('CLASSROOM', classroom.classSize)
+          console.log(idx)
+          return (
+            <>
+            <Card className={classes.paper} id={'HERE'} key={idx}>
+              <CardContent className={classes.cardcontent}>
+                <div className="classroom-data">
+                  <div className="classroom-name">
+                    <h2>
+                      {classroom.className}: {classroom.ClassTime}
+                    </h2>
                   </div>
-                </CardContent>
-                <CardActions className="classroom-buttons-container">
-                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small">View</Button>
-                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
-                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleDeactivateConfirmation}>Deactivate</Button>
-                </CardActions>
-              </Card>
-
-
-
-                {/* CODE FOR THE DELETE CLASS DIALOG BOX */}
-
-                <Dialog
-                  open={dialogOpen}
-                  onClose={handleDialogClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">{"Are you sure that you want to delete this class?"}</DialogTitle>
-                  <DialogActions>
-                    <Button onClick={handleDialogClose} color="primary">
-                      Disagree
-                    </Button>
-                    <Button onClick={handleClassDelete} color="primary" autoFocus>
-                      Agree
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-
-
-
-
-                {/* CODE FOR THE ADD A CLASS MODAL */}
-
-
-                <Modal
-                  open={modalOpen}
-                  onClose={handleCloseModal}
-                  aria-labelledby="simple-modal-title"
-                  aria-describedby="simple-modal-description"
-                >
-                  {addClassBody}
-                </Modal>
-
-
-
-
-
-                  {/* CODE FOR THE TRANSFER LIST AND MODAL THAT CONTAINS IT */}
-
-                  <Modal
-                    open={addStudentModalOpen}
-                    onClose={handleCloseStudentModal}
-                  >
-                   <Grid container spacing={2} justify="center" alignItems="center" className={classes.transferListGridContainer}>
-                    <Grid item>{customList(left)}</Grid>
-                    <Grid item>
-                      <Grid container direction="column" alignItems="center">
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className={classes.button}
-                          onClick={handleAllRight}
-                          disabled={left.length === 0}
-                          aria-label="move all right"
-                        >
-                          ≫
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className={classes.button}
-                          onClick={handleCheckedRight}
-                          disabled={leftChecked.length === 0}
-                          aria-label="move selected right"
-                        >
-                          &gt;
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className={classes.button}
-                          onClick={handleCheckedLeft}
-                          disabled={rightChecked.length === 0}
-                          aria-label="move selected left"
-                        >
-                          &lt;
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className={classes.button}
-                          onClick={handleAllLeft}
-                          disabled={right.length === 0}
-                          aria-label="move all left"
-                        >
-                          ≪
-                        </Button>
-                      </Grid>
-                    </Grid>
-                    <Grid item>{customList(right)}</Grid>
-                  </Grid>
-                </Modal>
-              </>
-            )
-          })}
+                  <div className="classroom-size">
+                    <h4>
+                      Class Size: {classroom.ClassSize}
+                    </h4>
+                  </div>
+                </div>
+              </CardContent>
+              <CardActions className="classroom-buttons-container" id={'HERE'}>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(idx)}}>View</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleDeactivateConfirmation}>Deactivate</Button>
+              </CardActions>
+            </Card>
+            </>
+          )
+        })}
       </div>
+
+      {/* CODE FOR THE DELETE CLASS DIALOG BOX */}
+
+        <Dialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Are you sure that you want to delete this class?"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Disagree
+          </Button>
+          <Button onClick={handleClassDelete} color="primary" autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+
+
+      {/* CODE FOR THE ADD A CLASS MODAL */}
+
+
+      <Modal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {addClassBody}
+      </Modal>
+
+
+
+
+
+        {/* CODE FOR THE TRANSFER LIST AND MODAL THAT CONTAINS IT */}
+
+      <Modal
+        open={addStudentModalOpen}
+        onClose={handleCloseStudentModal}
+      >
+        {/* {tListHeadings} */}
+        <Grid container spacing={2} justify="center" alignItems="center" className={classes.enrollStudentsModal}>
+          <Grid item>{customList(left)}</Grid>
+          <Grid item>
+            <Grid container direction="column" alignItems="center">
+              <Button
+                variant="outlined"
+                size="small"
+                className={classes.button}
+                onClick={handleAllRight}
+                disabled={left.length === 0}
+                aria-label="move all right"
+              >
+                ≫
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                className={classes.button}
+                onClick={handleCheckedRight}
+                disabled={leftChecked.length === 0}
+                aria-label="move selected right"
+              >
+                &gt;
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                className={classes.button}
+                onClick={handleCheckedLeft}
+                disabled={rightChecked.length === 0}
+                aria-label="move selected left"
+              >
+                &lt;
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                className={classes.button}
+                onClick={handleAllLeft}
+                disabled={right.length === 0}
+                aria-label="move all left"
+              >
+                ≪
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid item>{customList(right)}</Grid>
+        </Grid>
+      </Modal>
+
+
     </>
   )
 }
