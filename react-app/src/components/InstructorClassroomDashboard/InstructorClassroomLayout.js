@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux'
 
 export default function InstructorClassroomLayout() {
   const classList = useSelector(state => state.store.classrooms)
-  const currentClassrom = 1
+  const currentClassrom = useSelector(state => state.store.current_class)
 
   if(!classList) return null
   return (

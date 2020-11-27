@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Box from '@material-ui/core/Box';
-import { useDispatch } from "react-redux";
-import { setCurrentUser, fetchClassrooms, setUserClasses } from "../src/store/users";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentUser, fetchClassrooms, setUserClasses, setCurrentClassRoom } from "../src/store/users";
 import { BrowserRouter, Route } from "react-router-dom";
 import LoginForm from "./components/auth/LoginForm/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
@@ -35,6 +35,8 @@ function App() {
       dispatch(setUserClasses(classrooms))
     })();
   }, [authenticated]);
+
+  const currentClassroom = useSelector(state => state.store.current_class)
 
   if (!loaded) {
     return null;
@@ -72,9 +74,11 @@ function App() {
       </ProtectedRoute>
 
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-        <Box className='appConainer'>
+        <Box className='appContainer'>
           <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-          <InstructorLayout />
+
+          {currentClassroom ? <InstructorLayout /> : <button onClick={() => dispatch(setCurrentClassRoom(1))} >Set Class 1</button>}
+
           <Footer />
         </Box>
       </ProtectedRoute>
