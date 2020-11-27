@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "../src/store/users";
+import { setCurrentUser, fetchClassrooms, setUserClasses } from "../src/store/users";
 import { BrowserRouter, Route } from "react-router-dom";
 import LoginForm from "./components/auth/LoginForm/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
@@ -26,9 +26,11 @@ function App() {
       if (!user.errors) {
         setAuthenticated(true);
       }
-      console.log("user: ", user);
+      // console.log("user: ", user);
       setLoaded(true);
       dispatch(setCurrentUser(user));
+      const classrooms = await fetchClassrooms(user.id);
+      dispatch(setUserClasses(classrooms))
     })();
   }, [authenticated]);
 
@@ -67,6 +69,7 @@ function App() {
       <Route path='/testing' exact={true}>
         <EditProfile />
         <Footer />
+      </Route>
       <Route path="/test" exact={true}>
         <EditProfile />
       </Route>
