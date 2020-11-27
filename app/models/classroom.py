@@ -53,9 +53,11 @@ class Classroom(db.Model):
             "meeting_pw": self.meeting_pw,
             "active": self.active,
             "image_url": self.class_image_url,
-            "questions": self.questions,
-            "instructors": self.instructors,
-            "students": self.students,
-            "groups": self.groups,
-            "check_ins": self.check_ins
+            "questions": [question.to_dict() for question in self.questions],
+            "instructors": [
+                instructor.to_dict() for instructor in self.instructors],
+            "students": [student.to_dict() for student in self.students],
+            "groups": [
+                group.to_dict() for group in self.groups if group.active],
+            "check_ins": [check_in.to_dict() for check_in in self.check_ins],
         }

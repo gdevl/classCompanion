@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
-from app.models import User
 from werkzeug.security import generate_password_hash
 from ..models import db
+from app.models import User, Classroom
+
 
 user_routes = Blueprint('users', __name__)
 
@@ -21,12 +22,21 @@ def user(id):
     return user.to_dict()
 
 
+@user_routes.route('/<int:id>/classrooms')
+def classes(id):
+    user = User.query.get(id)
+    classrooms = user.get_user_classrooms()
+
+    return {"classes": classrooms}
+
+
 @user_routes.route('/me')
 @login_required
 def defaultView():
-    return current_user.to_dict()
-
-
+    return current_user.id.to_dict()
+  
+  
+  
 # update user info route example
 @user_routes.route("/<int:id>/update", methods=["GET", "PUT"])
 # @login_required
@@ -41,3 +51,6 @@ def updateUser(id):
     db.session.add(user)
     db.session.commit()
     return user.to_dict()
+
+
+

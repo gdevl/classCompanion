@@ -28,5 +28,5 @@ class Group(db.Model):
             "id": self.id,
             "class_id": self.class_id,
             "active": self.active,
-            "members": self.members,
+            "members": [member.to_dict() for member in self.members],
         }

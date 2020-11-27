@@ -39,7 +39,5 @@ class Question(db.Model):
             "student_id": self.student_id,
             "class_id": self.class_id,
             "resolved": self.resolved,
-            "student": self.student,
-            "classroom": self.classroom,
-            "answers": self.answers
+            "answers": [answer.to_dict() for answer in self.answers]
         }
