@@ -23,6 +23,7 @@ function App() {
   const dispatch = useDispatch();
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [userRole, setUserRole] = useState(null)
 
   useEffect(() => {
     (async () => {
@@ -30,9 +31,10 @@ function App() {
       if (!user.errors) {
         setAuthenticated(true);
       }
-      // console.log("user: ", user);
+      console.log("user: ", user);
       setLoaded(true);
       dispatch(setCurrentUser(user));
+      setUserRole(user.role)
       const classrooms = await fetchClassrooms(user.id);
       dispatch(setUserClasses(classrooms))
     })();
@@ -85,20 +87,25 @@ function App() {
       <Route path="/test" exact={true}>
         <EditProfile />
       </Route>
-      <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
+      {/* <ProtectedRoute path="/" exact={true} authenticated={authenticated}> */}
         {/* <InstructorClassrooms /> */}
         {/* <StudentClassrooms /> */}
         {/* <div className="outlined">My Home Page</div> */}
-        <User />
-      </ProtectedRoute>
+        {/* <User />
+      </ProtectedRoute> */}
 
 
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <Box className='appContainer'>
           <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-
+          {(()=> {
+            if(userRole === 'instructor') {
+              return <InstructorClassrooms />
+            } else{
+              return <StudentClassrooms />
+            }
+          })()}
           {currentClassroom ? <InstructorLayout /> : <button onClick={() => dispatch(setCurrentClassRoom(1))} >Set Class 1</button>}
-
           <Footer />
         </Box>
       </ProtectedRoute>

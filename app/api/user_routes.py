@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
-from app.models import User, Classroom,
+from app.models import User, Classroom
 
 
 user_routes = Blueprint('users', __name__)
@@ -22,50 +22,50 @@ def user(id):
     return user.to_dict()
 
 
-class_table = {
-    'instructor': {
-        'class1': {
-            'className': 'Math',
-            'ClassSize': '20',
-            'ClassTime': '10:00 - 11:30'
-        },
-        'class2': {
-            'className': 'Math',
-            'ClassSize': '25',
-            'ClassTime': '11:30 - 1:00'
-        },
-        'class3': {
-            'className': 'Math',
-            'ClassSize': '22',
-            'ClassTime': '1:00- 2:30'
-        },
-    },
-    'student': {
-        'class1': {
-            'className': 'Chemistry',
-            'ClassSize': '20',
-            'ClassTime': '10:00 - 11:30'
-        }
-    }
-}
+# class_table = {
+#     'instructor': {
+#         'class1': {
+#             'className': 'Math',
+#             'ClassSize': '20',
+#             'ClassTime': '10:00 - 11:30'
+#         },
+#         'class2': {
+#             'className': 'Math',
+#             'ClassSize': '25',
+#             'ClassTime': '11:30 - 1:00'
+#         },
+#         'class3': {
+#             'className': 'Math',
+#             'ClassSize': '22',
+#             'ClassTime': '1:00- 2:30'
+#         },
+#     },
+#     'student': {
+#         'class1': {
+#             'className': 'Chemistry',
+#             'ClassSize': '20',
+#             'ClassTime': '10:00 - 11:30'
+#         }
+#     }
+# }
 
-@user_routes.route("/<int:id>/classes")
-def get_classes(id):
-    keys = []
-    if id == 1:
-        for key in class_table:
-            if key == 'instructor':
-                instructor = class_table[key]
-                for subKey in instructor:
-                    keys.append(instructor[subKey])
-        return jsonify(keys)
-    else:
-        for key in class_table:
-            if key == 'student':
-                instructor = class_table[key]
-                for subKey in instructor:
-                    keys.append(instructor[subKey])
-        return jsonify(keys)
+# @user_routes.route("/<int:id>/classes")
+# def get_classes(id):
+#     keys = []
+#     if id == 1:
+#         for key in class_table:
+#             if key == 'instructor':
+#                 instructor = class_table[key]
+#                 for subKey in instructor:
+#                     keys.append(instructor[subKey])
+#         return jsonify(keys)
+#     else:
+#         for key in class_table:
+#             if key == 'student':
+#                 instructor = class_table[key]
+#                 for subKey in instructor:
+#                     keys.append(instructor[subKey])
+#         return jsonify(keys)
 
     #  return jsonify('hello')
 
@@ -89,19 +89,12 @@ def create_class(id):
                 meeting_pw=None,
                 active=False
             )
-            # class_user_relation = ClassUser(
-            #     user_id = id
 
-            # )
             user = User.query.get(id)
-
             db.session.add(classroom)
             classroom.instructors.append(user)
             db.session.commit()
-            print(classroom.to_dict)
-            # print(req_data['className'])
             return jsonify('hello')
-            # return jsonify('hello')
 
 
 
