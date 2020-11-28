@@ -81,6 +81,7 @@ export default function UserCard({ props }) {
   }
   const checkedIn = (student_id) => {
     let checkedIn = false
+    if(props.role === 'instructor') checkedIn = true
     let today = new Date();
     currentClass.check_ins.forEach(checkIn => {
       let checkInDay = new Date(checkIn.created_on)
