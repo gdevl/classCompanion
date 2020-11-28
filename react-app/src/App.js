@@ -69,7 +69,7 @@ function App() {
           <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
 
           {currentUserRole.role === 'instructor'
-          ? ( currentClassroom ? <InstructorLayout /> : <><InstructorClassrooms /><button onClick={() => dispatch(setCurrentClassRoom(1))}>CLASS 1</button></> )
+          ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
           : ( currentClassroom ? <InstructorLayout /> : <StudentClassrooms /> )
           }
 
