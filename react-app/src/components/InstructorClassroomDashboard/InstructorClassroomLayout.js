@@ -3,6 +3,7 @@ import ClassroomLayoutContainer from './ClassroomLayout/ClassroomLayoutContainer
 import ClassroomNav from './ClassroomNav/ClassroomNavContainer'
 import {useSelector} from 'react-redux'
 import Divider from '@material-ui/core/Divider';
+import DashboardHeadder from './DashboardHeader/DashboardHeaderContainer'
 
 export default function InstructorClassroomLayout() {
   const classList = useSelector(state => state.store.classrooms)
@@ -11,7 +12,7 @@ export default function InstructorClassroomLayout() {
   if(!classList) return null
   return (
     <>
-      <ClassroomNav />
+      <DashboardHeadder props={ classList[currentClassrom] } />
       <Divider />
       <ClassroomLayoutContainer props={ classList[currentClassrom] } />
     </>
