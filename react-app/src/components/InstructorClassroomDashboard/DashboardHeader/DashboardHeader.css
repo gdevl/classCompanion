@@ -1,0 +1,26 @@
+.dashboardHeaderContainer{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  /* border: 1px solid purple; */
+  margin-bottom: 1em;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.groupingMenu{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+.instructorMessage{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+.editButtonContainerContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
