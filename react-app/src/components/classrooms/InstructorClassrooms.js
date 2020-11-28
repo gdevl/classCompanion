@@ -136,6 +136,7 @@ const InstructorClassrooms = () => {
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState(['Ryan', 'Gabe']);
   const [right, setRight] = useState(['Ranson', 'Warren']);
+  const [classToDelete, setClassToDelete] = useState(null)
   const [transferListDisplay, setTransferListDisplay] = useState('none')
   const classroomData = useSelector(state => state.store.classrooms)
   const currentUserId = useSelector(state => state.store.current_user.id)
@@ -223,19 +224,38 @@ const InstructorClassrooms = () => {
 
   // ------------------------------------------------------------------------------
 
-  const handleDeactivateConfirmation = () => {
-    setDialogOpen(true);
-  }
 
   const handleDialogClose = () => {
     setDialogOpen(false);
   }
 
-  const handleClassDelete = async (classId) => {
-    setDialogOpen(false);
-    // const res = await fetch(`api/users/${userId}/classes/${classId}/delete`)
-    alert('Deleted Class')
+
+
+
+
+  // FUNCTIONALITY FOR DELETING A CLASS ------------------------------------------------------
+
+  const handleDeactivateConfirmation = (classId) => {
+    setClassToDelete(classId)
+    setDialogOpen(true);
   }
+
+  const handleClassDelete = async () => {
+    setDialogOpen(false);
+    const res = await fetch(`api/classes/${classToDelete}/delete`, {
+      method: 'PATCH'
+    })
+    const response = await res.json()
+    console.log(response)
+    const updatedClasses = await fetchClassrooms(currentUserId)
+    // console.log(updatedClasses)
+    dispatch(setUserClasses(updatedClasses))
+    // alert('Deleted Class')
+  }
+
+
+ // ------------------------------------------------------------------------------------------
+
 
   const handleAddClass = () => {
     setModalOpen(true);
@@ -448,7 +468,7 @@ const InstructorClassrooms = () => {
               <CardActions className="classroom-buttons-container" id={'HERE'}>
                 <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(classIds[idx])}}>View</Button>
                 <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleDeactivateConfirmation}>Delete</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleDeactivateConfirmation(classIds[idx])}}>Delete</Button>
               </CardActions>
             </Card>
             </>
