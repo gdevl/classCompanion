@@ -10,6 +10,8 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import { authenticate } from "./services/auth";
+import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
+import StudentClassrooms from "./components/classrooms/StudentClassrooms";
 import Footer from './components/footer/Footer'
 import EditProfile from "./components/edit_profile/EditProfile";
 import InstructorLayout from './components/InstructorClassroomDashboard/InstructorClassroomLayout'
@@ -45,6 +47,9 @@ function App() {
   return (
     <BrowserRouter>
 
+      <ProtectedRoute authenticated={authenticated}>
+        <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
+      </ProtectedRoute>
       <Route path="/login" exact={true}>
         <LoginForm
           authenticated={authenticated}
@@ -72,6 +77,21 @@ function App() {
       >
         <User />
       </ProtectedRoute>
+      {/* remove 'test' route below after finishing modal */}
+      <Route path='/testing' exact={true}>
+        <EditProfile />
+        <Footer />
+      </Route>
+      <Route path="/test" exact={true}>
+        <EditProfile />
+      </Route>
+      <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
+        {/* <InstructorClassrooms /> */}
+        {/* <StudentClassrooms /> */}
+        {/* <div className="outlined">My Home Page</div> */}
+        <User />
+      </ProtectedRoute>
+
 
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <Box className='appContainer'>
@@ -88,6 +108,7 @@ function App() {
       </ProtectedRoute> */}
 
     </BrowserRouter>
+
   );
 }
 
