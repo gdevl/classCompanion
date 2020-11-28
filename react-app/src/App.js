@@ -97,7 +97,7 @@ function App() {
         <Box className='appContainer'>
           <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
 
-          {currentClassroom ? <InstructorLayout /> : <button onClick={() => dispatch(setCurrentClassRoom(1))} >Set Class 1</button>}
+          {currentClassroom ? <InstructorLayout /> : <button onClick={() => dispatch(setCurrentClassRoom(1))}>CLASS !</button>}
 
           <Footer />
         </Box>

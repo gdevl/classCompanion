@@ -255,8 +255,8 @@ const InstructorClassrooms = () => {
     // alert('Class Created:')
     console.log(body)
     // console.log(await res.json())
-    const response = await res.json()
-    console.log(response)
+    // const response = await res.json()
+    // console.log(response)
   }
 
   const handleCreateClass = (e) => {
