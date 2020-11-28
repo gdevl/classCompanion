@@ -366,7 +366,18 @@ const InstructorClassrooms = () => {
     </div>
   );
 
-  // console.log(classrooms)
+
+
+
+
+
+  // COMPONENT RETURN STATEMENT ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
   return (
     <>
       <div className={classes.addClassContainer}>
@@ -414,7 +425,19 @@ const InstructorClassrooms = () => {
         })}
       </div>
 
+
+
+
+
+
+
       {/* CODE FOR THE DELETE CLASS DIALOG BOX */}
+
+
+
+
+
+
 
         <Dialog
         open={dialogOpen}

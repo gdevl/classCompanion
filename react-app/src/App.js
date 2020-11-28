@@ -41,17 +41,17 @@ function App() {
   }, [authenticated]);
 
   const currentClassroom = useSelector(state => state.store.current_class)
+  const currentUserRole = useSelector(state => state.store.current_user)
 
+  if(!currentUserRole) return null
   if (!loaded) {
     return null;
   }
 
+
   return (
     <BrowserRouter>
 
-      <ProtectedRoute authenticated={authenticated}>
-        <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-      </ProtectedRoute>
       <Route path="/login" exact={true}>
         <LoginForm
           authenticated={authenticated}
@@ -65,54 +65,18 @@ function App() {
         />
       </Route>
 
-      {/* <ProtectedRoute authenticated={authenticated}>
-        <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-      </ProtectedRoute> */}
-
-      <ProtectedRoute path="/users" exact={true} authenticated={authenticated}>
-        <UsersList />
-      </ProtectedRoute>
-      <ProtectedRoute
-        path="/users/:userId"
-        exact={true}
-        authenticated={authenticated}
-      >
-        <User />
-      </ProtectedRoute>
-      {/* remove 'test' route below after finishing modal */}
-      <Route path='/testing' exact={true}>
-        <EditProfile />
-        <Footer />
-      </Route>
-      <Route path="/test" exact={true}>
-        <EditProfile />
-      </Route>
-      {/* <ProtectedRoute path="/" exact={true} authenticated={authenticated}> */}
-        {/* <InstructorClassrooms /> */}
-        {/* <StudentClassrooms /> */}
-        {/* <div className="outlined">My Home Page</div> */}
-        {/* <User />
-      </ProtectedRoute> */}
-
-
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <Box className='appContainer'>
           <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-          {(()=> {
-            if(userRole === 'instructor') {
-              return <InstructorClassrooms />
-            } else{
-              return <StudentClassrooms />
-            }
-          })()}
-          {currentClassroom ? <InstructorLayout /> : <button onClick={() => dispatch(setCurrentClassRoom(1))} >Set Class 1</button>}
+
+          {currentUserRole.role === 'instructor'
+          ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
+          : ( currentClassroom ? <InstructorLayout /> : <StudentClassrooms /> )
+          }
+
           <Footer />
         </Box>
       </ProtectedRoute>
-
-      {/* <ProtectedRoute authenticated={authenticated}>
-        <Footer setAuthenticated={setAuthenticated} />
-      </ProtectedRoute> */}
 
     </BrowserRouter>
 

@@ -69,12 +69,14 @@ def user(id):
 
     #  return jsonify('hello')
 
+
 @user_routes.route('/<int:id>/classrooms')
 def classes(id):
     user = User.query.get(id)
     classrooms = user.get_user_classrooms()
 
     return {"classes": classrooms}
+
 
 @user_routes.route('/<int:id>/classes/create', methods=['GET', 'POST'])
 def create_class(id):
@@ -105,7 +107,6 @@ def create_class(id):
 @login_required
 def defaultView():
     return current_user.id.to_dict()
-
 
 
 # update user info route example
