@@ -22,6 +22,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useHistory } from 'react-router-dom'
 import zIndex from '@material-ui/core/styles/zIndex';
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserClasses, fetchClassrooms, setCurrentClassRoom } from "../../store/users";
 // import AddClass from './AddClass.js';
 
 
@@ -116,15 +118,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-// const userId = 1
+const userId = 1
 
 const InstructorClassrooms = () => {
 
-  const { userId } = useParams();
+  // const { userId } = useParams();
   const classes = useStyles()
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const [classrooms, setClassrooms] = useState([])
   const [dialogOpen, setDialogOpen] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [className, setClassName] = useState('')
@@ -135,6 +137,23 @@ const InstructorClassrooms = () => {
   const [left, setLeft] = useState(['Ryan', 'Gabe']);
   const [right, setRight] = useState(['Ranson', 'Warren']);
   const [transferListDisplay, setTransferListDisplay] = useState('none')
+  const classroomData = useSelector(state => state.store.classrooms)
+  const currentUserId = useSelector(state => state.store.current_user.id)
+
+  console.log(classroomData)
+
+  let allClassrooms = []
+  let classIds = []
+
+  for (let classroomId in classroomData) {
+    // allClassrooms.push
+    console.log(classroomData[classroomId])
+    allClassrooms.push(classroomData[classroomId])
+    classIds.push(classroomId)
+  }
+  console.log(allClassrooms)
+  // setOtherClassrooms(allClassrooms)
+
 
   // FUNCTIONALITY FOR THE TRANSFER LIST --------------------------------------------------------
 
@@ -184,11 +203,21 @@ const InstructorClassrooms = () => {
     setRight([]);
   };
 
-  const handleViewClick = async (e) => {
-    // await history.replace(`/api/users/classes/class`)
-    // console.log(e.target.id)
-    alert(`re-routing to math class: ${e}`)
-    console.log(e)
+
+
+
+
+  // FUNCTION FOR SETTING A SELECTED CLASSROOM
+
+
+
+
+  const handleViewClick = async (classId) => {
+
+
+    // alert(`re-routing to math class: ${classId}`)
+    console.log(classroomData[classId])
+    dispatch(setCurrentClassRoom(classroomData[classId]))
   }
 
 
@@ -224,6 +253,15 @@ const InstructorClassrooms = () => {
     setAddStudentModalOpen(false);
   }
 
+
+
+
+
+
+  // UPDATE FORM FIELDS FOR CREATE CLASSROOM MODAL
+
+
+
   const handleInputChange = (e) => {
     if(e.target.id === 'name-input') {
       setClassName(e.target.value)
@@ -235,14 +273,18 @@ const InstructorClassrooms = () => {
     }
   }
 
+
+
+
+  // FUNCTIONALITY FOR CREATING A CLASS AND UPDATING STORE
+
   const submitClass = async () => {
     const body = {
       className,
       classDescription,
       classTime
     }
-    // name, class_image_url, description, daily_objective,
-    // meeting_link, meeting_pw, active
+
 
     const res = await fetch(`/api/users/${userId}/classes/create`, {
 
@@ -252,11 +294,13 @@ const InstructorClassrooms = () => {
       },
       body: JSON.stringify(body)
     })
-    // alert('Class Created:')
     console.log(body)
-    // console.log(await res.json())
-    // const response = await res.json()
-    // console.log(response)
+    const response = await res.json()
+    console.log(response)
+
+    const updatedClasses = await fetchClassrooms(currentUserId)
+    console.log(updatedClasses)
+    dispatch(setUserClasses(updatedClasses))
   }
 
   const handleCreateClass = (e) => {
@@ -266,17 +310,17 @@ const InstructorClassrooms = () => {
   }
 
 
-  useEffect(() => {
-    const fetchClassData = async () => {
-      const res = await fetch(`/api/users/${userId}/classes`)
-      const classroomData = await res.json()
-      setClassrooms(classroomData)
-      // classrooms.push(classroomData)
-      // console.log(classroomData)
-    }
-    fetchClassData()
+  // useEffect(() => {
+  //   const fetchClassData = async () => {
+  //     const res = await fetch(`/api/users/${userId}/classes`)
+  //     const classroomData = await res.json()
+  //     setClassrooms(classroomData)
+  //     // classrooms.push(classroomData)
+  //     // console.log(classroomData)
+  //   }
+  //   fetchClassData()
 
-  }, [])
+  // }, [])
 
 
 
@@ -353,7 +397,18 @@ const InstructorClassrooms = () => {
     </div>
   );
 
-  // console.log(classrooms)
+
+
+
+
+
+  // COMPONENT RETURN STATEMENT ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
   return (
     <>
       <div className={classes.addClassContainer}>
@@ -368,7 +423,7 @@ const InstructorClassrooms = () => {
       </div>
 
       <div className={classes.outlined}>
-        {classrooms.map((classroom, idx) => {
+        {allClassrooms.map((classroom, idx) => {
           // console.log('CLASSROOM', classroom.classSize)
           console.log(idx)
           return (
@@ -378,18 +433,20 @@ const InstructorClassrooms = () => {
                 <div className="classroom-data">
                   <div className="classroom-name">
                     <h2>
-                      {classroom.className}: {classroom.ClassTime}
+                      {/* {classroom.className}: {classroom.ClassTime} */}
+                      {classroom.name}
                     </h2>
                   </div>
                   <div className="classroom-size">
                     <h4>
-                      Class Size: {classroom.ClassSize}
+                      {/* Class Size: {classroom.ClassSize} */}
+                      Class Size: {classroom.students.length}
                     </h4>
                   </div>
                 </div>
               </CardContent>
               <CardActions className="classroom-buttons-container" id={'HERE'}>
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(idx)}}>View</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(classIds[idx])}}>View</Button>
                 <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
                 <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleDeactivateConfirmation}>Delete</Button>
               </CardActions>
@@ -399,7 +456,19 @@ const InstructorClassrooms = () => {
         })}
       </div>
 
+
+
+
+
+
+
       {/* CODE FOR THE DELETE CLASS DIALOG BOX */}
+
+
+
+
+
+
 
         <Dialog
         open={dialogOpen}

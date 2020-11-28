@@ -22,51 +22,50 @@ def user(id):
     return user.to_dict()
 
 
-class_table = {
-    'instructor': {
-        'class1': {
-            'className': 'Math',
-            'ClassSize': '20',
-            'ClassTime': '10:00 - 11:30'
-        },
-        'class2': {
-            'className': 'Math',
-            'ClassSize': '25',
-            'ClassTime': '11:30 - 1:00'
-        },
-        'class3': {
-            'className': 'Math',
-            'ClassSize': '22',
-            'ClassTime': '1:00- 2:30'
-        },
-    },
-    'student': {
-        'class1': {
-            'className': 'Chemistry',
-            'ClassSize': '20',
-            'ClassTime': '10:00 - 11:30'
-        }
-    }
-}
+# class_table = {
+#     'instructor': {
+#         'class1': {
+#             'className': 'Math',
+#             'ClassSize': '20',
+#             'ClassTime': '10:00 - 11:30'
+#         },
+#         'class2': {
+#             'className': 'Math',
+#             'ClassSize': '25',
+#             'ClassTime': '11:30 - 1:00'
+#         },
+#         'class3': {
+#             'className': 'Math',
+#             'ClassSize': '22',
+#             'ClassTime': '1:00- 2:30'
+#         },
+#     },
+#     'student': {
+#         'class1': {
+#             'className': 'Chemistry',
+#             'ClassSize': '20',
+#             'ClassTime': '10:00 - 11:30'
+#         }
+#     }
+# }
 
-
-@user_routes.route("/<int:id>/classes")
-def get_classes(id):
-    keys = []
-    if id == 1:
-        for key in class_table:
-            if key == 'instructor':
-                instructor = class_table[key]
-                for subKey in instructor:
-                    keys.append(instructor[subKey])
-        return jsonify(keys)
-    else:
-        for key in class_table:
-            if key == 'student':
-                instructor = class_table[key]
-                for subKey in instructor:
-                    keys.append(instructor[subKey])
-        return jsonify(keys)
+# @user_routes.route("/<int:id>/classes")
+# def get_classes(id):
+#     keys = []
+#     if id == 1:
+#         for key in class_table:
+#             if key == 'instructor':
+#                 instructor = class_table[key]
+#                 for subKey in instructor:
+#                     keys.append(instructor[subKey])
+#         return jsonify(keys)
+#     else:
+#         for key in class_table:
+#             if key == 'student':
+#                 instructor = class_table[key]
+#                 for subKey in instructor:
+#                     keys.append(instructor[subKey])
+#         return jsonify(keys)
 
     #  return jsonify('hello')
 
@@ -82,29 +81,23 @@ def classes(id):
 @user_routes.route('/<int:id>/classes/create', methods=['GET', 'POST'])
 def create_class(id):
     if request.method == 'POST':
-        req_data = request.get_json()
-        classroom = Classroom(
-            name=req_data['className'],
-            class_image_url=None,
-            description=req_data['classDescription'],
-            daily_objective=None,
-            meeting_link=None,
-            meeting_pw=None,
-            active=False
-        )
-        # class_user_relation = ClassUser(
-        #     user_id = id
+            req_data = request.get_json()
+            classroom = Classroom(
+                name=req_data['className'],
+                class_image_url=None,
+                description=req_data['classDescription'],
+                daily_objective=None,
+                meeting_link=None,
+                meeting_pw=None,
+                active=True
+            )
 
-        # )
-        user = User.query.get(id)
+            user = User.query.get(id)
+            db.session.add(classroom)
+            classroom.instructors.append(user)
+            db.session.commit()
+            return jsonify('hello')
 
-        db.session.add(classroom)
-        classroom.instructors.append(user)
-        db.session.commit()
-        print(classroom.to_dict)
-        # print(req_data['className'])
-        # return jsonify('hello')
-        return jsonify("hello")
 
 
 # name, class_image_url, description, daily_objective, meeting_link, meeting_pw, active

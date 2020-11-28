@@ -33,9 +33,10 @@ function App() {
       if (!user.errors) {
         setAuthenticated(true);
       }
-      // console.log("user: ", user);
+      console.log("user: ", user);
       setLoaded(true);
       dispatch(setCurrentUser(user));
+      // setUserRole(user.role)
       const classrooms = await fetchClassrooms(user.id);
       dispatch(setUserClasses(classrooms))
     })();
@@ -75,10 +76,6 @@ function App() {
           <Footer />
         </Box>
       </ProtectedRoute>
-
-      {/* <ProtectedRoute authenticated={authenticated}>
-        <Footer setAuthenticated={setAuthenticated} />
-      </ProtectedRoute> */}
 
     </BrowserRouter>
 
