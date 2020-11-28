@@ -5,7 +5,7 @@ export const authenticate = async () => {
     },
   });
   const result = await response.json();
-  console.log("result", result);
+  // console.log("result", result);
   return result;
   // return await response.json();
 };
@@ -56,7 +56,7 @@ export const signUp = async (
     }),
   });
   const result = await response.json();
-  console.log("result", result);
+  // console.log("result", result);
   return result;
 };
 

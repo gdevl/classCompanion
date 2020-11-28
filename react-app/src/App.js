@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "../src/store/users";
+import { setCurrentUser, fetchClassrooms, setUserClasses } from "../src/store/users";
 import { BrowserRouter, Route } from "react-router-dom";
 import LoginForm from "./components/auth/LoginForm/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
@@ -13,6 +13,7 @@ import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
 import StudentClassrooms from "./components/classrooms/StudentClassrooms";
 import Footer from './components/footer/Footer'
 import EditProfile from "./components/edit_profile/EditProfile";
+import InstructorLayout from './components/InstructorClassroomDashboard/InstructorClassroomLayout'
 
 
 const siteTitle = "ClassCorral";
@@ -28,9 +29,11 @@ function App() {
       if (!user.errors) {
         setAuthenticated(true);
       }
-      console.log("user: ", user);
+      // console.log("user: ", user);
       setLoaded(true);
       dispatch(setCurrentUser(user));
+      const classrooms = await fetchClassrooms(user.id);
+      dispatch(setUserClasses(classrooms))
     })();
   }, [authenticated]);
 
@@ -56,6 +59,11 @@ function App() {
           setAuthenticated={setAuthenticated}
         />
       </Route>
+
+      {/* <ProtectedRoute authenticated={authenticated}>
+        <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
+      </ProtectedRoute> */}
+
       <ProtectedRoute path="/users" exact={true} authenticated={authenticated}>
         <UsersList />
       </ProtectedRoute>
@@ -80,6 +88,19 @@ function App() {
         {/* <div className="outlined">My Home Page</div> */}
         <User />
       </ProtectedRoute>
+
+
+      <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
+      <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
+
+        <InstructorLayout />
+
+        <Footer />
+      </ProtectedRoute>
+
+      {/* <ProtectedRoute authenticated={authenticated}>
+        <Footer setAuthenticated={setAuthenticated} />
+      </ProtectedRoute> */}
 
     </BrowserRouter>
 

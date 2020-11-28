@@ -21,7 +21,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useHistory } from 'react-router-dom'
 import zIndex from '@material-ui/core/styles/zIndex';
-
+import { useParams } from "react-router-dom";
 // import AddClass from './AddClass.js';
 
 
@@ -116,11 +116,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const userId = 1
-
+// const userId = 1
 
 const InstructorClassrooms = () => {
 
+  const { userId } = useParams();
   const classes = useStyles()
   const history = useHistory();
 
@@ -241,17 +241,22 @@ const InstructorClassrooms = () => {
       classDescription,
       classTime
     }
+    // name, class_image_url, description, daily_objective,
+    // meeting_link, meeting_pw, active
 
-    // const res = await fetch(`api/users/${userId}/classes/create`, {
+    const res = await fetch(`/api/users/${userId}/classes/create`, {
 
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(body)
-    // })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    })
     // alert('Class Created:')
     console.log(body)
+    // console.log(await res.json())
+    const response = await res.json()
+    console.log(response)
   }
 
   const handleCreateClass = (e) => {
@@ -386,7 +391,7 @@ const InstructorClassrooms = () => {
               <CardActions className="classroom-buttons-container" id={'HERE'}>
                 <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(idx)}}>View</Button>
                 <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleDeactivateConfirmation}>Deactivate</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleDeactivateConfirmation}>Delete</Button>
               </CardActions>
             </Card>
             </>
@@ -416,7 +421,12 @@ const InstructorClassrooms = () => {
 
 
 
+
+
       {/* CODE FOR THE ADD A CLASS MODAL */}
+
+
+
 
 
       <Modal
@@ -432,7 +442,14 @@ const InstructorClassrooms = () => {
 
 
 
+
+
         {/* CODE FOR THE TRANSFER LIST AND MODAL THAT CONTAINS IT */}
+
+
+
+
+
 
       <Modal
         open={addStudentModalOpen}

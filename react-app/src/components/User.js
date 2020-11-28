@@ -21,7 +21,6 @@ function User() {
     (async () => {
       const response = await fetch(`/api/users/${userId}`);
       const user = await response.json();
-      console.log(user.role)
       setUser(user);
     })();
   }, [userId]);
@@ -36,13 +35,9 @@ function User() {
     <>
       {(()=> {
         if(user.role === 'instructor') {
-          console.log('instructor')
           return <InstructorClassrooms />
-        } else if (user.role === 'student') {
-          console.log('student')
+        } else{
           return <StudentClassrooms />
-        } else {
-          console.log('local state is empty')
         }
       })()}
       {/* <InstructorClassrooms /> */}

@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
-from app.models import User, Classroom
+from app.models import User, Classroom,
 
 
 user_routes = Blueprint('users', __name__)
@@ -68,12 +68,44 @@ def get_classes(id):
         return jsonify(keys)
 
     #  return jsonify('hello')
+
 @user_routes.route('/<int:id>/classrooms')
 def classes(id):
     user = User.query.get(id)
     classrooms = user.get_user_classrooms()
 
     return {"classes": classrooms}
+
+@user_routes.route('/<int:id>/classes/create', methods=['GET', 'POST'])
+def create_class(id):
+    if request.method == 'POST':
+            req_data = request.get_json()
+            classroom = Classroom(
+                name=req_data['className'],
+                class_image_url=None,
+                description=req_data['classDescription'],
+                daily_objective=None,
+                meeting_link=None,
+                meeting_pw=None,
+                active=False
+            )
+            # class_user_relation = ClassUser(
+            #     user_id = id
+
+            # )
+            user = User.query.get(id)
+
+            db.session.add(classroom)
+            classroom.instructors.append(user)
+            db.session.commit()
+            print(classroom.to_dict)
+            # print(req_data['className'])
+            return jsonify('hello')
+            # return jsonify('hello')
+
+
+
+# name, class_image_url, description, daily_objective, meeting_link, meeting_pw, active
 
 
 @user_routes.route('/me')
