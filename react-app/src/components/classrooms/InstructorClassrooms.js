@@ -22,6 +22,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useHistory } from 'react-router-dom'
 import zIndex from '@material-ui/core/styles/zIndex';
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 // import AddClass from './AddClass.js';
 
 
@@ -116,15 +117,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-// const userId = 1
+const userId = 1
 
 const InstructorClassrooms = () => {
 
-  const { userId } = useParams();
+  // const { userId } = useParams();
   const classes = useStyles()
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [classrooms, setClassrooms] = useState([])
+  const [otherClassrooms, setOtherClassrooms] = useState([])
   const [dialogOpen, setDialogOpen] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [className, setClassName] = useState('')
@@ -135,6 +138,19 @@ const InstructorClassrooms = () => {
   const [left, setLeft] = useState(['Ryan', 'Gabe']);
   const [right, setRight] = useState(['Ranson', 'Warren']);
   const [transferListDisplay, setTransferListDisplay] = useState('none')
+  const classroomData = useSelector(state => state.store.classrooms)
+  console.log(classroomData)
+
+  let allClassrooms = []
+
+  for (let classroom in classroomData) {
+    // allClassrooms.push
+    console.log(classroomData[classroom])
+    allClassrooms.push(classroomData[classroom])
+  }
+  console.log(allClassrooms)
+  // setOtherClassrooms(allClassrooms)
+
 
   // FUNCTIONALITY FOR THE TRANSFER LIST --------------------------------------------------------
 
@@ -241,8 +257,7 @@ const InstructorClassrooms = () => {
       classDescription,
       classTime
     }
-    // name, class_image_url, description, daily_objective,
-    // meeting_link, meeting_pw, active
+
 
     const res = await fetch(`/api/users/${userId}/classes/create`, {
 
@@ -252,11 +267,9 @@ const InstructorClassrooms = () => {
       },
       body: JSON.stringify(body)
     })
-    // alert('Class Created:')
     console.log(body)
-    // console.log(await res.json())
-    // const response = await res.json()
-    // console.log(response)
+    const response = await res.json()
+    console.log(response)
   }
 
   const handleCreateClass = (e) => {
@@ -353,7 +366,18 @@ const InstructorClassrooms = () => {
     </div>
   );
 
-  // console.log(classrooms)
+
+
+
+
+
+  // COMPONENT RETURN STATEMENT ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
   return (
     <>
       <div className={classes.addClassContainer}>
@@ -368,7 +392,7 @@ const InstructorClassrooms = () => {
       </div>
 
       <div className={classes.outlined}>
-        {classrooms.map((classroom, idx) => {
+        {allClassrooms.map((classroom, idx) => {
           // console.log('CLASSROOM', classroom.classSize)
           console.log(idx)
           return (
@@ -378,12 +402,14 @@ const InstructorClassrooms = () => {
                 <div className="classroom-data">
                   <div className="classroom-name">
                     <h2>
-                      {classroom.className}: {classroom.ClassTime}
+                      {/* {classroom.className}: {classroom.ClassTime} */}
+                      {classroom.name}
                     </h2>
                   </div>
                   <div className="classroom-size">
                     <h4>
-                      Class Size: {classroom.ClassSize}
+                      {/* Class Size: {classroom.ClassSize} */}
+                      Class Size: {classroom.students.length}
                     </h4>
                   </div>
                 </div>
@@ -399,7 +425,19 @@ const InstructorClassrooms = () => {
         })}
       </div>
 
+
+
+
+
+
+
       {/* CODE FOR THE DELETE CLASS DIALOG BOX */}
+
+
+
+
+
+
 
         <Dialog
         open={dialogOpen}

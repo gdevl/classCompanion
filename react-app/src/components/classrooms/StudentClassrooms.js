@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -71,10 +72,19 @@ const useStyles = makeStyles((theme) => ({
 
 const userId = 2
 
+const handleViewClick = async (e) => {
+  // await history.replace(`/api/users/classes/class`)
+  // console.log(e.target.id)
+  alert(`re-routing to math class: ${e}`)
+  console.log(e)
+}
+
 const StudentClassrooms = () => {
 
   const classes = useStyles()
-
+  // const userRole = useSelector(state => state.store)
+  // const userId = useSelector(state => state.store.current_user)
+  console.log(userId)
   const [classrooms, setClassrooms] = useState([])
 
   useEffect(() => {
@@ -113,7 +123,7 @@ const StudentClassrooms = () => {
                 </div>
               </CardContent>
               <CardActions className="classroom-buttons-container">
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small">View</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(idx)}}>View</Button>
               </CardActions>
             </Card>
           )
