@@ -23,7 +23,7 @@ import { useHistory } from 'react-router-dom'
 import zIndex from '@material-ui/core/styles/zIndex';
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserClasses, fetchClassrooms } from "../../store/users";
+import { setUserClasses, fetchClassrooms, setCurrentClassRoom } from "../../store/users";
 // import AddClass from './AddClass.js';
 
 
@@ -143,11 +143,13 @@ const InstructorClassrooms = () => {
   console.log(classroomData)
 
   let allClassrooms = []
+  let classIds = []
 
-  for (let classroom in classroomData) {
+  for (let classroomId in classroomData) {
     // allClassrooms.push
-    console.log(classroomData[classroom])
-    allClassrooms.push(classroomData[classroom])
+    console.log(classroomData[classroomId])
+    allClassrooms.push(classroomData[classroomId])
+    classIds.push(classroomId)
   }
   console.log(allClassrooms)
   // setOtherClassrooms(allClassrooms)
@@ -201,11 +203,21 @@ const InstructorClassrooms = () => {
     setRight([]);
   };
 
-  const handleViewClick = async (e) => {
-    // await history.replace(`/api/users/classes/class`)
-    // console.log(e.target.id)
-    alert(`re-routing to math class: ${e}`)
-    console.log(e)
+
+
+
+
+  // FUNCTION FOR SETTING A SELECTED CLASSROOM
+
+
+
+
+  const handleViewClick = async (classId) => {
+
+
+    // alert(`re-routing to math class: ${classId}`)
+    console.log(classroomData[classId])
+    dispatch(setCurrentClassRoom(classroomData[classId]))
   }
 
 
@@ -241,6 +253,15 @@ const InstructorClassrooms = () => {
     setAddStudentModalOpen(false);
   }
 
+
+
+
+
+
+  // UPDATE FORM FIELDS FOR CREATE CLASSROOM MODAL
+
+
+
   const handleInputChange = (e) => {
     if(e.target.id === 'name-input') {
       setClassName(e.target.value)
@@ -251,6 +272,11 @@ const InstructorClassrooms = () => {
       setClassTime(e.target.value)
     }
   }
+
+
+
+
+  // FUNCTIONALITY FOR CREATING A CLASS AND UPDATING STORE
 
   const submitClass = async () => {
     const body = {
@@ -420,7 +446,7 @@ const InstructorClassrooms = () => {
                 </div>
               </CardContent>
               <CardActions className="classroom-buttons-container" id={'HERE'}>
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(idx)}}>View</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(classIds[idx])}}>View</Button>
                 <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
                 <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleDeactivateConfirmation}>Delete</Button>
               </CardActions>
