@@ -24,6 +24,9 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
+    const currentClassroom = useSelector(state => state.store.current_class)
+    const currentUserRole = useSelector(state => state.store.current_user)
+
   useEffect(() => {
     (async () => {
       const user = await authenticate();
@@ -38,9 +41,6 @@ function App() {
       dispatch(setUserClasses(classrooms))
     })();
   }, [authenticated]);
-
-  const currentClassroom = useSelector(state => state.store.current_class)
-  const currentUserRole = useSelector(state => state.store.current_user)
 
   if(!currentUserRole) return null
   if (!loaded) {
