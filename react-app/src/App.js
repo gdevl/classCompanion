@@ -23,7 +23,6 @@ function App() {
   const dispatch = useDispatch();
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [userRole, setUserRole] = useState(null)
 
   useEffect(() => {
     (async () => {
@@ -34,7 +33,7 @@ function App() {
       console.log("user: ", user);
       setLoaded(true);
       dispatch(setCurrentUser(user));
-      setUserRole(user.role)
+      // setUserRole(user.role)
       const classrooms = await fetchClassrooms(user.id);
       dispatch(setUserClasses(classrooms))
     })();
