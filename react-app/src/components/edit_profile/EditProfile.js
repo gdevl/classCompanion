@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux'
 import { Avatar, Typography, Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -55,8 +56,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const EditProfile = () => {
-
+const EditProfile = (state) => {
+    // const currentUser = useSelector((state) => state.store.current_user)
+    // const idd = currentUser.id
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [username, setUsername] = useState("");
@@ -66,15 +68,25 @@ const EditProfile = () => {
 
     // access current_user id object from redux store
     // ---------------------------------------
-    const id = localStorage.getItem('USERID')
+    // const id = localStorage.getItem('USERID')
     // ---------------------------------------
     //check form submission for updateProfile call
-    const updateProfile = async (username, email, password, avatarUrl) => {
+
+
+    const currentUser = useSelector((state) => state.store)
+    // console.log(currentUser.current_user.id)
+
+    if (!currentUser.current_user) return null;
+    const id = currentUser.current_user.id
+
+
+
+
+    const updateProfile = async () => {
         const response = await fetch(`/api/users/${id}/update`, {
-            method: "put",
+            method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, email, password, avatarUrl }),
-
         });
         if (response.ok) {
             window.location.reload()
@@ -140,7 +152,7 @@ const EditProfile = () => {
                             <TextField id='standard-basic' value={email} onChange={updateEmail} label='Email' />
                             <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' />
                             <TextField id='standard-basic' value={avatarUrl} onChange={updateAvatarUrl} label='Avatar URL' />
-                            <Button variant='contained' color='primary' className={classes.button}>Submit</Button>
+                            <Button variant='contained' color='primary' className={classes.button} type='submit'>Submit</Button>
                         </form>
                     </Typography>
                 </Fade>

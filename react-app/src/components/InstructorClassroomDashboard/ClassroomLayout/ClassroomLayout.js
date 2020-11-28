@@ -9,7 +9,7 @@ export default function ClassroomLayout({ props }) {
   if (!props.groups.grouped) {
     return (
       <>
-        {props.users.map(user => {
+        {props.students.map(user => {
           return (
             <UserCardContainer key={user.id} props={user} />
           )

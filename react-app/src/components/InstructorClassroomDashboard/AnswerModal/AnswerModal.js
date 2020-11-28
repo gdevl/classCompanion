@@ -27,7 +27,7 @@ export default function AnswerModal({ props }) {
         <DialogTitle id="form-dialog-title">{`${props.user.first_name}'s Question`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {props.user.question}
+            {props.question}
           </DialogContentText>
           <TextField
             autoFocus

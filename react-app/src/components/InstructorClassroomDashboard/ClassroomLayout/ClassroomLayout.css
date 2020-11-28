@@ -1,5 +1,5 @@
 .classroomLayoutContainer{
-  border: 1px solid green;
+  /* border: 1px solid green; */
   display: flex;
   flex-wrap: wrap;
   /* justify-content: space-evenly; */

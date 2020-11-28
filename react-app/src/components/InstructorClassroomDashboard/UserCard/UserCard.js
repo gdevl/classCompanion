@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -65,6 +66,35 @@ const useStyles = makeStyles((theme) => ({
 export default function UserCard({ props }) {
   const classes = useStyles();
 
+  //GRAB STUDENT INFO FROM CLASS
+  const currentState = useSelector(state =>state.store)
+  const currentClass = currentState.classrooms[currentState.current_class]
+  //FUNCTIONS FOR GRABBING USER INFO FROM CLASS
+  const hasQuestion = (student_id) => {
+    let activeQuestion = ''
+    currentClass.questions.forEach(question => {
+      if (question.student_id === student_id && question.resolved === false){
+        activeQuestion = question.content
+      }
+    })
+    return activeQuestion;
+  }
+  const checkedIn = (student_id) => {
+    let checkedIn = false
+    let today = new Date();
+    currentClass.check_ins.forEach(checkIn => {
+      let checkInDay = new Date(checkIn.created_on)
+      if( checkIn.student_id === student_id
+          && today.getFullYear() == checkInDay.getFullYear()
+          && today.getMonth() == checkInDay.getMonth()
+          && today.getDate() == checkInDay.getDate()
+        ) {
+        checkedIn = true
+      }
+    })
+    return checkedIn
+  }
+
   //Card Question Expansion
   const [expanded, setExpanded] = React.useState(null);
   const handleExpandClick = (id) => {
@@ -81,7 +111,7 @@ export default function UserCard({ props }) {
   const user = props
   return (
     <>
-      <Card key={user.id} className={user.checked_in ? [classes.root, classes.checkedIn] : [classes.root, classes.checkedOut]}>
+      <Card key={user.id} className={checkedIn(user.id) ? [classes.root, classes.checkedIn] : [classes.root, classes.checkedOut]}>
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" className={classes.avatar} src={user.avatar_url ? user.avatar_url : ''}>
@@ -89,12 +119,12 @@ export default function UserCard({ props }) {
             </Avatar>
           }
           action={
-            <IconButton aria-label="question" onClick={() => handleClickOpen(user.id)} className={user.active_question ? classes.handIcon : classes.hidden}>
+            <IconButton aria-label="question" onClick={() => handleClickOpen(user.id)} className={hasQuestion(user.id) ? classes.handIcon : classes.hidden}>
               <PanToolIcon />
             </IconButton>
           }
         />
-        <AnswerModalContainer props={{ user, open, setOpen }} />
+        <AnswerModalContainer props={{ user, open, setOpen, question: hasQuestion(user.id) }} />
 
         <CardActions disableSpacing className={classes.cardActionsContainer}>
           <Box className={classes.userInfoBox}>
@@ -102,7 +132,7 @@ export default function UserCard({ props }) {
             <Typography> {user.email} </Typography>
           </Box>
           <IconButton
-            className={[clsx(classes.expand, { [classes.expandOpen]: expanded == user.id }), user.active_question ? '' : classes.hidden]}
+            className={[clsx(classes.expand, { [classes.expandOpen]: expanded == user.id }), hasQuestion(user.id) ? '' : classes.hidden]}
             onClick={() => handleExpandClick(user.id)}
             aria-expanded={expanded}
             aria-label="show more"
@@ -116,7 +146,7 @@ export default function UserCard({ props }) {
             <Divider />
             <Typography paragraph>Question:</Typography>
             <Typography paragraph>
-              {user.question ? user.question : ''}
+              {hasQuestion(user.id) ? hasQuestion(user.id) : ''}
             </Typography>
           </CardContent>
         </Collapse>
