@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "python.pythonPath": "/home/warren/.local/share/virtualenvs/classCorral-oDR53Rn7/bin/python",
+=======
+    "python.pythonPath": "/home/warren/.pyenv/versions/3.8.3/bin/python",
+>>>>>>> main
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
     "python.linting.pycodestyleEnabled": true

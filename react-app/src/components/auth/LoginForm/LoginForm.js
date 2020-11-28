@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+// import { useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { login } from "../../services/auth";
+import { login } from "../../../services/auth";
+import { setCurrentUser } from "../../../store/users";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import Hero from "../Hero";
+import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+import LoginFormHeader from "./LoginFormHeader";
 
 const useStyles = makeStyles((theme) => ({
   loginform: {
@@ -28,15 +31,18 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
   const [errors, setErrors] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [needsSignUp, setNeedsSignUp] = useState(false);
 
   const onLogin = async (e) => {
     e.preventDefault();
     const user = await login(email, password);
     if (!user.errors) {
       setAuthenticated(true);
+      // dispatch(setCurrentUser(user));
     } else {
       setErrors(user.errors);
     }
+    console.log("user: ", user);
   };
 
   const updateEmail = (e) => {
@@ -47,6 +53,15 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
     setPassword(e.target.value);
   };
 
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    setNeedsSignUp(true);
+  };
+
+  if (needsSignUp) {
+    return <Redirect to="/signup" />;
+  }
+
   if (authenticated) {
     return <Redirect to="/" />;
   }
@@ -54,7 +69,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
   return (
     <>
       <Box>
-        <Hero />
+        <LoginFormHeader />
       </Box>
       <form className={classes.loginform} onSubmit={onLogin}>
         <Box>
@@ -69,7 +84,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
             type="text"
             value={email}
             onChange={updateEmail}
-            id="filled-basic"
+            id="email"
             label="Email"
             variant="filled"
           />
@@ -81,7 +96,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
             type="password"
             value={password}
             onChange={updatePassword}
-            id="filled-basic"
+            id="password"
             label="Password"
             variant="filled"
           />
@@ -95,7 +110,19 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
             className={classes.button}
             startIcon={<VerifiedUserIcon />}
           >
-            Login
+            Log In
+          </Button>
+        </Box>
+        <Box>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            className={classes.button}
+            startIcon={<SupervisedUserCircleIcon />}
+            onClick={handleSignUp}
+          >
+            Register
           </Button>
         </Box>
       </form>
