@@ -68,7 +68,7 @@ export default function UserCard({ props }) {
 
   //GRAB STUDENT INFO FROM CLASS
   const currentState = useSelector(state =>state.store)
-  const currentClass = currentState.classrooms[currentState.current_class]
+  const currentClass = currentState.classrooms[currentState.current_class.id]
   //FUNCTIONS FOR GRABBING USER INFO FROM CLASS
   const hasQuestion = (student_id) => {
     let activeQuestion = ''

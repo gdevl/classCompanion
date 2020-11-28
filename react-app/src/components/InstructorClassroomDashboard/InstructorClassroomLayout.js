@@ -12,9 +12,9 @@ export default function InstructorClassroomLayout() {
   if(!classList) return null
   return (
     <>
-      <DashboardHeadder props={ classList[currentClassrom] } />
+      <DashboardHeadder props={ classList[currentClassrom.id] } />
       <Divider />
-      <ClassroomLayoutContainer props={ classList[currentClassrom] } />
+      <ClassroomLayoutContainer props={ classList[currentClassrom.id] } />
     </>
   )
 }
