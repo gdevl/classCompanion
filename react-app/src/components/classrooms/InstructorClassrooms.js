@@ -23,6 +23,7 @@ import { useHistory } from 'react-router-dom'
 import zIndex from '@material-ui/core/styles/zIndex';
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { setUserClasses, fetchClassrooms } from "../../store/users";
 // import AddClass from './AddClass.js';
 
 
@@ -126,8 +127,6 @@ const InstructorClassrooms = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [classrooms, setClassrooms] = useState([])
-  const [otherClassrooms, setOtherClassrooms] = useState([])
   const [dialogOpen, setDialogOpen] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [className, setClassName] = useState('')
@@ -139,6 +138,8 @@ const InstructorClassrooms = () => {
   const [right, setRight] = useState(['Ranson', 'Warren']);
   const [transferListDisplay, setTransferListDisplay] = useState('none')
   const classroomData = useSelector(state => state.store.classrooms)
+  const currentUserId = useSelector(state => state.store.current_user.id)
+
   console.log(classroomData)
 
   let allClassrooms = []
@@ -270,6 +271,10 @@ const InstructorClassrooms = () => {
     console.log(body)
     const response = await res.json()
     console.log(response)
+
+    const updatedClasses = await fetchClassrooms(currentUserId)
+    console.log(updatedClasses)
+    dispatch(setUserClasses(updatedClasses))
   }
 
   const handleCreateClass = (e) => {
@@ -279,17 +284,17 @@ const InstructorClassrooms = () => {
   }
 
 
-  useEffect(() => {
-    const fetchClassData = async () => {
-      const res = await fetch(`/api/users/${userId}/classes`)
-      const classroomData = await res.json()
-      setClassrooms(classroomData)
-      // classrooms.push(classroomData)
-      // console.log(classroomData)
-    }
-    fetchClassData()
+  // useEffect(() => {
+  //   const fetchClassData = async () => {
+  //     const res = await fetch(`/api/users/${userId}/classes`)
+  //     const classroomData = await res.json()
+  //     setClassrooms(classroomData)
+  //     // classrooms.push(classroomData)
+  //     // console.log(classroomData)
+  //   }
+  //   fetchClassData()
 
-  }, [])
+  // }, [])
 
 
 

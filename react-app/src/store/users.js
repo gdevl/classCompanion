@@ -23,7 +23,9 @@ export const fetchClassrooms = async (userId) => {
   const classrooms = {}
   // console.log('classrooms', result)
   result.classes.classrooms.forEach(classroom => {
-    classrooms[classroom.id] = classroom
+    if(classroom.active !== false) {
+      classrooms[classroom.id] = classroom
+    }
   })
   return classrooms
 }

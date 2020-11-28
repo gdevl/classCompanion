@@ -89,7 +89,7 @@ def create_class(id):
                 daily_objective=None,
                 meeting_link=None,
                 meeting_pw=None,
-                active=False
+                active=True
             )
 
             user = User.query.get(id)
