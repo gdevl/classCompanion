@@ -1,0 +1,17 @@
+.classroomLayoutContainer{
+  /* border: 1px solid green; */
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-evenly; */
+  justify-content: center;
+  width: 70%;
+  max-height: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  left: 15%;
+  padding: 2rem;
+  background-color: #2A9D8F;
+}

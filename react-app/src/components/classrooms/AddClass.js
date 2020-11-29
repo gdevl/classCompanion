@@ -62,7 +62,7 @@ const AddClass = () => {
     //   body: JSON.stringify(body)
     // })
     // alert('Class Created:')
-    console.log(body)
+    // console.log(body)
   }
 
   const handleCreateClass = (e) => {

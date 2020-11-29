@@ -15,6 +15,7 @@ import StudentClassrooms from "./components/classrooms/StudentClassrooms";
 import Footer from './components/footer/Footer'
 import EditProfile from "./components/edit_profile/EditProfile";
 import InstructorLayout from './components/InstructorClassroomDashboard/InstructorClassroomLayout'
+import StudentLayout from './components/StudentClassroomDashboard/StudentClassroomLayout'
 import MainLayout from './MainLayout';
 
 
@@ -26,6 +27,7 @@ function App() {
   const [loaded, setLoaded] = useState(false);
 
   const currentClassroom = useSelector(state => state.store.current_class)
+  const currentClassrooms = useSelector(state => state.store.classrooms)
   const currentUserRole = useSelector(state => state.store.current_user)
 
   useEffect(() => {
@@ -34,7 +36,7 @@ function App() {
       if (!user.errors) {
         setAuthenticated(true);
       }
-      console.log("user: ", user);
+      // console.log("user: ", user);
       setLoaded(true);
       dispatch(setCurrentUser(user));
       // setUserRole(user.role)
@@ -68,11 +70,11 @@ function App() {
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <Box className='appContainer'>
           <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-          <MainLayout />
-          {/* {currentUserRole.role === 'instructor'
+          {/* <MainLayout /> */}
+          {currentUserRole.role === 'instructor'
           ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
-          : ( currentClassroom ? <InstructorLayout /> : <StudentClassrooms /> )
-          } */}
+          : ( currentClassroom ? <StudentLayout /> : <><StudentClassrooms /><button onClick={() => dispatch(setCurrentClassRoom(currentClassrooms[1]))}>Class 1</button></> )
+          }
 
           <Footer />
         </Box>

@@ -7,7 +7,7 @@ export const setCurrentUser = (user) => {
 };
 
 export const setCurrentClassRoom = (classroom) => {
-  console.log(classroom)
+  // console.log(classroom)
   return {
     type: SET_CURRENT_CLASSROOM,
     classroom,
