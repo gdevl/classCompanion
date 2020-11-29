@@ -32,7 +32,10 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid blue',
   },
   checkedOut: {
-    border: '1px solid red',
+    // border: '1px solid red',
+    // border: '5px solid #EE4266',
+    // border: '2px solid red',
+    // opacity: '70%'
   },
   media: {
     height: 0,
@@ -67,13 +70,13 @@ export default function UserCard({ props }) {
   const classes = useStyles();
 
   //GRAB STUDENT INFO FROM CLASS
-  const currentState = useSelector(state =>state.store)
+  const currentState = useSelector(state => state.store)
   const currentClass = currentState.classrooms[currentState.current_class.id]
   //FUNCTIONS FOR GRABBING USER INFO FROM CLASS
   const hasQuestion = (student_id) => {
     let activeQuestion = ''
     currentClass.questions.forEach(question => {
-      if (question.student_id === student_id && question.resolved === false){
+      if (question.student_id === student_id && question.resolved === false) {
         activeQuestion = question.content
       }
     })
@@ -81,15 +84,15 @@ export default function UserCard({ props }) {
   }
   const checkedIn = (student_id) => {
     let checkedIn = false
-    if(props.role === 'instructor') checkedIn = true
+    if (props.role === 'instructor') checkedIn = true
     let today = new Date();
     currentClass.check_ins.forEach(checkIn => {
       let checkInDay = new Date(checkIn.created_on)
-      if( checkIn.student_id === student_id
-          && today.getFullYear() == checkInDay.getFullYear()
-          && today.getMonth() == checkInDay.getMonth()
-          && today.getDate() == checkInDay.getDate()
-        ) {
+      if (checkIn.student_id === student_id
+        && today.getFullYear() == checkInDay.getFullYear()
+        && today.getMonth() == checkInDay.getMonth()
+        && today.getDate() == checkInDay.getDate()
+      ) {
         checkedIn = true
       }
     })

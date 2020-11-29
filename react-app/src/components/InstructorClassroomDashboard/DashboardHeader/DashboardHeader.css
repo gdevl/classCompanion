@@ -6,6 +6,7 @@
   margin-bottom: 1em;
   justify-content: space-evenly;
   align-items: center;
+  /* background-color: #2A9D8F; */
 }
 .groupingMenu{
   display: flex;
