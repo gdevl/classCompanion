@@ -30,12 +30,21 @@ const useStyles = makeStyles((theme) => ({
   },
   checkedIn: {
     border: '1px solid blue',
+    border: '5px solid #EE4266',
+    border: '2px solid blue',
+    opacity: '70%',
+    width: '15em',
+    margin: '1em',
+    minHeight: '8em',
   },
   checkedOut: {
-    // border: '1px solid red',
-    // border: '5px solid #EE4266',
-    // border: '2px solid red',
-    // opacity: '70%'
+    border: '1px solid red',
+    border: '5px solid #EE4266',
+    border: '2px solid red',
+    opacity: '70%',
+    width: '15em',
+    margin: '1em',
+    minHeight: '8em',
   },
   media: {
     height: 0,
@@ -115,7 +124,7 @@ export default function UserCard({ props }) {
   const user = props
   return (
     <>
-      <Card key={user.id} className={checkedIn(user.id) ? [classes.root, classes.checkedIn] : [classes.root, classes.checkedOut]}>
+      <Card key={user.id} className={checkedIn(user.id) ?  classes.checkedIn : classes.checkedOut}>
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" className={classes.avatar} src={user.avatar_url ? user.avatar_url : ''}>

@@ -20,6 +20,7 @@ import InstructorLayout from './components/InstructorClassroomDashboard/Instruct
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        display: 'flex',
     },
     paper: {
         padding: theme.spacing(2),
