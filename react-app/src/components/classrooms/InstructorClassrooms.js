@@ -138,7 +138,10 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '300px',
     margin: '1em',
     textAlign: 'center',
-    border: '1px solid black'
+    border: '1px solid black',
+    "&:hover": {
+      border: '2.5px solid black'
+    }
   },
 
   Title: {
