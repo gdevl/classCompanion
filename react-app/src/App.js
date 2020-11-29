@@ -15,6 +15,7 @@ import StudentClassrooms from "./components/classrooms/StudentClassrooms";
 import Footer from './components/footer/Footer'
 import EditProfile from "./components/edit_profile/EditProfile";
 import InstructorLayout from './components/InstructorClassroomDashboard/InstructorClassroomLayout'
+import StudentLayout from './components/StudentClassroomDashboard/StudentClassroomLayout'
 import MainLayout from './MainLayout';
 
 
@@ -72,7 +73,7 @@ function App() {
           {/* <MainLayout /> */}
           {currentUserRole.role === 'instructor'
           ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
-          : ( currentClassroom ? <InstructorLayout /> : <><StudentClassrooms /><button onClick={() => dispatch(setCurrentClassRoom(currentClassrooms[1]))}>Class 1</button></> )
+          : ( currentClassroom ? <StudentLayout /> : <><StudentClassrooms /><button onClick={() => dispatch(setCurrentClassRoom(currentClassrooms[1]))}>Class 1</button></> )
           }
 
           <Footer />

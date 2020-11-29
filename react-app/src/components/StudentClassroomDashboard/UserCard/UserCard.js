@@ -110,7 +110,6 @@ export default function UserCard({ props }) {
 
   //Card Question Expansion
   const [expanded, setExpanded] = React.useState(null);
-
   const handleExpandClick = (id) => {
     if (expanded == id) setExpanded(null);
     else setExpanded(id);
@@ -160,7 +159,7 @@ export default function UserCard({ props }) {
             <Divider />
             <Typography paragraph>Question:</Typography>
             <Typography paragraph>
-              {hasQuestion(user.id) ? hasQuestion(user.id).content : ''}
+              {hasQuestion(user.id) ? hasQuestion(user.id) : ''}
             </Typography>
           </CardContent>
         </Collapse>

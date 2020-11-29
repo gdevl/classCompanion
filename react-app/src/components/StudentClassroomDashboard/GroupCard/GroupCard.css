@@ -1,0 +1,13 @@
+.groupCardContainer{
+  border-top: 1px solid grey;
+  border-radius: 1em;
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
+  padding: 1em;
+}
+.groupMembers{
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 35em;
+}
