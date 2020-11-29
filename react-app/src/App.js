@@ -16,7 +16,7 @@ import Footer from './components/footer/Footer'
 import EditProfile from "./components/edit_profile/EditProfile";
 import InstructorLayout from './components/InstructorClassroomDashboard/InstructorClassroomLayout'
 import MainLayout from './MainLayout';
-
+import AskQuestion from './components/ask-a-question/AskQuestion';
 
 const siteTitle = "ClassCorral";
 
@@ -77,6 +77,9 @@ function App() {
           <Footer />
         </Box>
       </ProtectedRoute>
+      <Route path='/question' exact={true} authenticated={authenticated}>
+        <AskQuestion />
+      </Route>
 
     </BrowserRouter>
 
