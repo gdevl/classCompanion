@@ -16,7 +16,7 @@ export default function GroupCard({ props }) {
       </Box>
       <Divider />
       <Box className='groupMembers'>
-        {props.members.map(member => {
+        {props.members.members.map(member => {
           return (
             <UserCardContainer key={`userCard${member.id}`} props={member} />
           )
