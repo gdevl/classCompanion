@@ -26,6 +26,7 @@ function App() {
   const [loaded, setLoaded] = useState(false);
 
   const currentClassroom = useSelector(state => state.store.current_class)
+  const currentClassrooms = useSelector(state => state.store.classrooms)
   const currentUserRole = useSelector(state => state.store.current_user)
 
   useEffect(() => {
@@ -71,7 +72,7 @@ function App() {
           {/* <MainLayout /> */}
           {currentUserRole.role === 'instructor'
           ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
-          : ( currentClassroom ? <InstructorLayout /> : <StudentClassrooms /> )
+          : ( currentClassroom ? <InstructorLayout /> : <><StudentClassrooms /><button onClick={() => dispatch(setCurrentClassRoom(currentClassrooms[1]))}>Class 1</button></> )
           }
 
           <Footer />
