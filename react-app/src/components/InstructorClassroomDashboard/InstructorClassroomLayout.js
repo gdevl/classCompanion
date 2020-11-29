@@ -1,6 +1,5 @@
 import React from 'react'
 import ClassroomLayoutContainer from './ClassroomLayout/ClassroomLayoutContainer'
-import ClassroomNav from './ClassroomNav/ClassroomNavContainer'
 import {useSelector} from 'react-redux'
 import Divider from '@material-ui/core/Divider';
 import DashboardHeadder from './DashboardHeader/DashboardHeaderContainer'
