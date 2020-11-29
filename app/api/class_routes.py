@@ -107,6 +107,25 @@ def dismiss_question(class_id, question_id):
         return jsonify("QUESITON DISMISS TEST")
 
 
+
+# post question
+@class_routes.route("/<int:class_id>/user/<int:user_id>/question", methods=["POST"])
+# @login_required
+def postQuestion(class_id, user_id):
+    req_data = request.get_json()
+    question = Question(
+            content = req_data['question'],
+            image_url=None,
+            student_id=user_id,
+            instructor_id=None,
+            class_id=class_id
+            )
+
+    db.session.add(question)
+    db.session.commit()
+    return question.to_dict()
+
+
 @class_routes.route('/<int:class_id>/user/<int:student_id>/checkin', methods=['GET', 'POST'])
 def check_in(class_id, student_id):
     checkin = CheckIn(

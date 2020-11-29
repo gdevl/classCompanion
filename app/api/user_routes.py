@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
-from app.models import User, Classroom
+from app.models import User, Classroom, Question
 
 
 user_routes = Blueprint('users', __name__)
