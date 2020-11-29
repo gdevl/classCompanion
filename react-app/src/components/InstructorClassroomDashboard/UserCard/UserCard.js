@@ -86,7 +86,7 @@ export default function UserCard({ props }) {
     let activeQuestion = ''
     currentClass.questions.forEach(question => {
       if (question.student_id === student_id && question.resolved === false) {
-        activeQuestion = question.content
+        activeQuestion = {id: question.id, content: question.content}
       }
     })
     return activeQuestion;
