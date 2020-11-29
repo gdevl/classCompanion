@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
-from app.models import User, Classroom, Group
+from app.models import User, Classroom, Group, Question, Answer
 import math, random
 
 class_routes = Blueprint('classes', __name__)
@@ -65,3 +65,38 @@ def group_class(id, size):
                 db.session.add(group)
                 db.session.commit()
         return jsonify("TEST")
+
+
+@class_routes.route('/<int:class_id>/question/<int:question_id>/answer', methods=['GET', 'POST'])
+def answer_question(class_id, question_id):
+    if request.method == 'POST':
+        req_data = request.get_json()
+        selected_question = Question.query.get(question_id)
+        answer = Answer(
+            content=req_data['answer'],
+            instructor_id=req_data['instructor_id'],
+            question_id=question_id,
+        )
+        db.session.add(answer)
+        selected_question.resolved = True
+        db.session.add(selected_question)
+        db.session.commit()
+        return jsonify("QUESITON ANSWER TEST")
+
+
+@class_routes.route('/<int:class_id>/question/<int:question_id>/dismiss', methods=['GET', 'POST'])
+def dismiss_question(class_id, question_id):
+    if request.method == 'POST':
+        req_data = request.get_json()
+        selected_question = Question.query.get(question_id)
+        answer = Answer(
+            content=req_data['answer'],
+            instructor_id=req_data['instructor_id'],
+            question_id=question_id,
+            active=False
+        )
+        db.session.add(answer)
+        selected_question.resolved = True
+        db.session.add(selected_question)
+        db.session.commit()
+        return jsonify("QUESITON DISMISS TEST")

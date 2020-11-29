@@ -22,8 +22,6 @@ def user(id):
     return user.to_dict()
 
 
-
-
 @user_routes.route('/<int:id>/classrooms')
 def classes(id):
     user = User.query.get(id)
@@ -35,25 +33,22 @@ def classes(id):
 @user_routes.route('/<int:id>/classes/create', methods=['GET', 'POST'])
 def create_class(id):
     if request.method == 'POST':
-            req_data = request.get_json()
-            classroom = Classroom(
-                name=req_data['className'],
-                class_image_url=None,
-                description=req_data['classDescription'],
-                daily_objective=None,
-                meeting_link=None,
-                meeting_pw=None,
-                active=True
-            )
+        req_data = request.get_json()
+        classroom = Classroom(
+            name=req_data['className'],
+            class_image_url=None,
+            description=req_data['classDescription'],
+            daily_objective=None,
+            meeting_link=None,
+            meeting_pw=None,
+            active=True
+        )
 
-            user = User.query.get(id)
-            db.session.add(classroom)
-            classroom.instructors.append(user)
-            db.session.commit()
-            return jsonify('hello')
-
-
-
+        user = User.query.get(id)
+        db.session.add(classroom)
+        classroom.instructors.append(user)
+        db.session.commit()
+        return jsonify('hello')
 
 
 @user_routes.route('/me')

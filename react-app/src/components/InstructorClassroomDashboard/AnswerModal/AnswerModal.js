@@ -1,4 +1,5 @@
 import React from 'react'
+import {useSelector} from 'react-redux'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,15 +9,46 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function AnswerModal({ props }) {
+  const currentUser= useSelector(state => state.store.current_user)
+  const currentClass= useSelector(state => state.store.current_class)
 
-  const handleSubmit = () => {
-    //implement form submission here
-    props.setOpen(null)
+  const [answer, setAnswer] = React.useState('');
+  const handleAnswerChange = (event) => {
+    setAnswer(event.target.value)
   }
 
-  const handleDismiss = () => {
+  const handleDismiss = async () => {
     //implement question dismiss here
-    props.setOpen(null)
+    const response = await fetch(`/api/classes/${currentClass.id}/question/${props.question.id}/dismiss`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        instructor_id: currentUser.id,
+        answer: 'dismissed'
+      }),
+    });
+    if(response.ok) props.setOpen(null)
+
+    // props.setOpen(null)
+  }
+
+  const handleSubmit = async () => {
+    //implement form submission here
+    const response = await fetch(`/api/classes/${currentClass.id}/question/${props.question.id}/answer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        instructor_id: currentUser.id,
+        answer: answer
+      }),
+    });
+    if(response.ok) props.setOpen(null)
+
+    // props.setOpen(null)
   }
 
   if(!props) return null
@@ -27,7 +59,7 @@ export default function AnswerModal({ props }) {
         <DialogTitle id="form-dialog-title">{`${props.user.first_name}'s Question`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {props.question}
+            {props.question.content}
           </DialogContentText>
           <TextField
             autoFocus
@@ -35,6 +67,8 @@ export default function AnswerModal({ props }) {
             id="instructor_answer"
             label="Answer"
             type="text"
+            value={answer}
+            onChange={handleAnswerChange}
             fullWidth
           />
         </DialogContent>
