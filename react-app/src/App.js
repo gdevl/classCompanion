@@ -34,7 +34,7 @@ function App() {
       if (!user.errors) {
         setAuthenticated(true);
       }
-      console.log("user: ", user);
+      // console.log("user: ", user);
       setLoaded(true);
       dispatch(setCurrentUser(user));
       // setUserRole(user.role)
@@ -68,11 +68,11 @@ function App() {
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <Box className='appContainer'>
           <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-          <MainLayout />
-          {/* {currentUserRole.role === 'instructor'
+          {/* <MainLayout /> */}
+          {currentUserRole.role === 'instructor'
           ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
           : ( currentClassroom ? <InstructorLayout /> : <StudentClassrooms /> )
-          } */}
+          }
 
           <Footer />
         </Box>
