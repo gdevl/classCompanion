@@ -1,4 +1,6 @@
 import React from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import { fetchClassrooms, setUserClasses } from '../../../../src/store/users'
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -40,8 +42,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DashboardHeader({ props }) {
-
+  const dispatch = useDispatch();
   const classes = useStyles();
+
+  const currentUser = useSelector(state => state.store.current_user)
+
   const [editMode, setEditMode] = React.useState(false);
   const [grouped, setGrouped] = React.useState(props.groups.length >= 1 ? true : false);
   const [groupSize, setGroupSize] = React.useState(props.groups.length);
@@ -91,7 +96,8 @@ export default function DashboardHeader({ props }) {
         })
       }
       if (infoResponse.ok) {
-        window.location.reload()
+        const classrooms = await fetchClassrooms(currentUser.id);
+        dispatch(setUserClasses(classrooms))
       }
       setEditMode(false)
     }

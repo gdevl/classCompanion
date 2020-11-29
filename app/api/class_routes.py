@@ -37,6 +37,11 @@ def update_class(id):
 def group_class(id, size):
     if request.method == 'POST':
         selected_class = Classroom.query.get(id)
+        for group in selected_class.groups:
+            if group.active:
+                group.active = False
+                db.session.add(group)
+                db.session.commit()
         students = selected_class.students.copy()
         random.shuffle(students)
         numGroups = math.ceil(len(students) / size)
