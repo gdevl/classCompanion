@@ -71,21 +71,3 @@ def updateUser(id):
     db.session.add(user)
     db.session.commit()
     return user.to_dict()
-
-
-# post question
-@user_routes.route("/<int:id>/question", methods=["POST"])
-# @login_required
-def postQuestion(id):
-    req_data = request.get_json()
-    question = Question(
-            content = req_data['question'],
-            image_url=None,
-            student_id=id,
-            instructor_id=None,
-            class_id=None
-            )
-
-    db.session.add(question)
-    db.session.commit()
-    return question.to_dict()
