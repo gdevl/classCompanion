@@ -15,6 +15,7 @@ import StudentClassrooms from "./components/classrooms/StudentClassrooms";
 import Footer from './components/footer/Footer'
 import EditProfile from "./components/edit_profile/EditProfile";
 import InstructorLayout from './components/InstructorClassroomDashboard/InstructorClassroomLayout'
+import MainLayout from './MainLayout';
 
 
 const siteTitle = "ClassCorral";
@@ -24,8 +25,8 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-    const currentClassroom = useSelector(state => state.store.current_class)
-    const currentUserRole = useSelector(state => state.store.current_user)
+  const currentClassroom = useSelector(state => state.store.current_class)
+  const currentUserRole = useSelector(state => state.store.current_user)
 
   useEffect(() => {
     (async () => {
@@ -42,7 +43,7 @@ function App() {
     })();
   }, [authenticated]);
 
-  if(!currentUserRole) return null
+  if (!currentUserRole) return null
   if (!loaded) {
     return null;
   }
@@ -67,11 +68,11 @@ function App() {
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <Box className='appContainer'>
           <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-
-          {currentUserRole.role === 'instructor'
+          <MainLayout />
+          {/* {currentUserRole.role === 'instructor'
           ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
           : ( currentClassroom ? <InstructorLayout /> : <StudentClassrooms /> )
-          }
+          } */}
 
           <Footer />
         </Box>

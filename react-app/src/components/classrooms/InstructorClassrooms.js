@@ -70,18 +70,31 @@ const useStyles = makeStyles((theme) => ({
   },
 
   classModal: {
-    position: 'absolute',
-    top: 300,
-    left: 550,
+    // position: 'absolute',
+    position: 'relative',
+    top: '20rem',
+    // top: 300,
+    // left: 550,
+    // left: 850,
+    left: '20rem',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    // // border: '2px solid #000',
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    // padding: theme.spacing(2, 4, 3),
+    paddingLeft: '5rem',
+    paddingRight: '5rem',
+    paddingTop: '2rem',
+    paddingBottom: '3rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '2px solid white',
   },
 
   addClassSubmitButton: {
-    marginTop: '10px'
+    marginTop: '2rem'
   },
 
   addClassButton: {
@@ -113,6 +126,31 @@ const useStyles = makeStyles((theme) => ({
     // position: 'absolute',
     // top: 200,
     // left: 200
+  },
+
+  addClass: {
+    padding: theme.spacing(2),
+    textAlign: 'left',
+    // backgroundColor: theme.palette.secondary.light,
+    // background: theme.palette.success.light,
+    color: 'black',
+    height: '200px',
+    minWidth: '300px',
+    margin: '1em',
+    textAlign: 'center',
+    border: '1px solid black'
+  },
+
+  Title: {
+    width: '100%',
+    textAlign: 'center',
+    position: 'relative',
+    top: '-5rem'
+  },
+
+  Container: {
+    display: 'flex',
+    flexDirection: 'column',
   }
 
 }));
@@ -254,7 +292,7 @@ const InstructorClassrooms = () => {
   }
 
 
- // ------------------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------------
 
 
   const handleAddClass = () => {
@@ -283,10 +321,10 @@ const InstructorClassrooms = () => {
 
 
   const handleInputChange = (e) => {
-    if(e.target.id === 'name-input') {
+    if (e.target.id === 'name-input') {
       setClassName(e.target.value)
       // console.log(className)
-    } else if(e.target.id === 'description-input') {
+    } else if (e.target.id === 'description-input') {
       setClassDescription(e.target.value)
     } else {
       setClassTime(e.target.value)
@@ -348,6 +386,7 @@ const InstructorClassrooms = () => {
 
 
   const addClassBody = (
+    // <div className={classes.classModal}>
     <div className={classes.classModal}>
       <h2 id="simple-modal-title">Class Info:</h2>
       {/* <p id="simple-modal-description">
@@ -356,19 +395,19 @@ const InstructorClassrooms = () => {
       <div>
         <FormControl>
           <InputLabel htmlFor="name-input">Name</InputLabel>
-          <Input id="name-input" onChange={handleInputChange}/>
+          <Input id="name-input" onChange={handleInputChange} autoFocus />
         </FormControl>
       </div>
       <div>
         <FormControl>
           <InputLabel htmlFor="description-input">Description</InputLabel>
-          <Input id="description-input" onChange={handleInputChange}/>
+          <Input id="description-input" onChange={handleInputChange} />
         </FormControl>
       </div>
       <div>
         <FormControl>
           <InputLabel htmlFor="timeslot-input">Time Slot</InputLabel>
-          <Input id="timeslot-input" onChange={handleInputChange}/>
+          <Input id="timeslot-input" onChange={handleInputChange} />
         </FormControl>
       </div>
       <div>
@@ -430,8 +469,8 @@ const InstructorClassrooms = () => {
 
 
   return (
-    <>
-      <div className={classes.addClassContainer}>
+    <div className={classes.Container}>
+      {/* <div className={classes.addClassContainer}>
         <h1>
           Add Class
         </h1>
@@ -440,44 +479,54 @@ const InstructorClassrooms = () => {
             <BsPlusSquare size={25} onClick={handleAddClass}/>
           </Button>
         </div>
+      </div> */}
+      <div className={classes.Title}>
+        <h1>Select a Class!</h1>
       </div>
-
       <div className={classes.outlined}>
         {allClassrooms.map((classroom, idx) => {
           // console.log('CLASSROOM', classroom.classSize)
           console.log(idx)
           return (
             <>
-            <Card className={classes.paper} id={'HERE'} key={idx}>
-              <CardContent className={classes.cardcontent}>
-                <div className="classroom-data">
-                  <div className="classroom-name">
-                    <h2>
-                      {/* {classroom.className}: {classroom.ClassTime} */}
-                      {classroom.name}
-                    </h2>
-                  </div>
-                  <div className="classroom-size">
-                    <h4>
-                      {/* Class Size: {classroom.ClassSize} */}
+              <Card className={classes.paper} id={'HERE'} key={idx}>
+                <CardContent className={classes.cardcontent}>
+                  <div className="classroom-data">
+                    <div className="classroom-name">
+                      <h2>
+                        {/* {classroom.className}: {classroom.ClassTime} */}
+                        {classroom.name}
+                      </h2>
+                    </div>
+                    <div className="classroom-size">
+                      <h4>
+                        {/* Class Size: {classroom.ClassSize} */}
                       Class Size: {classroom.students.length}
-                    </h4>
+                      </h4>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-              <CardActions className="classroom-buttons-container" id={'HERE'}>
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(classIds[idx])}}>View</Button>
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleDeactivateConfirmation(classIds[idx])}}>Delete</Button>
-              </CardActions>
-            </Card>
+                </CardContent>
+                <CardActions className="classroom-buttons-container" id={'HERE'}>
+                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => { handleViewClick(classIds[idx]) }}>View</Button>
+                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
+                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => { handleDeactivateConfirmation(classIds[idx]) }}>Delete</Button>
+                </CardActions>
+              </Card>
+
             </>
           )
         })}
+        <Card className={classes.addClass}>
+          <CardContent className={classes.cardcontent}>
+            <h2>
+              Add Class
+                  </h2>
+            <Button style={{ maxWidth: '5px' }} size='small'>
+              <BsPlusSquare size={25} onClick={handleAddClass} />
+            </Button>
+          </CardContent>
+        </Card>
       </div>
-
-
-
 
 
 
@@ -490,7 +539,7 @@ const InstructorClassrooms = () => {
 
 
 
-        <Dialog
+      <Dialog
         open={dialogOpen}
         onClose={handleDialogClose}
         aria-labelledby="alert-dialog-title"
@@ -533,7 +582,7 @@ const InstructorClassrooms = () => {
 
 
 
-        {/* CODE FOR THE TRANSFER LIST AND MODAL THAT CONTAINS IT */}
+      {/* CODE FOR THE TRANSFER LIST AND MODAL THAT CONTAINS IT */}
 
 
 
@@ -596,7 +645,7 @@ const InstructorClassrooms = () => {
       </Modal>
 
 
-    </>
+    </div>
   )
 }
 

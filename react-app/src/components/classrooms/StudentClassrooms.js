@@ -99,6 +99,26 @@ const StudentClassrooms = () => {
 
   }, [])
 
+  //THE CODE BELOW GRABS THE CURRENT USER ID FROM STATE AND UTILIZES THE fetchClassData FUNCTION SUCCESSFULLY
+  //WITHOUT THE USEEFFECT()
+  //=============================================================
+  // const currentUser = useSelector((state) => state.store)
+  // if (!currentUser.current_user) return null;
+  // const userId = currentUser.current_user.id
+  // console.log(userId)
+
+
+  // const fetchClassData = async () => {
+  //   const res = await fetch(/api/users/${userId}/classes)
+  //   const classroomData = await res.json()
+  //   setClassrooms(classroomData)
+  //   // classrooms.push(classroomData)
+  //   // console.log(classroomData)
+  // }
+  // fetchClassData()
+
+  //=============================================================
+
 
   console.log(classrooms)
   return (
@@ -123,7 +143,7 @@ const StudentClassrooms = () => {
                 </div>
               </CardContent>
               <CardActions className="classroom-buttons-container">
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(idx)}}>View</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => { handleViewClick(idx) }}>View</Button>
               </CardActions>
             </Card>
           )

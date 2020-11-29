@@ -5,7 +5,7 @@ import './ClassroomNav.css'
 
 export default function ClassroomNavContainer() {
   return (
-    <Box className='classroomNavConatiner'>
+    <Box className='classroomNavContainer'>
       <ClassroomNav />
     </Box>
   )
