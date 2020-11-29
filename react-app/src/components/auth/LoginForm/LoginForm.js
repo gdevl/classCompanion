@@ -42,7 +42,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
     } else {
       setErrors(user.errors);
     }
-    console.log("user: ", user);
+    // console.log("user: ", user);
   };
 
   const updateEmail = (e) => {

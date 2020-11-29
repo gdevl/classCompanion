@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
-from app.models import User, Classroom, Group, Question, Answer
+from app.models import User, Classroom, Group, Question, Answer, CheckIn
 import math, random
 
 class_routes = Blueprint('classes', __name__)
@@ -124,3 +124,14 @@ def postQuestion(class_id, user_id):
     db.session.add(question)
     db.session.commit()
     return question.to_dict()
+
+
+@class_routes.route('/<int:class_id>/user/<int:student_id>/checkin', methods=['GET', 'POST'])
+def check_in(class_id, student_id):
+    checkin = CheckIn(
+        student_id=student_id,
+        class_id=class_id,
+    )
+    db.session.add(checkin)
+    db.session.commit()
+    return jsonify("CHECKINTEST")
