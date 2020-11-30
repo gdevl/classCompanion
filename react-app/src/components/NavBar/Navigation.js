@@ -105,6 +105,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navigation = ({ setAuthenticated }) => {
+
+  let userObj = { hola: 1 }
+
   const { user } = useParams();
   let { userSlug } = useParams();
   const classes = useStyles();
@@ -139,6 +142,23 @@ const Navigation = ({ setAuthenticated }) => {
       window.location.reload()
     }
   };
+
+  const collectUserDataForEdit = async () => {
+    const response = await fetch(`/api/users/${id}/update`, {
+    });
+    const users = await response.json()
+    console.log('hola')
+    // userObj.username = users.username
+    // userObj.email = users.email
+    // userObj.avatar_url = users.avatar_url
+
+    if (response.ok) {
+      window.location.reload()
+    }
+  };
+
+  collectUserDataForEdit()
+  // console.log('look here: ', userObj)
 
 
   const handleOpenModal = () => {
@@ -241,7 +261,7 @@ const Navigation = ({ setAuthenticated }) => {
                           <Typography variant='h4' className={classes.editHeading}>
                             Edit Profile
                             </Typography>
-                          <TextField id='standard-basic' value={username} onChange={updateUsername} label='Username' autoFocus />
+                          <TextField id='standard-basic' placeholder={userObj.hola} value={username} onChange={updateUsername} label='Username' autoFocus />
                           <TextField id='standard-basic' value={email} onChange={updateEmail} label='Email' />
                           <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' />
                           <TextField id='standard-basic' value={avatarUrl} onChange={updateAvatarUrl} label='Avatar URL' />
