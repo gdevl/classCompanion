@@ -29,17 +29,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
   },
   checkedIn: {
-    border: '1px solid blue',
-    border: '5px solid #EE4266',
     border: '2px solid blue',
-    opacity: '70%',
     width: '15em',
     margin: '1em',
     minHeight: '8em',
   },
   checkedOut: {
-    border: '1px solid red',
-    border: '5px solid #EE4266',
     border: '2px solid red',
     opacity: '70%',
     width: '15em',
@@ -86,7 +81,7 @@ export default function UserCard({ props }) {
     let activeQuestion = ''
     currentClass.questions.forEach(question => {
       if (question.student_id === student_id && question.resolved === false) {
-        activeQuestion = {id: question.id, content: question.content}
+        activeQuestion = { id: question.id, content: question.content }
       }
     })
     return activeQuestion;
@@ -125,7 +120,7 @@ export default function UserCard({ props }) {
   const user = props
   return (
     <>
-      <Card key={user.id} className={checkedIn(user.id) ?  classes.checkedIn : classes.checkedOut}>
+      <Card key={user.id} className={checkedIn(user.id) ? classes.checkedIn : classes.checkedOut}>
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" className={classes.avatar} src={user.avatar_url ? user.avatar_url : ''}>

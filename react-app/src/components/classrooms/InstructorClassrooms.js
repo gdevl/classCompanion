@@ -10,7 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { BsFillPlusSquareFill } from "react-icons/bs";
+import { BsFillPauseFill, BsFillPlusSquareFill } from "react-icons/bs";
 import { BsPlusSquare } from "react-icons/bs";
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     backgroundColor: theme.palette.secondary.light,
     background: theme.palette.success.light,
-    color: theme.palette.secondary.contrastText,
+    color: theme.palette.primary.contrastText,
     height: '200px',
     minWidth: '300px',
     margin: '1em'
@@ -164,6 +164,7 @@ const userId = 1
 const InstructorClassrooms = () => {
 
   // const { userId } = useParams();
+  const [updatedEnrolledStudents, setUpdatedEnrolledStudents] = useState([])
   const classes = useStyles()
   const history = useHistory();
   const dispatch = useDispatch();
@@ -175,26 +176,25 @@ const InstructorClassrooms = () => {
   const [classTime, setClassTime] = useState('')
   const [addStudentModalOpen, setAddStudentModalOpen] = useState(false)
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState(['Ryan', 'Gabe']);
-  const [right, setRight] = useState(['Ranson', 'Warren']);
+  const [left, setLeft] = useState([]);
+  const [right, setRight] = useState([]);
+  const [enrolledStudentIds, setEnrolledStudentIds] = useState([])
   const [classToDelete, setClassToDelete] = useState(null)
   const [transferListDisplay, setTransferListDisplay] = useState('none')
+  const [currentClass, setCurrentClass] = useState('')
   const classroomData = useSelector(state => state.store.classrooms)
   const currentUserId = useSelector(state => state.store.current_user.id)
 
-  console.log(classroomData)
 
   let allClassrooms = []
   let classIds = []
-
+  let test = []
+  let ids = []
+  let id = []
   for (let classroomId in classroomData) {
-    // allClassrooms.push
-    console.log(classroomData[classroomId])
     allClassrooms.push(classroomData[classroomId])
     classIds.push(classroomId)
   }
-  console.log(allClassrooms)
-  // setOtherClassrooms(allClassrooms)
 
 
   // FUNCTIONALITY FOR THE TRANSFER LIST --------------------------------------------------------
@@ -232,12 +232,15 @@ const InstructorClassrooms = () => {
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
+    console.log(right)
+
   };
 
   const handleCheckedLeft = () => {
     setLeft(left.concat(rightChecked));
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
+    console.log(right)
   };
 
   const handleAllLeft = () => {
@@ -249,7 +252,7 @@ const InstructorClassrooms = () => {
 
 
 
-  // FUNCTION FOR SETTING A SELECTED CLASSROOM
+  // FUNCTION FOR SETTING A SELECTED CLASSROOM------------------------------------|
 
 
 
@@ -263,7 +266,7 @@ const InstructorClassrooms = () => {
   }
 
 
-  // ------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------|
 
 
   const handleDialogClose = () => {
@@ -274,7 +277,7 @@ const InstructorClassrooms = () => {
 
 
 
-  // FUNCTIONALITY FOR DELETING A CLASS ------------------------------------------------------
+  // FUNCTIONALITY FOR DELETING A CLASS ------------------------------------------------------|
 
   const handleDeactivateConfirmation = (classId) => {
     setClassToDelete(classId)
@@ -295,7 +298,7 @@ const InstructorClassrooms = () => {
   }
 
 
-  // ------------------------------------------------------------------------------------------
+ // ------------------------------------------------------------------------------------------|
 
 
   const handleAddClass = () => {
@@ -306,7 +309,52 @@ const InstructorClassrooms = () => {
     setModalOpen(false);
   }
 
-  const handleAddStudent = () => {
+  const populateEnrolledStudentIdsArray = (enrolledStudents) => {
+    // console.log(enrolledStudents)
+    console.log('here 2')
+    const studentIds = []
+    enrolledStudents.forEach(student => {
+      console.log('STUDENT ID:', student.id)
+      studentIds.push(student.id)
+    })
+    // setEnrolledStudentIds(studentIds)
+    test.push(...studentIds)
+  }
+
+  const populateEnrolledStudentsArray = (classId) => {
+    console.log('here 1')
+    const enrolledStudents = []
+
+    allClassrooms.forEach(classroom => {
+      if (classroom.id === Number(classId)) {
+        populateEnrolledStudentIdsArray(classroom.students)
+        classroom.students.forEach(student => {
+          // console.log(student)
+          enrolledStudents.push(`${student.first_name} ${student.last_name} - Student id: ${student.id}`)
+        })
+      }
+    })
+    setRight(enrolledStudents)
+  }
+
+  const handlePopulateTransferList = async (classId) => {
+
+    setCurrentClass(classId)
+    const unEnrolledStudents = []
+
+    await populateEnrolledStudentsArray(classId)
+    const res = await fetch(`api/classes/${classId}/students`)
+    const allStudentsArr = await res.json()
+    allStudentsArr.forEach(student => {
+      // console.log(student)
+      if(!test.includes(student.id)) {
+        console.log(enrolledStudentIds)
+        unEnrolledStudents.push(`${student.first_name} ${student.last_name} - Student id: ${student.id}`)
+      }
+    })
+    setLeft(unEnrolledStudents)
+    // console.log(allStudentsArr)
+
     setAddStudentModalOpen(true);
   }
 
@@ -314,6 +362,47 @@ const InstructorClassrooms = () => {
     setAddStudentModalOpen(false);
   }
 
+  const submitEnrolledStudents = async () => {
+    await fetch(`api/classes/${currentClass}/update-enrollment`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(ids)
+    })
+    const updatedClasses = await fetchClassrooms(currentUserId)
+    console.log(updatedClasses)
+    dispatch(setUserClasses(updatedClasses))
+  }
+
+  const updateEnrollment = () => {
+    handleCloseStudentModal()
+    console.log(right)
+
+    let isNumber = true
+    right.forEach(student => {
+      isNumber = true
+      let i = student.length - 1
+      while (isNumber === true) {
+        console.log(student[i])
+        if(Number(student[i])) {
+          console.log('is number')
+          id.unshift(student[i])
+          i -= 1
+          continue
+        } else {
+          console.log('is not number')
+          let currentId = id.pop()
+          Number(currentId)
+          ids.push(currentId)
+          isNumber = BsFillPauseFill
+        }
+      }
+    })
+    // setUpdatedEnrolledStudents(ids)
+    // console.log(ids)
+    submitEnrolledStudents()
+  }
 
 
 
@@ -441,7 +530,9 @@ const InstructorClassrooms = () => {
                 />
               </ListItemIcon>
               {/* <ListItemText id={labelId} primary={`List item ${value + 1}`} /> */}
-              <ListItemText id={labelId} primary={value} />
+              <ListItemText id={labelId}>
+                {value}
+              </ListItemText>
             </ListItem>
           );
         })}
@@ -488,34 +579,32 @@ const InstructorClassrooms = () => {
       </div>
       <div className={classes.outlined}>
         {allClassrooms.map((classroom, idx) => {
-          // console.log('CLASSROOM', classroom.classSize)
-          console.log(idx)
+
           return (
             <>
-              <Card className={classes.paper} id={'HERE'} key={idx}>
-                <CardContent className={classes.cardcontent}>
-                  <div className="classroom-data">
-                    <div className="classroom-name">
-                      <h2>
-                        {/* {classroom.className}: {classroom.ClassTime} */}
-                        {classroom.name}
-                      </h2>
-                    </div>
-                    <div className="classroom-size">
-                      <h4>
-                        {/* Class Size: {classroom.ClassSize} */}
-                      Class Size: {classroom.students.length}
-                      </h4>
-                    </div>
+            <Card className={classes.paper} id={'HERE'} key={idx}>
+              <CardContent className={classes.cardcontent}>
+                <div className="classroom-data">
+                  <div className="classroom-name">
+                    <h2>
+                      {/* {classroom.className}: {classroom.ClassTime} */}
+                      {classroom.name}
+                    </h2>
                   </div>
-                </CardContent>
-                <CardActions className="classroom-buttons-container" id={'HERE'}>
-                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => { handleViewClick(classIds[idx]) }}>View</Button>
-                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={handleAddStudent}>Enroll Students</Button>
-                  <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => { handleDeactivateConfirmation(classIds[idx]) }}>Delete</Button>
-                </CardActions>
-              </Card>
-
+                  <div className="classroom-size">
+                    <h3>
+                      {/* Class Size: {classroom.ClassSize} */}
+                      Class Size: {classroom.students.length}
+                    </h3>
+                  </div>
+                </div>
+              </CardContent>
+              <CardActions className="classroom-buttons-container" id={'HERE'}>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(classIds[idx])}}>View</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handlePopulateTransferList(classIds[idx])}}>Enroll Students</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleDeactivateConfirmation(classIds[idx])}}>Delete</Button>
+              </CardActions>
+            </Card>
             </>
           )
         })}
@@ -644,10 +733,9 @@ const InstructorClassrooms = () => {
             </Grid>
           </Grid>
           <Grid item>{customList(right)}</Grid>
+          <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={updateEnrollment}>Enroll Students</Button>
         </Grid>
       </Modal>
-
-
     </div>
   )
 }
