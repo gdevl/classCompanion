@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
-import { CardActionArea, CardActions, Grid, Paper, FormControl, InputLabel, Input } from "@material-ui/core";
+import { CardActions, Grid, Paper, FormControl, InputLabel, Input } from "@material-ui/core";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { BsFillPauseFill, BsFillPlusSquareFill } from "react-icons/bs";
 import { BsPlusSquare } from "react-icons/bs";
 import Modal from '@material-ui/core/Modal';
-import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useHistory } from 'react-router-dom'
-import zIndex from '@material-ui/core/styles/zIndex';
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserClasses, fetchClassrooms, setCurrentClassRoom } from "../../store/users";
-// import AddClass from './AddClass.js';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -159,16 +151,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const userId = 1
 
 const InstructorClassrooms = () => {
-
-  // const { userId } = useParams();
-  const [updatedEnrolledStudents, setUpdatedEnrolledStudents] = useState([])
   const classes = useStyles()
-  const history = useHistory();
   const dispatch = useDispatch();
-
   const [dialogOpen, setDialogOpen] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [className, setClassName] = useState('')
@@ -180,7 +166,6 @@ const InstructorClassrooms = () => {
   const [right, setRight] = useState([]);
   const [enrolledStudentIds, setEnrolledStudentIds] = useState([])
   const [classToDelete, setClassToDelete] = useState(null)
-  const [transferListDisplay, setTransferListDisplay] = useState('none')
   const [currentClass, setCurrentClass] = useState('')
   const classroomData = useSelector(state => state.store.classrooms)
   const currentUserId = useSelector(state => state.store.current_user.id)
@@ -196,8 +181,157 @@ const InstructorClassrooms = () => {
     classIds.push(classroomId)
   }
 
+  // CREATE A CLASS ------------------------------------------------------------------------------------------------------------------------
 
-  // FUNCTIONALITY FOR THE TRANSFER LIST --------------------------------------------------------
+
+  const handleAddClass = () => {
+    setModalOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  }
+
+  const handleInputChange = (e) => {
+    if (e.target.id === 'name-input') {
+      setClassName(e.target.value)
+    } else if (e.target.id === 'description-input') {
+      setClassDescription(e.target.value)
+    } else {
+      setClassTime(e.target.value)
+    }
+  }
+
+
+  const submitClass = async () => {
+    const body = {
+      className,
+      classDescription,
+      classTime
+    }
+
+
+    const res = await fetch(`/api/users/${currentUserId}/classes/create`, {
+
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    })
+    const response = await res.json()
+
+    const updatedClasses = await fetchClassrooms(currentUserId)
+    dispatch(setUserClasses(updatedClasses))
+  }
+
+  const handleCreateClass = (e) => {
+    e.preventDefault()
+    setModalOpen(false)
+    submitClass()
+  }
+
+  const addClassBody = (
+    <div className={classes.classModal}>
+      <h2 id="simple-modal-title">Class Info:</h2>
+      <div>
+        <FormControl>
+          <InputLabel htmlFor="name-input">Name</InputLabel>
+          <Input id="name-input" onChange={handleInputChange} autoFocus />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl>
+          <InputLabel htmlFor="description-input">Description</InputLabel>
+          <Input id="description-input" onChange={handleInputChange} />
+        </FormControl>
+      </div>
+      <div>
+        <Button variant="contained" color="primary" style={{ color: "white" }} size="small" className={classes.addClassSubmitButton} onClick={handleCreateClass} type='submit'>Create Class</Button>
+      </div>
+    </div>
+  );
+
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+  // DELETE A CLASS --------------------------------------------------------------------------------------------------------------------------------------------
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  }
+
+
+  const handleDeactivateConfirmation = (classId) => {
+    setClassToDelete(classId)
+    setDialogOpen(true);
+  }
+
+  const handleClassDelete = async () => {
+    setDialogOpen(false);
+    const res = await fetch(`api/classes/${classToDelete}/delete`, {
+      method: 'PATCH'
+    })
+    const response = await res.json()
+    const updatedClasses = await fetchClassrooms(currentUserId)
+    // console.log(updatedClasses)
+    dispatch(setUserClasses(updatedClasses))
+    // alert('Deleted Class')
+  }
+
+
+  // ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+  // VIEW A CLASS-------------------------------------------------------------------------------------------------------------------------------|
+
+
+  const handleViewClick = async (classId) => {
+
+
+    // alert(`re-routing to math class: ${classId}`)
+    dispatch(setCurrentClassRoom(classroomData[classId]))
+  }
+
+
+  // -----------------------------------------------------------------------------------------------------------------------------------------------|
+
+
+  // START T-LIST SECTION
+
+  // (OTHER UI IS IN THE MAIN RETURN STATMENT FOR THE INSTRUCTOR CLASSROOMS COMPONENT)---------------------------------------------------------------------------------------------------------------------------------
+
+  // T-LIST BOILERPLATE-------------------------------------------------------------------------------------------------------------------
+    const customList = (items) => (
+      <Paper className={classes.enrollStudentsTransferList}>
+        <List dense component="div" role="list">
+          {items.map((value) => {
+            const labelId = `transfer-list-item-${value}-label`;
+
+            return (
+              <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
+                <ListItemIcon>
+                  <Checkbox
+                    checked={checked.indexOf(value) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ 'aria-labelledby': labelId }}
+                  />
+                </ListItemIcon>
+                {/* <ListItemText id={labelId} primary={`List item ${value + 1}`} /> */}
+                <ListItemText id={labelId}>
+                  {value}
+                </ListItemText>
+              </ListItem>
+            );
+          })}
+          <ListItem />
+        </List>
+      </Paper>
+    );
 
   function not(a, b) {
     return a.filter((value) => b.indexOf(value) === -1);
@@ -232,7 +366,6 @@ const InstructorClassrooms = () => {
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
-    console.log(right)
 
   };
 
@@ -240,7 +373,6 @@ const InstructorClassrooms = () => {
     setLeft(left.concat(rightChecked));
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
-    console.log(right)
   };
 
   const handleAllLeft = () => {
@@ -248,94 +380,90 @@ const InstructorClassrooms = () => {
     setRight([]);
   };
 
-
-
-
-
-  // FUNCTION FOR SETTING A SELECTED CLASSROOM------------------------------------|
-
-
-
-
-  const handleViewClick = async (classId) => {
-
-
-    // alert(`re-routing to math class: ${classId}`)
-    console.log(classroomData[classId])
-    dispatch(setCurrentClassRoom(classroomData[classId]))
+  const handleCloseStudentModal = () => {
+    setAddStudentModalOpen(false);
   }
 
 
-  // ------------------------------------------------------------------------------|
-
-
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-  }
+  // END T-LIST BOILER PLATE (FUNCTIONS FOR GETTING AND SUBMITTING DATA BELOW)--------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
+   // 5) THIS IS THE HELPER FUNCTION TO THE FOURTH FUNCTION AND SENDS THE ARRAY OF IDS OF THE ENROLLED STUDENTS TO THE FOLLOWING ENDPOINT
 
-
-  // FUNCTIONALITY FOR DELETING A CLASS ------------------------------------------------------|
-
-  const handleDeactivateConfirmation = (classId) => {
-    setClassToDelete(classId)
-    setDialogOpen(true);
-  }
-
-  const handleClassDelete = async () => {
-    setDialogOpen(false);
-    const res = await fetch(`api/classes/${classToDelete}/delete`, {
-      method: 'PATCH'
+   const submitEnrolledStudents = async () => {
+    await fetch(`api/classes/${currentClass}/update-enrollment`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(ids)
     })
-    const response = await res.json()
-    console.log(response)
     const updatedClasses = await fetchClassrooms(currentUserId)
-    // console.log(updatedClasses)
     dispatch(setUserClasses(updatedClasses))
-    // alert('Deleted Class')
   }
 
 
- // ------------------------------------------------------------------------------------------|
+  // 4) THIS THE FUNCTION THAT IS RUN AFTER CLICKING THE 'ENROLL STUDENTS' BUTTON OF THE T-LIST
+  // IT LOOPS THROUGH ALL OF THE STUDENTS IN THE ENROLLED ARRAY (CALLED 'RIGHT' AND IS IN THE LOCAL STATE) AND EXTRACTS
+  // THE STUDENT ID AND ADDS THIS ID TO AN ARRAY CALLED IDS
 
+  const updateEnrollment = () => {
+    handleCloseStudentModal()
 
-  const handleAddClass = () => {
-    setModalOpen(true);
+    let isNumber = true
+    right.forEach(student => {
+      isNumber = true
+      let i = student.length - 1
+      while (isNumber === true) {
+        if(Number(student[i])) {
+          id.unshift(student[i])
+          i -= 1
+          continue
+        } else {
+          let currentId = id.pop()
+          Number(currentId)
+          ids.push(currentId)
+          isNumber = BsFillPauseFill
+        }
+      }
+    })
+
+    submitEnrolledStudents()
   }
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  }
-
+  // 3) THIS IS THE HELPER FUNCTION OF THE SECOND FUNCTION THAT KEEPS TRACK OF ALL OF THE ENROLLED STUDENTS BY THEIR ID.
+  // THIS IS LATER USED AS A REFERENCE WHEN POPULATING THE 'NOT ENROLLED' SECTION BY COMPARING EVERY STUDENT ID TO THE
+  // STUDENT IDS THAT ARE ENROLLED IN ORDER TO DETERMINE WHICH IDS BELONG TO THE 'NOT ENROLLED SECTION'
   const populateEnrolledStudentIdsArray = (enrolledStudents) => {
-    // console.log(enrolledStudents)
-    console.log('here 2')
     const studentIds = []
     enrolledStudents.forEach(student => {
-      console.log('STUDENT ID:', student.id)
       studentIds.push(student.id)
     })
     // setEnrolledStudentIds(studentIds)
     test.push(...studentIds)
   }
 
+  // 2) THIS IS THE HELPER FUNCTION OF THE FIRST FUNCTION THAT POPULATES THE ARRAY THAT IS THEN USED BY THE TRANSFER LIST
+  // CODE IN THE 'COMPONENT RETURN STATEMENT' TO DISPLAY THE CONTENT OF THE 'ENROLLED' SECTION OF THE TRANSFER LIST
+
   const populateEnrolledStudentsArray = (classId) => {
-    console.log('here 1')
     const enrolledStudents = []
 
     allClassrooms.forEach(classroom => {
       if (classroom.id === Number(classId)) {
         populateEnrolledStudentIdsArray(classroom.students)
         classroom.students.forEach(student => {
-          // console.log(student)
           enrolledStudents.push(`${student.first_name} ${student.last_name} - Student id: ${student.id}`)
         })
       }
     })
     setRight(enrolledStudents)
   }
+
+
+  // 1) THIS FUNCTION IS RUN WHEN YOU CLICK THE 'ENROLL STUDENTS' BUTTON AND ITS PURPOSE IS TO POPULATE THE 'NOT ENROLLED' AND
+  // 'ENROLLED' SECTIONS OF THE T-LIST BEFORE ANY CHANGES ARE MADE TO THE LIST BY MOVING STUDENTS
 
   const handlePopulateTransferList = async (classId) => {
 
@@ -346,210 +474,18 @@ const InstructorClassrooms = () => {
     const res = await fetch(`api/classes/${classId}/students`)
     const allStudentsArr = await res.json()
     allStudentsArr.forEach(student => {
-      // console.log(student)
       if(!test.includes(student.id)) {
-        console.log(enrolledStudentIds)
         unEnrolledStudents.push(`${student.first_name} ${student.last_name} - Student id: ${student.id}`)
       }
     })
     setLeft(unEnrolledStudents)
-    // console.log(allStudentsArr)
 
     setAddStudentModalOpen(true);
   }
 
-  const handleCloseStudentModal = () => {
-    setAddStudentModalOpen(false);
-  }
-
-  const submitEnrolledStudents = async () => {
-    await fetch(`api/classes/${currentClass}/update-enrollment`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(ids)
-    })
-    const updatedClasses = await fetchClassrooms(currentUserId)
-    console.log(updatedClasses)
-    dispatch(setUserClasses(updatedClasses))
-  }
-
-  const updateEnrollment = () => {
-    handleCloseStudentModal()
-    console.log(right)
-
-    let isNumber = true
-    right.forEach(student => {
-      isNumber = true
-      let i = student.length - 1
-      while (isNumber === true) {
-        console.log(student[i])
-        if(Number(student[i])) {
-          console.log('is number')
-          id.unshift(student[i])
-          i -= 1
-          continue
-        } else {
-          console.log('is not number')
-          let currentId = id.pop()
-          Number(currentId)
-          ids.push(currentId)
-          isNumber = BsFillPauseFill
-        }
-      }
-    })
-    // setUpdatedEnrolledStudents(ids)
-    // console.log(ids)
-    submitEnrolledStudents()
-  }
-
-
-
-
-
-  // UPDATE FORM FIELDS FOR CREATE CLASSROOM MODAL
-
-
-
-  const handleInputChange = (e) => {
-    if (e.target.id === 'name-input') {
-      setClassName(e.target.value)
-      // console.log(className)
-    } else if (e.target.id === 'description-input') {
-      setClassDescription(e.target.value)
-    } else {
-      setClassTime(e.target.value)
-    }
-  }
-
-
-
-
-  // FUNCTIONALITY FOR CREATING A CLASS AND UPDATING STORE
-
-  const submitClass = async () => {
-    const body = {
-      className,
-      classDescription,
-      classTime
-    }
-
-
-    const res = await fetch(`/api/users/${userId}/classes/create`, {
-
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    })
-    console.log(body)
-    const response = await res.json()
-    console.log(response)
-
-    const updatedClasses = await fetchClassrooms(currentUserId)
-    console.log(updatedClasses)
-    dispatch(setUserClasses(updatedClasses))
-  }
-
-  const handleCreateClass = (e) => {
-    e.preventDefault()
-    setModalOpen(false)
-    submitClass()
-  }
-
-
-  // useEffect(() => {
-  //   const fetchClassData = async () => {
-  //     const res = await fetch(`/api/users/${userId}/classes`)
-  //     const classroomData = await res.json()
-  //     setClassrooms(classroomData)
-  //     // classrooms.push(classroomData)
-  //     // console.log(classroomData)
-  //   }
-  //   fetchClassData()
-
-  // }, [])
-
-
-
-  // CONTENT OF THE 'CREATE A CLASS' MODAL -------------------------------------------------------------------------------------------------------------------------------------
-
-
-  const addClassBody = (
-    // <div className={classes.classModal}>
-    <div className={classes.classModal}>
-      <h2 id="simple-modal-title">Class Info:</h2>
-      {/* <p id="simple-modal-description">
-        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-      </p> */}
-      <div>
-        <FormControl>
-          <InputLabel htmlFor="name-input">Name</InputLabel>
-          <Input id="name-input" onChange={handleInputChange} autoFocus />
-        </FormControl>
-      </div>
-      <div>
-        <FormControl>
-          <InputLabel htmlFor="description-input">Description</InputLabel>
-          <Input id="description-input" onChange={handleInputChange} />
-        </FormControl>
-      </div>
-      <div>
-        <FormControl>
-          <InputLabel htmlFor="timeslot-input">Time Slot</InputLabel>
-          <Input id="timeslot-input" onChange={handleInputChange} />
-        </FormControl>
-      </div>
-      <div>
-        <Button variant="contained" color="primary" style={{ color: "white" }} size="small" className={classes.addClassSubmitButton} onClick={handleCreateClass} type='submit'>Create Class</Button>
-      </div>
-    </div>
-  );
-
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-  // FUNCTION THAT GENERATES THE TRANSFER LIST CONTENT---------------------------------------------------------------------------------------------------------------------------------
-
-  const customList = (items) => (
-    <Paper className={classes.enrollStudentsTransferList}>
-      <List dense component="div" role="list">
-        {items.map((value) => {
-          const labelId = `transfer-list-item-${value}-label`;
-
-          return (
-            <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
-              <ListItemIcon>
-                <Checkbox
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': labelId }}
-                />
-              </ListItemIcon>
-              {/* <ListItemText id={labelId} primary={`List item ${value + 1}`} /> */}
-              <ListItemText id={labelId}>
-                {value}
-              </ListItemText>
-            </ListItem>
-          );
-        })}
-        <ListItem />
-      </List>
-    </Paper>
-  );
-
   //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-  const tListHeadings = (
-    <div>
-
-    </div>
-  );
-
+  // END T-LIST SECTION
 
 
 
@@ -559,21 +495,8 @@ const InstructorClassrooms = () => {
 
 
 
-
-
-
   return (
     <div className={classes.Container}>
-      {/* <div className={classes.addClassContainer}>
-        <h1>
-          Add Class
-        </h1>
-        <div className="plus-icon">
-          <Button style={{maxWidth: '5px'}} size='small'>
-            <BsPlusSquare size={25} onClick={handleAddClass}/>
-          </Button>
-        </div>
-      </div> */}
       <div className={classes.Title}>
         <h1>Select a Class!</h1>
       </div>
@@ -679,15 +602,20 @@ const InstructorClassrooms = () => {
 
 
 
-
-
       <Modal
         open={addStudentModalOpen}
         onClose={handleCloseStudentModal}
       >
         {/* {tListHeadings} */}
         <Grid container spacing={2} justify="center" alignItems="center" className={classes.enrollStudentsModal}>
-          <Grid item>{customList(left)}</Grid>
+          <Grid item>
+            <div>
+              <h1>
+                Not Enrolled
+              </h1>
+            </div>
+            {customList(left)}
+            </Grid>
           <Grid item>
             <Grid container direction="column" alignItems="center">
               <Button
@@ -732,7 +660,14 @@ const InstructorClassrooms = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid item>{customList(right)}</Grid>
+          <Grid item>
+          <div>
+              <h1>
+                Enrolled
+              </h1>
+            </div>
+            {customList(right)}
+          </Grid>
           <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={updateEnrollment}>Enroll Students</Button>
         </Grid>
       </Modal>
