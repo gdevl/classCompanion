@@ -84,6 +84,15 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '0px',
     paddingLeft: '0px',
   },
+  backBtn: {
+    backgroundColor: 'white',
+    "&:active": {
+      backgroundColor: 'white'
+    },
+    "&:hover": {
+      backgroundColor: 'white'
+    }
+  },
   avatar: {
     marginBottom: '1rem',
     width: theme.spacing(7),
@@ -221,6 +230,7 @@ const Navigation = ({ setAuthenticated }) => {
     <div className={classes.navigation}>
       <AppBar position="static">
         <Toolbar>
+          <Button size='large' variant='contained' onClick={() => { window.location.reload() }} className={classes.backBtn} variant='outlined'>Classes</Button>
           <Typography variant="h6" className={classes.title} align="center">
             User
           </Typography>
