@@ -68,16 +68,14 @@ function App() {
       </Route>
 
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-        <Box className='appContainer'>
-          <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
-          {/* <MainLayout /> */}
-          {currentUserRole.role === 'instructor'
-          ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
-          : ( currentClassroom ? <StudentLayout /> : <><StudentClassrooms /><button onClick={() => dispatch(setCurrentClassRoom(currentClassrooms[1]))}>Class 1</button></> )
-          }
+        <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
 
-          <Footer />
-        </Box>
+        {currentUserRole.role === 'instructor'
+          ? (currentClassroom ? <InstructorLayout /> : <InstructorClassrooms />)
+          : (currentClassroom ? <StudentLayout /> : <><StudentClassrooms /><button onClick={() => dispatch(setCurrentClassRoom(currentClassrooms[1]))}>Class 1</button></>)
+        }
+
+        <Footer />
       </ProtectedRoute>
       <Route path='/question' exact={true} authenticated={authenticated}>
         <AskQuestion />

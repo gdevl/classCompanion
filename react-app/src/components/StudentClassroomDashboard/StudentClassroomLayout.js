@@ -3,6 +3,7 @@ import ClassroomLayoutContainer from './ClassroomLayout/ClassroomLayoutContainer
 import {useSelector} from 'react-redux'
 import Divider from '@material-ui/core/Divider';
 import DashboardHeadder from './DashboardHeader/DashboardHeaderContainer'
+import './StudentLayout.css'
 
 export default function StudentClassroomLayout() {
   const classList = useSelector(state => state.store.classrooms)
