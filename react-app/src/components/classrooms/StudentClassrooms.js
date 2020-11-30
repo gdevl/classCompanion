@@ -6,6 +6,8 @@ import CardContent from '@material-ui/core/CardContent';
 import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from "react-redux";
+import { setUserClasses, fetchClassrooms, setCurrentClassRoom } from "../../store/users";
+
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -70,60 +72,70 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const userId = 2
 
-const handleViewClick = async (e) => {
-  // await history.replace(`/api/users/classes/class`)
-  // console.log(e.target.id)
-  alert(`re-routing to math class: ${e}`)
-  console.log(e)
-}
 
 const StudentClassrooms = () => {
 
+  const dispatch = useDispatch();
   const classes = useStyles()
-  // const userRole = useSelector(state => state.store)
-  // const userId = useSelector(state => state.store.current_user)
-  console.log(userId)
   const [classrooms, setClassrooms] = useState([])
+  const classroomData = useSelector(state => state.store.classrooms)
+  const currentUserId = useSelector(state => state.store.current_user.id)
 
-  useEffect(() => {
-    const fetchClassData = async () => {
-      const res = await fetch(`/api/users/${userId}/classes`)
-      const classroomData = await res.json()
-      setClassrooms(classroomData)
-      // classrooms.push(classroomData)
-      // console.log(classroomData)
-    }
-    fetchClassData()
 
-  }, [])
+  let allClassrooms = []
+  let classIds = []
 
+  for (let classroomId in classroomData) {
+    allClassrooms.push(classroomData[classroomId])
+    classIds.push(classroomId)
+  }
+
+  // useEffect(() => {
+  //   const fetchClassData = async () => {
+  //     const res = await fetch(`/api/users/${currentUserId}/classes`)
+  //     const classroomData = await res.json()
+  //     setClassrooms(classroomData)
+  //     // classrooms.push(classroomData)
+  //     // console.log(classroomData)
+  //   }
+  //   fetchClassData()
+
+  // }, [])
+
+  const handleViewClick = (classId) => {
+    // alert(`re-routing to math class: ${classId}`)
+    console.log(classroomData)
+    console.log(classroomData[classId])
+    dispatch(setCurrentClassRoom(classroomData[classId]))
+  }
 
   console.log(classrooms)
   return (
     <>
       <div className={classes.outlined}>
-        {classrooms.map((classroom, idx) => {
+        {allClassrooms.map((classroom, idx) => {
           // console.log('CLASSROOM', classroom.classSize)
           return (
-            <Card className={classes.paper}>
-              <CardContent className={classes.cardcontent}>
-                <div className="classroom-data">
-                  <div className="classroom-name">
-                    <h2>
-                      {classroom.className}: {classroom.ClassTime}
-                    </h2>
-                  </div>
-                  <div className="classroom-size">
-                    <h4>
-                      Class Size: {classroom.ClassSize}
-                    </h4>
-                  </div>
+            <Card className={classes.paper} id={'HERE'} key={idx}>
+            <CardContent className={classes.cardcontent}>
+              <div className="classroom-data">
+                <div className="classroom-name">
+                  <h2>
+                    {/* {classroom.className}: {classroom.ClassTime} */}
+                    {classroom.name}
+                  </h2>
                 </div>
-              </CardContent>
+                <div className="classroom-size">
+                  <h3>
+                    {/* Class Size: {classroom.ClassSize} */}
+                    Class Size: {classroom.students.length}
+                  </h3>
+                </div>
+              </div>
+            </CardContent>
               <CardActions className="classroom-buttons-container">
-                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(idx)}}>View</Button>
+                <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={() => {handleViewClick(classIds[idx])}}>View</Button>
               </CardActions>
             </Card>
           )
