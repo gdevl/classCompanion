@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, make_response
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
@@ -67,7 +67,35 @@ def updateUser(id):
     user.username = req_data['username']
     user.email = req_data['email']
     user.avatar_url = req_data['avatarUrl']
-    user.hashed_password = generate_password_hash(req_data['password'])
+    # user.hashed_password = generate_password_hash(req_data['password'])
     db.session.add(user)
     db.session.commit()
     return user.to_dict()
+
+# @user_routes.route("/<int:id>/update", methods=["GET", "PUT"])
+# # @login_required
+# def updateUser(id):
+#     if request.method == 'GET':
+#         user = User.query.get(id)
+#         req_data = request.get_json()
+#         username = req_data['username']
+#         email = req_data['email']
+#         avatar_url = req_data['email']
+#         response = make_response(
+#             jsonify(
+#                 {username, email, avatar_url}
+#             )
+#         )
+#         response.headers["Content-Type"] = "application/json"
+#         return response
+#     # return f"{req_data}"
+#     if request.method == 'POST':
+#         user = User.query.get(id)
+#         req_data = request.get_json()
+#         user.username = req_data['username']
+#         user.email = req_data['email']
+#         user.avatar_url = req_data['avatarUrl']
+#         user.hashed_password = generate_password_hash(req_data['password'])
+#         db.session.add(user)
+#         db.session.commit()
+#         return user.to_dict()
