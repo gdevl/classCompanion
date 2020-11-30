@@ -138,7 +138,7 @@ export default function UserCard({ props }) {
             </IconButton>
           }
         />
-        <AnswerModalContainer props={{ user, open, setOpen, question: hasQuestion(user.id) }} />
+        <AnswerModalContainer props={{ user, open, setOpen, question: hasQuestion(user.id), setExpanded }} />
 
         <CardActions disableSpacing className={classes.cardActionsContainer}>
           <Box className={classes.userInfoBox}>
