@@ -106,19 +106,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Navigation = ({ setAuthenticated }) => {
 
-  let userObj = { hola: 1 }
+  // let userObj = { hola: 1 }
 
-  const { user } = useParams();
-  let { userSlug } = useParams();
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open1 = Boolean(anchorEl);
   const [open, setOpen] = React.useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
 
   //   const handleChange = (event) => {
   //     setAuth(event.target.checked);
@@ -127,47 +121,65 @@ const Navigation = ({ setAuthenticated }) => {
   //grab current user from store (imported section from EditProfile component)
   const currentUser = useSelector((state) => state.store)
 
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+
 
   if (!currentUser.current_user) return null;
-  const id = currentUser.current_user.id
+  const id = currentUser.current_user.id;
 
+
+
+
+  // (() => {
+  //   setEmail(currentUser.current_user.email)
+  //   setUsername(currentUser.current_user.username)
+  //   setAvatarUrl(currentUser.current_user.avatar_url)
+
+  // })()
 
   const updateProfile = async () => {
     const response = await fetch(`/api/users/${id}/update`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password, avatarUrl }),
+      body: JSON.stringify({ username, email, avatarUrl }),
     });
     if (response.ok) {
       window.location.reload()
     }
   };
 
-  const collectUserDataForEdit = async () => {
-    const response = await fetch(`/api/users/${id}/update`, {
-    });
-    const users = await response.json()
-    console.log('hola')
-    // userObj.username = users.username
-    // userObj.email = users.email
-    // userObj.avatar_url = users.avatar_url
+  // const collectUserDataForEdit = async () => {
+  //   const response = await fetch(`/api/users/${id}/update`, {
+  //     method: "GET"
+  //   });
+  //   const users = await response.json()
+  //   // console.log('hola')
+  //   userObj.username = users.username
+  //   userObj.email = users.email
+  //   userObj.avatar_url = users.avatar_url
 
-    if (response.ok) {
-      window.location.reload()
-    }
-  };
+  //   if (response.ok) {
+  //     window.location.reload()
+  //   }
+  // };
 
-  collectUserDataForEdit()
+  // collectUserDataForEdit()
   // console.log('look here: ', userObj)
 
 
   const handleOpenModal = () => {
+    setEmail(currentUser.current_user.email)
+    setUsername(currentUser.current_user.username)
+    setAvatarUrl(currentUser.current_user.avatar_url)
     setOpen(true);
   };
 
   const handleCloseModal = (e) => {
     e.stopPropagation()
-    console.log(e.target)
+    // console.log(e.target)
     setOpen(false);
   };
 
@@ -180,9 +192,9 @@ const Navigation = ({ setAuthenticated }) => {
     setEmail(e.target.value);
   };
 
-  const updatePassword = (e) => {
-    setPassword(e.target.value);
-  };
+  // const updatePassword = (e) => {
+  //   setPassword(e.target.value);
+  // };
 
   const updateAvatarUrl = (e) => {
     setAvatarUrl(e.target.value);
@@ -261,9 +273,9 @@ const Navigation = ({ setAuthenticated }) => {
                           <Typography variant='h4' className={classes.editHeading}>
                             Edit Profile
                             </Typography>
-                          <TextField id='standard-basic' placeholder={userObj.hola} value={username} onChange={updateUsername} label='Username' autoFocus />
+                          <TextField id='standard-basic' value={username} onChange={updateUsername} label='Username' autoFocus />
                           <TextField id='standard-basic' value={email} onChange={updateEmail} label='Email' />
-                          <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' />
+                          {/* <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' /> */}
                           <TextField id='standard-basic' value={avatarUrl} onChange={updateAvatarUrl} label='Avatar URL' />
                           <Button variant='contained' color='primary' className={classes.button} type='submit'>Submit</Button>
                         </form>
