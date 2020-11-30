@@ -25,3 +25,8 @@
   flex-direction: column;
   justify-content: center;
 }
+
+
+.where-am-i {
+  outline: 1px solid black;
+}

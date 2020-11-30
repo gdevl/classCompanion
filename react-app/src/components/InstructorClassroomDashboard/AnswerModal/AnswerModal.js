@@ -35,6 +35,7 @@ export default function AnswerModal({ props }) {
     if (response.ok) {
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms))
+      props.setExpanded(null)
       props.setOpen(null)
     }
 
@@ -56,6 +57,7 @@ export default function AnswerModal({ props }) {
     if (response.ok) {
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms))
+      props.setExpanded(null)
       props.setOpen(null)
     }
 

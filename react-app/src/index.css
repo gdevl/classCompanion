@@ -20,10 +20,10 @@ body {
 }
 
 #root {
-    align-items: center;
+    /* align-items: center;
     justify-content: center;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; */
     height: 100%;
     /* display: grid;
     grid-gap: 3px;
@@ -76,7 +76,10 @@ body {
   /* margin-left: 5px */
 }
 .outlined {
-  outline: 1px solid red;
+  /* height: calc(100vh - 128px); */
+  /* height: 100%; */
+  margin: 10px;
+  outline: 1px solid pink;
 }
 .appContainer{
   width: 100%;
@@ -88,4 +91,16 @@ body {
 
 .userCardContainer{
     width: calc(100% * (1/4) - 10px - 1px)
+}
+
+.negative-space {
+  height: 64px;
+}
+
+.content__divider {
+  margin: 2em 0 !important;
+}
+
+.login__container-height {
+  height: 100%;
 }
