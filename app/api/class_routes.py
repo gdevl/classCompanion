@@ -3,7 +3,8 @@ from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
 from app.models import User, Classroom, Group, Question, Answer, CheckIn
-import math, random
+import math
+import random
 
 class_routes = Blueprint('classes', __name__)
 
@@ -33,7 +34,9 @@ def update_class(id):
         return selected_class.to_dict()
     return jsonify({"Error"})
 
-@class_routes.route('/<int:id>/group/<int:size>', methods=['GET', 'POST', 'PUT'])
+
+@class_routes.route(
+    '/<int:id>/group/<int:size>', methods=['GET', 'POST', 'PUT'])
 def group_class(id, size):
     if request.method == 'POST':
         selected_class = Classroom.query.get(id)
@@ -107,19 +110,18 @@ def dismiss_question(class_id, question_id):
         return jsonify("QUESITON DISMISS TEST")
 
 
-
 # post question
 @class_routes.route("/<int:class_id>/user/<int:user_id>/question", methods=["POST"])
 # @login_required
 def postQuestion(class_id, user_id):
     req_data = request.get_json()
     question = Question(
-            content = req_data['question'],
-            image_url=None,
-            student_id=user_id,
-            instructor_id=None,
-            class_id=class_id
-            )
+        content=req_data['question'],
+        image_url=None,
+        student_id=user_id,
+        instructor_id=None,
+        class_id=class_id
+    )
 
     db.session.add(question)
     db.session.commit()

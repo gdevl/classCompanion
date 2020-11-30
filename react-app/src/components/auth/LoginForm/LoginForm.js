@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { login } from "../../../services/auth";
 import { setCurrentUser } from "../../../store/users";
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginForm = ({ authenticated, setAuthenticated }) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
   const [errors, setErrors] = useState([]);
   const [email, setEmail] = useState("");
@@ -38,7 +39,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
     const user = await login(email, password);
     if (!user.errors) {
       setAuthenticated(true);
-      // dispatch(setCurrentUser(user));
+      dispatch(setCurrentUser(user));
     } else {
       setErrors(user.errors);
     }

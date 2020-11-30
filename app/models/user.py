@@ -52,9 +52,14 @@ class User(db.Model, UserMixin):
         }
 
     def get_user_classrooms(self):
+        # return {
+        #     "classrooms": [
+        #         classroom.id for classroom in self.classrooms],
+        # }
         return {
             "classrooms": [
-                classroom.to_dict() for classroom in self.classrooms],
+                classroom.to_dict() for classroom in self.classrooms
+            ]
         }
 
 

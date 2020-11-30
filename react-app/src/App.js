@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Box from '@material-ui/core/Box';
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentUser, fetchClassrooms, setUserClasses, setCurrentClassRoom } from "../src/store/users";
+import {
+  setCurrentUser,
+  fetchClassrooms,
+  setUserClasses,
+  setCurrentClassRoom,
+} from "../src/store/users";
 import { BrowserRouter, Route } from "react-router-dom";
 import LoginForm from "./components/auth/LoginForm/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
@@ -12,12 +18,12 @@ import User from "./components/User";
 import { authenticate } from "./services/auth";
 import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
 import StudentClassrooms from "./components/classrooms/StudentClassrooms";
-import Footer from './components/footer/Footer'
+import Footer from "./components/footer/Footer";
 import EditProfile from "./components/edit_profile/EditProfile";
-import InstructorLayout from './components/InstructorClassroomDashboard/InstructorClassroomLayout'
-import StudentLayout from './components/StudentClassroomDashboard/StudentClassroomLayout'
-import MainLayout from './MainLayout';
-import AskQuestion from './components/ask-a-question/AskQuestion';
+import InstructorLayout from "./components/InstructorClassroomDashboard/InstructorClassroomLayout";
+import StudentLayout from "./components/StudentClassroomDashboard/StudentClassroomLayout";
+import MainLayout from "./MainLayout";
+import AskQuestion from "./components/ask-a-question/AskQuestion";
 
 const siteTitle = "ClassCorral";
 
@@ -26,9 +32,9 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  const currentClassroom = useSelector(state => state.store.current_class)
-  const currentClassrooms = useSelector(state => state.store.classrooms)
-  const currentUserRole = useSelector(state => state.store.current_user)
+  const currentClassroom = useSelector((state) => state.store.current_class);
+  const currentClassrooms = useSelector((state) => state.store.classrooms);
+  const currentUserRole = useSelector((state) => state.store.current_user);
 
   useEffect(() => {
     (async () => {
@@ -41,19 +47,17 @@ function App() {
       dispatch(setCurrentUser(user));
       // setUserRole(user.role)
       const classrooms = await fetchClassrooms(user.id);
-      dispatch(setUserClasses(classrooms))
+      dispatch(setUserClasses(classrooms));
     })();
   }, [authenticated]);
 
-  if (!currentUserRole) return null
+  if (!currentUserRole) return null;
   if (!loaded) {
     return null;
   }
 
-
   return (
     <BrowserRouter>
-
       <Route path="/login" exact={true}>
         <LoginForm
           authenticated={authenticated}
@@ -68,23 +72,37 @@ function App() {
       </Route>
 
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-        <Box className='appContainer'>
-          <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
+        <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
+        <Grid className="appContainer">
           {/* <MainLayout /> */}
-          {currentUserRole.role === 'instructor'
-          ? ( currentClassroom ? <InstructorLayout /> : <InstructorClassrooms /> )
-          : ( currentClassroom ? <StudentLayout /> : <><StudentClassrooms /><button onClick={() => dispatch(setCurrentClassRoom(currentClassrooms[1]))}>Class 1</button></> )
-          }
-
-          <Footer />
-        </Box>
+          {currentUserRole.role === "instructor" ? (
+            currentClassroom ? (
+              <InstructorLayout />
+            ) : (
+              <InstructorClassrooms />
+            )
+          ) : currentClassroom ? (
+            <StudentLayout />
+          ) : (
+            <StudentClassrooms />
+            // <>
+            //   <StudentClassrooms />
+            //   <button
+            //     onClick={() =>
+            //       dispatch(setCurrentClassRoom(currentClassrooms[1]))
+            //     }
+            //   >
+            //     Class 1
+            //   </button>
+            // </>
+          )}
+        </Grid>
+        <Footer />
       </ProtectedRoute>
-      <Route path='/question' exact={true} authenticated={authenticated}>
+      <Route path="/question" exact={true} authenticated={authenticated}>
         <AskQuestion />
       </Route>
-
     </BrowserRouter>
-
   );
 }
 

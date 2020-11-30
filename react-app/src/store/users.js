@@ -1,6 +1,6 @@
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const SET_CURRENT_CLASSROOM = "SET_CURRENT_CLASSROOM";
-export const SET_CURRENT_CLASSROOMS = "SET_CURRENT_CLASSROOMS"
+export const SET_CURRENT_CLASSROOMS = "SET_CURRENT_CLASSROOMS";
 
 export const setCurrentUser = (user) => {
   return { type: SET_CURRENT_USER, user };
@@ -21,22 +21,25 @@ export const fetchClassrooms = async (userId) => {
     },
   });
   const result = await response.json();
-  const classrooms = {}
+  console.log("line 24 result: ", result);
+  // const classrooms = {}
   // console.log('classrooms', result)
-  result.classes.classrooms.forEach(classroom => {
-    if(classroom.active !== false) {
-      classrooms[classroom.id] = classroom
-    }
-  })
-  return classrooms
-}
+  // result.classes.classrooms.forEach((classroom) => {
+  //   if (classroom.active !== false) {
+  //     classrooms[classroom.id] = classroom;
+  //   }
+  // });
+  const { classrooms } = result.classrooms;
+  console.log("line 33: classrooms: ", classrooms);
+  return classrooms;
+};
 
 export const setUserClasses = (classrooms) => {
   return {
     type: SET_CURRENT_CLASSROOMS,
-    classrooms
-  }
-}
+    classrooms,
+  };
+};
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
@@ -56,7 +59,7 @@ export default function reducer(state = {}, action) {
       return {
         ...state,
         classrooms: action.classrooms,
-      }
+      };
     }
     default:
       return state;

@@ -27,7 +27,7 @@ def classes(id):
     user = User.query.get(id)
     classrooms = user.get_user_classrooms()
 
-    return {"classes": classrooms}
+    return {"classrooms": classrooms}
 
 
 @user_routes.route('/<int:id>/classes/create', methods=['GET', 'POST'])

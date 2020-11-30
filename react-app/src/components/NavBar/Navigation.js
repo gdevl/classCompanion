@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Button, Modal, TextField, ClickAwayListener } from '@material-ui/core';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
+import {
+  Avatar,
+  Button,
+  Modal,
+  TextField,
+  ClickAwayListener,
+} from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -18,7 +24,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import LogoutButton from "../auth/LogoutButton";
 import { logout } from "../../services/auth";
-import EditProfile from '../edit_profile/EditProfile';
+import EditProfile from "../edit_profile/EditProfile";
 
 const useStyles = makeStyles((theme) => ({
   navigation: {
@@ -32,73 +38,72 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   paper: {
-    backgroundColor: 'white',
-    outline: '0',
-    border: '2px solid white',
-    borderRadius: '5px',
+    backgroundColor: "white",
+    outline: "0",
+    border: "2px solid white",
+    borderRadius: "5px",
     boxShadow: theme.shadows[5],
-    paddingLeft: '5rem',
-    paddingRight: '5rem',
-    paddingTop: '2rem',
-    paddingBottom: '2rem',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-
+    paddingLeft: "5rem",
+    paddingRight: "5rem",
+    paddingTop: "2rem",
+    paddingBottom: "2rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   editHeading: {
-    marginBottom: '1rem'
+    marginBottom: "1rem",
   },
   menuButton: {
-    border: 'none',
-    fontFamily: 'Roboto',
-    fontSize: '16px',
-    marginLeft: '-6px',
-    backgroundColor: 'white',
+    border: "none",
+    fontFamily: "Roboto",
+    fontSize: "16px",
+    marginLeft: "-6px",
+    backgroundColor: "white",
     "&:hover": {
-      backgroundColor: '#f5f5f5'
+      backgroundColor: "#f5f5f5",
     },
     margin: theme.spacing(1),
   },
   element: {
-    padding: '1rem',
+    padding: "1rem",
   },
   button: {
-    marginTop: '2rem',
+    marginTop: "2rem",
   },
   btnContainer: {
-    position: 'relative',
-    left: '72%',
-    bottom: '100%',
+    position: "relative",
+    left: "72%",
+    bottom: "100%",
   },
   exitBtn: {
-    position: 'relative',
-    bottom: '1.95rem',
-    left: '8.5rem',
-    border: 'none',
-    paddingRight: '0px',
-    paddingLeft: '0px',
+    position: "relative",
+    bottom: "1.95rem",
+    left: "8.5rem",
+    border: "none",
+    paddingRight: "0px",
+    paddingLeft: "0px",
   },
   avatar: {
-    marginBottom: '1rem',
+    marginBottom: "1rem",
     width: theme.spacing(7),
-    height: theme.spacing(7)
+    height: theme.spacing(7),
   },
   root: {
-    position: 'relative',
+    position: "relative",
   },
   dropdown: {
-    position: 'absolute',
+    position: "absolute",
     top: 28,
     right: 0,
     left: 0,
     zIndex: 1,
-    border: '1px solid',
+    border: "1px solid",
     padding: theme.spacing(1),
     backgroundColor: theme.palette.background.paper,
   },
@@ -122,12 +127,11 @@ const Navigation = ({ setAuthenticated }) => {
   //   };
 
   //grab current user from store (imported section from EditProfile component)
-  const currentUser = useSelector((state) => state.store)
+  const currentUser = useSelector((state) => state.store.current_user);
+  const displayName = currentUser.username;
 
-
-  if (!currentUser.current_user) return null;
-  const id = currentUser.current_user.id
-
+  if (!currentUser) return null;
+  const id = currentUser.id;
 
   const updateProfile = async () => {
     const response = await fetch(`/api/users/${id}/update`, {
@@ -136,21 +140,18 @@ const Navigation = ({ setAuthenticated }) => {
       body: JSON.stringify({ username, email, password, avatarUrl }),
     });
     if (response.ok) {
-      window.location.reload()
+      window.location.reload();
     }
   };
-
 
   const handleOpenModal = () => {
     setOpen(true);
   };
 
   const handleCloseModal = (e) => {
-    e.stopPropagation()
-    console.log(e.target)
+    e.stopPropagation();
     setOpen(false);
   };
-
 
   const updateUsername = (e) => {
     setUsername(e.target.value);
@@ -167,8 +168,6 @@ const Navigation = ({ setAuthenticated }) => {
   const updateAvatarUrl = (e) => {
     setAvatarUrl(e.target.value);
   };
-
-
 
   //end
 
@@ -190,7 +189,7 @@ const Navigation = ({ setAuthenticated }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title} align="center">
-            User
+            {displayName}
           </Typography>
           {auth && (
             <div>
@@ -232,20 +231,69 @@ const Navigation = ({ setAuthenticated }) => {
                     }}
                   >
                     <Fade in={open}>
-                      <Typography variant='h5'>
-                        <form className={classes.paper} noValidate autoComplete='off' onSubmit={updateProfile}>
+                      <Typography variant="h5">
+                        <form
+                          className={classes.paper}
+                          noValidate
+                          autoComplete="off"
+                          onSubmit={updateProfile}
+                        >
                           {/* <form className={classes.paper} noValidate autoComplete='off'> */}
-                          <Button size='large' variant='contained' onClick={handleCloseModal} className={classes.exitBtn} variant='outlined'>x</Button>
+                          <Button
+                            size="large"
+                            variant="contained"
+                            onClick={handleCloseModal}
+                            className={classes.exitBtn}
+                            variant="outlined"
+                          >
+                            x
+                          </Button>
                           {/* <Button size='large' variant='contained' onClick={() => handleCloseModal()} className={classes.exitBtn}>x</Button> */}
-                          <Avatar alt="" src={avatarUrl} className={classes.avatar} size='large'></Avatar>
-                          <Typography variant='h4' className={classes.editHeading}>
+                          <Avatar
+                            alt=""
+                            src={avatarUrl}
+                            className={classes.avatar}
+                            size="large"
+                          ></Avatar>
+                          <Typography
+                            variant="h4"
+                            className={classes.editHeading}
+                          >
                             Edit Profile
-                            </Typography>
-                          <TextField id='standard-basic' value={username} onChange={updateUsername} label='Username' autoFocus />
-                          <TextField id='standard-basic' value={email} onChange={updateEmail} label='Email' />
-                          <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' />
-                          <TextField id='standard-basic' value={avatarUrl} onChange={updateAvatarUrl} label='Avatar URL' />
-                          <Button variant='contained' color='primary' className={classes.button} type='submit'>Submit</Button>
+                          </Typography>
+                          <TextField
+                            id="standard-basic"
+                            value={username}
+                            onChange={updateUsername}
+                            label="Username"
+                            autoFocus
+                          />
+                          <TextField
+                            id="standard-basic"
+                            value={email}
+                            onChange={updateEmail}
+                            label="Email"
+                          />
+                          <TextField
+                            id="standard-basic"
+                            value={password}
+                            onChange={updatePassword}
+                            label="Password"
+                          />
+                          <TextField
+                            id="standard-basic"
+                            value={avatarUrl}
+                            onChange={updateAvatarUrl}
+                            label="Avatar URL"
+                          />
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                            type="submit"
+                          >
+                            Submit
+                          </Button>
                         </form>
                       </Typography>
                     </Fade>
