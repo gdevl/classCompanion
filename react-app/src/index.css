@@ -15,8 +15,8 @@ body {
   /* background-color: #457B9D; */
   box-sizing: border-box;
   height: 100%;
-  padding: 10px;
-  margin-bottom: 0.5rem;
+  /* padding: 10px; */
+  /* margin-bottom: 0.5rem; */
 }
 
 #root {
