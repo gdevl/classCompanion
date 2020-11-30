@@ -16,6 +16,7 @@ import UserCardContainer from '../UserCard/UserCardContainer'
 import Button from '@material-ui/core/Button';
 import './DashboardHeader.css'
 import AskQuestionContainer from '../ask-a-question/AskQuestionContainer'
+import AnswerViewContainer from '../AnswerView/AnswerViewContainer'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,10 +53,14 @@ export default function DashboardHeader({ props }) {
   const currentClass = currentState.classrooms[currentState.current_class.id]
 
   const [open, setOpen] = React.useState(false);
+  const [openAnswer, setOpenAnswer] = React.useState(false);
 
   const handleQuestion = () => {
     setOpen(true);
   };
+  const handleAnswer = () => {
+    setOpenAnswer(true)
+  }
 
   const checkedIn = (id) => {
     let checkedIn = false
@@ -92,7 +97,7 @@ export default function DashboardHeader({ props }) {
         && question.resolved === true
       ) {
         if (question.answers.length >= 1) {
-          if (question.answers[0].active === true) pending = question.answers[0].content
+          if (question.answers[0].active === true) pending = {id: question.answers[0].id, question: question.content, answer: question.answers[0].content}
         }
       }
     })
@@ -143,12 +148,13 @@ export default function DashboardHeader({ props }) {
             ? pendingQuestion(currentUser.id)
               ? <Button color='secondary' disabled='true' >Question Pending</Button>
               : pendingAnswer(currentUser.id)
-                ? <Button color='primry'>View Answer</Button>
+                ? <Button color='primary' onClick={handleAnswer} >View Answer</Button>
                 : <Button color='primary' onClick={handleQuestion} >Ask A Question</Button>
             : <Button color='secondary' onClick={handleCheckin} >Check In</Button>}
         </Box>
       </Box>
       <AskQuestionContainer props={{ open, setOpen }} />
+      <AnswerViewContainer props={{ answer: pendingAnswer(currentUser.id), open: openAnswer, setOpen: setOpenAnswer }} />
     </>
   )
 }

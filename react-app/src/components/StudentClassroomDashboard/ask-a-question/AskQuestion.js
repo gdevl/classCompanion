@@ -62,7 +62,6 @@ const AskQuestion = ({ props }) => {
     // const currentUser = useSelector((state) => state.store.current_user)
     // const idd = currentUser.id
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
     const [question, setQuestion] = useState("");
 
     // access current_user id object from redux store
@@ -91,14 +90,10 @@ const AskQuestion = ({ props }) => {
             body: JSON.stringify({ question }),
         });
         if (response.ok) {
-            props.setOpen(false)
-            const classrooms = await fetchClassrooms(currentUser.id);
+            const classrooms = await fetchClassrooms(currentUser.current_user.id);
             dispatch(setUserClasses(classrooms))
         }
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
+        handleClose()
     };
 
     const handleClose = () => {
@@ -142,14 +137,11 @@ const AskQuestion = ({ props }) => {
                                 variant="filled"
                                 onChange={updateQuestion}
                             />
-                            <Button variant='contained' color='primary' className={classes.button} type='submit'>Submit</Button>
+                            <Button variant='contained' color='primary' className={classes.button} onClick={postQuestion} >Submit</Button>
                         </form>
                     </Typography>
                 </Fade>
             </Modal>
-
-
-
 
         </div>
     );

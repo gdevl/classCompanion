@@ -3,7 +3,8 @@ from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
 from app.models import User, Classroom, Group, Question, Answer, CheckIn
-import math, random
+import math
+import random
 
 class_routes = Blueprint('classes', __name__)
 
@@ -32,6 +33,7 @@ def update_class(id):
         db.session.commit()
         return selected_class.to_dict()
     return jsonify({"Error"})
+
 
 @class_routes.route('/<int:id>/group/<int:size>', methods=['GET', 'POST', 'PUT'])
 def group_class(id, size):
@@ -107,26 +109,26 @@ def dismiss_question(class_id, question_id):
         return jsonify("QUESITON DISMISS TEST")
 
 
-
 # post question
 @class_routes.route("/<int:class_id>/user/<int:user_id>/question", methods=["POST"])
 # @login_required
 def postQuestion(class_id, user_id):
     req_data = request.get_json()
     question = Question(
-            content = req_data['question'],
-            image_url=None,
-            student_id=user_id,
-            instructor_id=None,
-            class_id=class_id
-            )
+        content=req_data['question'],
+        image_url=None,
+        student_id=user_id,
+        instructor_id=None,
+        class_id=class_id
+    )
 
     db.session.add(question)
     db.session.commit()
     return question.to_dict()
 
 
-@class_routes.route('/<int:class_id>/user/<int:student_id>/checkin', methods=['GET', 'POST'])
+@class_routes.route('/<int:class_id>/user/<int:student_id>/checkin',
+                    methods=['GET', 'POST'])
 def check_in(class_id, student_id):
     checkin = CheckIn(
         student_id=student_id,
@@ -135,3 +137,13 @@ def check_in(class_id, student_id):
     db.session.add(checkin)
     db.session.commit()
     return jsonify("CHECKINTEST")
+
+
+@class_routes.route('/answer/<int:answer_id>/accept',
+                    methods=['GET', 'POST'])
+def accept_answer(answer_id):
+    answer = Answer.query.get(answer_id)
+    answer.active = False
+    db.session.add(answer)
+    db.session.commit()
+    return jsonify("ACCEPT ANSWER")
