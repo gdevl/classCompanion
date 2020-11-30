@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import { Avatar, Button, Modal, TextField, ClickAwayListener } from '@material-ui/core';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -14,6 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import LogoutButton from "../auth/LogoutButton";
 import { logout } from "../../services/auth";
+import EditProfile from '../edit_profile/EditProfile';
 
 const useStyles = makeStyles((theme) => ({
   navigation: {
@@ -26,6 +31,77 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: 'white',
+    outline: '0',
+    border: '2px solid white',
+    borderRadius: '5px',
+    boxShadow: theme.shadows[5],
+    paddingLeft: '5rem',
+    paddingRight: '5rem',
+    paddingTop: '2rem',
+    paddingBottom: '2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+
+  },
+  editHeading: {
+    marginBottom: '1rem'
+  },
+  menuButton: {
+    border: 'none',
+    fontFamily: 'Roboto',
+    fontSize: '16px',
+    marginLeft: '-6px',
+    backgroundColor: 'white',
+    "&:hover": {
+      backgroundColor: '#f5f5f5'
+    },
+    margin: theme.spacing(1),
+  },
+  element: {
+    padding: '1rem',
+  },
+  button: {
+    marginTop: '2rem',
+  },
+  btnContainer: {
+    position: 'relative',
+    left: '72%',
+    bottom: '100%',
+  },
+  exitBtn: {
+    position: 'relative',
+    bottom: '1.95rem',
+    left: '8.5rem',
+    border: 'none',
+    paddingRight: '0px',
+    paddingLeft: '0px',
+  },
+  avatar: {
+    marginBottom: '1rem',
+    width: theme.spacing(7),
+    height: theme.spacing(7)
+  },
+  root: {
+    position: 'relative',
+  },
+  dropdown: {
+    position: 'absolute',
+    top: 28,
+    right: 0,
+    left: 0,
+    zIndex: 1,
+    border: '1px solid',
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+  },
 }));
 
 const Navigation = ({ setAuthenticated }) => {
@@ -34,11 +110,67 @@ const Navigation = ({ setAuthenticated }) => {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const open1 = Boolean(anchorEl);
+  const [open, setOpen] = React.useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
 
   //   const handleChange = (event) => {
   //     setAuth(event.target.checked);
   //   };
+
+  //grab current user from store (imported section from EditProfile component)
+  const currentUser = useSelector((state) => state.store)
+
+
+  if (!currentUser.current_user) return null;
+  const id = currentUser.current_user.id
+
+
+  const updateProfile = async () => {
+    const response = await fetch(`/api/users/${id}/update`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password, avatarUrl }),
+    });
+    if (response.ok) {
+      window.location.reload()
+    }
+  };
+
+
+  const handleOpenModal = () => {
+    setOpen(true);
+  };
+
+  const handleCloseModal = (e) => {
+    e.stopPropagation()
+    console.log(e.target)
+    setOpen(false);
+  };
+
+
+  const updateUsername = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const updateEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const updatePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const updateAvatarUrl = (e) => {
+    setAvatarUrl(e.target.value);
+  };
+
+
+
+  //end
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -83,10 +215,43 @@ const Navigation = ({ setAuthenticated }) => {
                   vertical: "top",
                   horizontal: "right",
                 }}
-                open={open}
+                open={open1}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>My Profile</MenuItem>
+                <MenuItem onClick={handleOpenModal}>
+                  <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleCloseModal}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                      timeout: 500,
+                    }}
+                  >
+                    <Fade in={open}>
+                      <Typography variant='h5'>
+                        <form className={classes.paper} noValidate autoComplete='off' onSubmit={updateProfile}>
+                          {/* <form className={classes.paper} noValidate autoComplete='off'> */}
+                          <Button size='large' variant='contained' onClick={handleCloseModal} className={classes.exitBtn} variant='outlined'>x</Button>
+                          {/* <Button size='large' variant='contained' onClick={() => handleCloseModal()} className={classes.exitBtn}>x</Button> */}
+                          <Avatar alt="" src={avatarUrl} className={classes.avatar} size='large'></Avatar>
+                          <Typography variant='h4' className={classes.editHeading}>
+                            Edit Profile
+                            </Typography>
+                          <TextField id='standard-basic' value={username} onChange={updateUsername} label='Username' autoFocus />
+                          <TextField id='standard-basic' value={email} onChange={updateEmail} label='Email' />
+                          <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' />
+                          <TextField id='standard-basic' value={avatarUrl} onChange={updateAvatarUrl} label='Avatar URL' />
+                          <Button variant='contained' color='primary' className={classes.button} type='submit'>Submit</Button>
+                        </form>
+                      </Typography>
+                    </Fade>
+                  </Modal>
+                  Edit Profile
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'
-import { Avatar, Typography, Button, Modal, TextField, MenuItem } from '@material-ui/core';
+import { Avatar, Typography, Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -30,17 +30,6 @@ const useStyles = makeStyles((theme) => ({
     editHeading: {
         marginBottom: '1rem'
     },
-    menuButton: {
-        border: 'none',
-        fontFamily: 'Roboto',
-        fontSize: '16px',
-        marginLeft: '-6px',
-        backgroundColor: 'white',
-        "&:hover": {
-            backgroundColor: '#f5f5f5'
-        },
-        margin: theme.spacing(1),
-    },
     element: {
         padding: '1rem',
     },
@@ -55,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     exitBtn: {
         position: 'relative',
         bottom: '1.95rem',
-        left: '8.5rem',
+        left: '10rem',
         border: 'none',
         paddingRight: '0px',
         paddingLeft: '0px',
@@ -67,15 +56,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const EditProfile = (state) => {
+const AskQuestion = (state) => {
     // const currentUser = useSelector((state) => state.store.current_user)
     // const idd = currentUser.id
     const classes = useStyles();
-    const [openModal, setOpenModal] = React.useState(false);
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [avatarUrl, setAvatarUrl] = useState("");
+    const [open, setOpen] = React.useState(false);
+    const [question, setQuestion] = useState("");
 
     // access current_user id object from redux store
     // ---------------------------------------
@@ -85,84 +71,77 @@ const EditProfile = (state) => {
 
 
     const currentUser = useSelector((state) => state.store)
+    const currentState = useSelector(state => state.store)
     // console.log(currentUser.current_user.id)
 
     if (!currentUser.current_user) return null;
-    const id = currentUser.current_user.id
+    const user_id = currentUser.current_user.id
+
+    if (!currentState.current_class) return null;
+    const currentClass = currentState.classrooms[currentState.current_class.id]
+    const class_id = currentClass.id
 
 
-
-
-    const updateProfile = async () => {
-        const response = await fetch(`/api/users/${id}/update`, {
-            method: "PUT",
+    const postQuestion = async () => {
+        const response = await fetch(`/api/classes/${class_id}/user/${user_id}/question`, {
+            method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, email, password, avatarUrl }),
+            body: JSON.stringify({ question }),
         });
         if (response.ok) {
             window.location.reload()
         }
     };
 
-    const handleOpenModal = () => {
-        setOpenModal(true);
+    const handleOpen = () => {
+        setOpen(true);
     };
 
-    const handleCloseModal = () => {
-        setOpenModal(false);
+    const handleClose = () => {
+        setOpen(false);
     };
 
-
-    const updateUsername = (e) => {
-        setUsername(e.target.value);
+    const updateQuestion = (e) => {
+        setQuestion(e.target.value);
     };
-
-    const updateEmail = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const updatePassword = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const updateAvatarUrl = (e) => {
-        setAvatarUrl(e.target.value);
-    };
-
-
 
     return (
 
-        <div className='profile-edit__container'>
+        <div className='question__container'>
 
-            <button type="button" className={classes.menuButton} onClick={handleOpenModal}>
-                Edit Profile
+            <button type="button" onClick={handleOpen}>
+                Ask Question
             </button>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 className={classes.modal}
-                open={openModal}
-                onClose={handleCloseModal}
+                open={open}
+                onClose={handleClose}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
             >
-                <Fade in={openModal}>
+                <Fade in={open}>
                     <Typography variant='h5'>
-                        <form className={classes.paper} noValidate autoComplete='off' onSubmit={updateProfile}>
+                        <form className={classes.paper} noValidate autoComplete='off' onSubmit={postQuestion}>
                             {/* <form className={classes.paper} noValidate autoComplete='off'> */}
-                            <Button size='large' variant='contained' onClick={handleCloseModal} className={classes.exitBtn} variant='outlined'>x</Button>
-                            <Avatar alt="" src={avatarUrl} className={classes.avatar} size='large'></Avatar>
+                            <Button size='large' variant='contained' onClick={handleClose} className={classes.exitBtn} variant='outlined'>x</Button>
                             <Typography variant='h4' className={classes.editHeading}>
-                                Edit Profile
+                                Ask a Question
                             </Typography>
-                            <TextField id='standard-basic' value={username} onChange={updateUsername} label='Username' autoFocus />
-                            <TextField id='standard-basic' value={email} onChange={updateEmail} label='Email' />
-                            <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' />
-                            <TextField id='standard-basic' value={avatarUrl} onChange={updateAvatarUrl} label='Avatar URL' />
+                            <TextField
+                                autoFocus
+                                id="filled-multiline-static"
+                                // label="Multiline"
+                                multiline
+                                rows={4}
+                                // defaultValue="Default Value"
+                                variant="filled"
+                                onChange={updateQuestion}
+                            />
                             <Button variant='contained' color='primary' className={classes.button} type='submit'>Submit</Button>
                         </form>
                     </Typography>
@@ -176,4 +155,4 @@ const EditProfile = (state) => {
     );
 }
 
-export default EditProfile;
+export default AskQuestion;

@@ -1,4 +1,6 @@
 import React from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import { fetchClassrooms, setUserClasses } from '../../../../src/store/users'
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -40,11 +42,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DashboardHeader({ props }) {
-
+  const dispatch = useDispatch();
   const classes = useStyles();
+
+  const currentUser = useSelector(state => state.store.current_user)
+
   const [editMode, setEditMode] = React.useState(false);
-  const [grouped, setGrouped] = React.useState(false);
-  const [groupSize, setGroupSize] = React.useState(null);
+  const [grouped, setGrouped] = React.useState(props.groups.length >= 1 ? true : false);
+  const [groupSize, setGroupSize] = React.useState(props.groups.length);
   const [message, setMessage] = React.useState(props.daily_objective);
   const [description, setDescription] = React.useState(props.description);
   const [link, setLink] = React.useState(props.meeting_link);
@@ -57,7 +62,8 @@ export default function DashboardHeader({ props }) {
     setMessage(event.target.value);
   };
   const handleGroupedChange = (event) => {
-    if(event.target.value === false) setGroupSize(null)
+    if (event.target.value === false) setGroupSize(0);
+    if (event.target.value !== false) setGroupSize(2);
     setGrouped(event.target.value);
   };
   const handleGroupSizeChange = (event) => {
@@ -69,11 +75,30 @@ export default function DashboardHeader({ props }) {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value)
   }
-  const handleEditMode = () => {
+  const handleEditMode = async () => {
     if (!editMode) setEditMode(true)
     else {
       //IMPLEMENT POST PROCEDURES HERE!!!!!!!!
-
+      const infoResponse = await fetch(`/api/classes/${props.id}/update`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, description, link, password }),
+      });
+      if(grouped){
+        const groupResponse = await fetch(`/api/classes/${props.id}/group/${groupSize}`, {
+          method: "POST",
+        headers: { "Content-Type": "application/json" },
+        })
+      }else{
+        const ungroupResponse = await fetch(`/api/classes/${props.id}/group/${groupSize}`, {
+          method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        })
+      }
+      if (infoResponse.ok) {
+        const classrooms = await fetchClassrooms(currentUser.id);
+        dispatch(setUserClasses(classrooms))
+      }
       setEditMode(false)
     }
   }
@@ -81,7 +106,7 @@ export default function DashboardHeader({ props }) {
   return (
     <>
       <Box className='instructorCard'>
-        <UserCardContainer props={{...props.instructors[0], checked_in: true}} />
+        <UserCardContainer props={{ ...props.instructors[0], checked_in: true }} />
       </Box>
 
       <Box className='groupingMenu'>

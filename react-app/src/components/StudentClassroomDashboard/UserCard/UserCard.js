@@ -17,7 +17,7 @@ import PanToolIcon from '@material-ui/icons/PanTool';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import './UserCard.css'
-import AnswerModalContainer from '../AnswerModal/AnswerModalContainer'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,12 +29,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
   },
   checkedIn: {
+    border: '1px solid blue',
+    border: '5px solid #EE4266',
     border: '2px solid blue',
+    opacity: '70%',
     width: '15em',
     margin: '1em',
     minHeight: '8em',
   },
   checkedOut: {
+    border: '1px solid red',
+    border: '5px solid #EE4266',
     border: '2px solid red',
     opacity: '70%',
     width: '15em',
@@ -77,15 +82,6 @@ export default function UserCard({ props }) {
   const currentState = useSelector(state => state.store)
   const currentClass = currentState.classrooms[currentState.current_class.id]
   //FUNCTIONS FOR GRABBING USER INFO FROM CLASS
-  const hasQuestion = (student_id) => {
-    let activeQuestion = ''
-    currentClass.questions.forEach(question => {
-      if (question.student_id === student_id && question.resolved === false) {
-        activeQuestion = { id: question.id, content: question.content }
-      }
-    })
-    return activeQuestion;
-  }
   const checkedIn = (student_id) => {
     let checkedIn = false
     if (props.role === 'instructor') checkedIn = true
@@ -103,62 +99,25 @@ export default function UserCard({ props }) {
     return checkedIn
   }
 
-  //Card Question Expansion
-  const [expanded, setExpanded] = React.useState(null);
-
-  const handleExpandClick = (id) => {
-    if (expanded == id) setExpanded(null);
-    else setExpanded(id);
-  };
-  //Answer Modal Pop-up
-  const [open, setOpen] = React.useState(null);
-  const handleClickOpen = (id) => {
-    setOpen(id);
-  };
-
   if (!props) return null
   const user = props
   return (
     <>
-      <Card key={user.id} className={checkedIn(user.id) ? classes.checkedIn : classes.checkedOut}>
+      <Card key={user.id} className={checkedIn(user.id) ?  classes.checkedIn : classes.checkedOut}>
         <CardHeader
           avatar={
-            <Avatar aria-label="recipe" className={classes.avatar} src={user.avatar_url ? user.avatar_url : ''}>
+            <Avatar aria-label="avatar" className={classes.avatar} src={user.avatar_url ? user.avatar_url : ''}>
               {user.avatar_url ? '' : user.first_name.slice(0, 1)}
             </Avatar>
           }
-          action={
-            <IconButton aria-label="question" onClick={() => handleClickOpen(user.id)} className={hasQuestion(user.id) ? classes.handIcon : classes.hidden}>
-              <PanToolIcon />
-            </IconButton>
-          }
         />
-        <AnswerModalContainer props={{ user, open, setOpen, question: hasQuestion(user.id) }} />
 
         <CardActions disableSpacing className={classes.cardActionsContainer}>
           <Box className={classes.userInfoBox}>
             <Typography> {user.username ? user.username : `${user.first_name} ${user.last_name}`} </Typography>
             <Typography> {user.email} </Typography>
           </Box>
-          <IconButton
-            className={[clsx(classes.expand, { [classes.expandOpen]: expanded == user.id }), hasQuestion(user.id) ? '' : classes.hidden]}
-            onClick={() => handleExpandClick(user.id)}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
         </CardActions>
-
-        <Collapse in={expanded == user.id} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Divider />
-            <Typography paragraph>Question:</Typography>
-            <Typography paragraph>
-              {hasQuestion(user.id) ? hasQuestion(user.id).content : ''}
-            </Typography>
-          </CardContent>
-        </Collapse>
 
       </Card>
     </>
