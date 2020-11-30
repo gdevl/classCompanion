@@ -1,0 +1,4 @@
+.studentLayout{
+  display: flex;
+  flex-direction: column;
+}

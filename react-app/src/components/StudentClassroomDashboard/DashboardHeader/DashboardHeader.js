@@ -15,6 +15,8 @@ import { red, blue } from '@material-ui/core/colors';
 import UserCardContainer from '../UserCard/UserCardContainer'
 import Button from '@material-ui/core/Button';
 import './DashboardHeader.css'
+import AskQuestionContainer from '../ask-a-question/AskQuestionContainer'
+import AnswerViewContainer from '../AnswerView/AnswerViewContainer'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +52,16 @@ export default function DashboardHeader({ props }) {
   const currentState = useSelector(state => state.store)
   const currentClass = currentState.classrooms[currentState.current_class.id]
 
+  const [open, setOpen] = React.useState(false);
+  const [openAnswer, setOpenAnswer] = React.useState(false);
+
+  const handleQuestion = () => {
+    setOpen(true);
+  };
+  const handleAnswer = () => {
+    setOpenAnswer(true)
+  }
+
   const checkedIn = (id) => {
     let checkedIn = false
     let today = new Date();
@@ -66,6 +78,31 @@ export default function DashboardHeader({ props }) {
     return checkedIn
   }
 
+  const pendingQuestion = (id) => {
+    let pending = false;
+    currentClass.questions.forEach(question => {
+      if (question.student_id === id
+        && question.resolved === false
+      ) {
+        pending = true
+      }
+    })
+    return pending;
+  }
+
+  const pendingAnswer = (id) => {
+    let pending = false;
+    currentClass.questions.forEach(question => {
+      if (question.student_id === id
+        && question.resolved === true
+      ) {
+        if (question.answers.length >= 1) {
+          if (question.answers[0].active === true) pending = {id: question.answers[0].id, question: question.content, answer: question.answers[0].content}
+        }
+      }
+    })
+    return pending;
+  }
 
   const handleCheckin = async () => {
     const checkIn = await fetch(`/api/classes/${currentClass.id}/user/${currentUser.id}/checkin`, {
@@ -76,9 +113,6 @@ export default function DashboardHeader({ props }) {
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms))
     }
-  }
-  const handleQeustion = () => {
-    alert('question')
   }
 
   return (
@@ -111,10 +145,16 @@ export default function DashboardHeader({ props }) {
       <Box className='checkinAndQuestionButton'>
         <Box className='buttonContainer'>
           {checkedIn(currentUser.id)
-            ? <Button color='primary' onClick={handleQeustion} >Ask A Quesiton</Button>
+            ? pendingQuestion(currentUser.id)
+              ? <Button color='secondary' disabled='true' >Question Pending</Button>
+              : pendingAnswer(currentUser.id)
+                ? <Button color='primary' onClick={handleAnswer} >View Answer</Button>
+                : <Button color='primary' onClick={handleQuestion} >Ask A Question</Button>
             : <Button color='secondary' onClick={handleCheckin} >Check In</Button>}
         </Box>
       </Box>
+      <AskQuestionContainer props={{ open, setOpen }} />
+      <AnswerViewContainer props={{ answer: pendingAnswer(currentUser.id), open: openAnswer, setOpen: setOpenAnswer }} />
     </>
   )
 }
