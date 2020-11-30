@@ -11,6 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles((theme) => ({
   signupform: {
@@ -85,6 +86,11 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
 
   const updateRole = (e) => {
     setRole(e.target.value);
+  };
+
+  const handleGoBack = (e) => {
+    e.preventDefault();
+    return <Redirect to="/login" />;
   };
 
   if (authenticated) {
@@ -201,6 +207,18 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             startIcon={<SupervisedUserCircleIcon />}
           >
             Submit
+          </Button>
+        </Box>
+        <Box>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            className={classes.button}
+            onClick={handleGoBack}
+            startIcon={<ArrowBackIcon />}
+          >
+            Go Back
           </Button>
         </Box>
       </form>

@@ -1,29 +1,30 @@
-import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import { fetchClassrooms, setUserClasses } from '../../../../src/store/users'
-import Box from '@material-ui/core/Box';
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
-import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
-import { red, blue } from '@material-ui/core/colors';
-import UserCardContainer from '../UserCard/UserCardContainer'
-import './DashboardHeader.css'
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClassrooms, setUserClasses } from "../../../../src/store/users";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import TextField from "@material-ui/core/TextField";
+import EditIcon from "@material-ui/icons/Edit";
+import IconButton from "@material-ui/core/IconButton";
+import { red, blue } from "@material-ui/core/colors";
+import UserCardContainer from "../UserCard/UserCardContainer";
+import "./DashboardHeader.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    height: '100%',
-    '& > *': {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    height: "100%",
+    "& > *": {
       margin: theme.spacing(1),
-      width: '25ch',
+      width: "25ch",
     },
   },
   formControl: {
@@ -38,17 +39,19 @@ const useStyles = makeStyles((theme) => ({
   },
   red: {
     color: red[500],
-  }
+  },
 }));
 
 export default function DashboardHeader({ props }) {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const currentUser = useSelector(state => state.store.current_user)
+  const currentUser = useSelector((state) => state.store.current_user);
 
   const [editMode, setEditMode] = React.useState(false);
-  const [grouped, setGrouped] = React.useState(props.groups.length >= 1 ? true : false);
+  const [grouped, setGrouped] = React.useState(
+    props.groups.length >= 1 ? true : false
+  );
   const [groupSize, setGroupSize] = React.useState(props.groups.length);
   const [message, setMessage] = React.useState(props.daily_objective);
   const [description, setDescription] = React.useState(props.description);
@@ -68,15 +71,15 @@ export default function DashboardHeader({ props }) {
   };
   const handleGroupSizeChange = (event) => {
     setGroupSize(event.target.value);
-  }
+  };
   const handleLinkChange = (event) => {
-    setLink(event.target.value)
-  }
+    setLink(event.target.value);
+  };
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value)
-  }
+    setPassword(event.target.value);
+  };
   const handleEditMode = async () => {
-    if (!editMode) setEditMode(true)
+    if (!editMode) setEditMode(true);
     else {
       //IMPLEMENT POST PROCEDURES HERE!!!!!!!!
       const infoResponse = await fetch(`/api/classes/${props.id}/update`, {
@@ -84,32 +87,40 @@ export default function DashboardHeader({ props }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, description, link, password }),
       });
-      if(grouped){
-        const groupResponse = await fetch(`/api/classes/${props.id}/group/${groupSize}`, {
-          method: "POST",
-        headers: { "Content-Type": "application/json" },
-        })
-      }else{
-        const ungroupResponse = await fetch(`/api/classes/${props.id}/group/${groupSize}`, {
-          method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        })
+      if (grouped) {
+        const groupResponse = await fetch(
+          `/api/classes/${props.id}/group/${groupSize}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      } else {
+        const ungroupResponse = await fetch(
+          `/api/classes/${props.id}/group/${groupSize}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
       }
       if (infoResponse.ok) {
         const classrooms = await fetchClassrooms(currentUser.id);
-        dispatch(setUserClasses(classrooms))
+        dispatch(setUserClasses(classrooms));
       }
-      setEditMode(false)
+      setEditMode(false);
     }
-  }
+  };
 
   return (
     <>
-      <Box className='instructorCard'>
-        <UserCardContainer props={{ ...props.instructors[0], checked_in: true }} />
-      </Box>
+      <Grid item className="instructorCard">
+        <UserCardContainer
+          props={{ ...props.instructors[0], checked_in: true }}
+        />
+      </Grid>
 
-      <Box className='groupingMenu'>
+      <Grid item className="groupingMenu">
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-helper-label">Grouped</InputLabel>
           <Select
@@ -124,7 +135,9 @@ export default function DashboardHeader({ props }) {
           </Select>
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-helper-label">Group Size</InputLabel>
+          <InputLabel id="demo-simple-select-helper-label">
+            Group Size
+          </InputLabel>
           <Select
             labelId="demo-simple-select-helper-label"
             id="demo-simple-select-helper"
@@ -139,10 +152,16 @@ export default function DashboardHeader({ props }) {
             <MenuItem value={5}>5</MenuItem>
           </Select>
         </FormControl>
-      </Box>
-      <Box className='instructorMessage'>
+      </Grid>
+      <Grid item className="instructorMessage">
         <form className={classes.root} noValidate autoComplete="off">
-          <TextField id="standard-name" label="Daily Message" value={message} onChange={handleMessageChange} disabled={!editMode} />
+          <TextField
+            id="standard-name"
+            label="Daily Message"
+            value={message}
+            onChange={handleMessageChange}
+            disabled={!editMode}
+          />
           <TextField
             id="filled-multiline-flexible"
             label="Course Description"
@@ -153,22 +172,38 @@ export default function DashboardHeader({ props }) {
             disabled={!editMode}
           />
         </form>
-      </Box>
+      </Grid>
 
-      <Box className='meetingInfo'>
+      <Grid item className="meetingInfo">
         <form className={classes.root} noValidate autoComplete="off">
-          <TextField id="standard-name" label="Meeting Link" value={link} onChange={handleLinkChange} disabled={!editMode} />
-          <TextField id="standard-name" label="Meeting Password" value={password} onChange={handlePasswordChange} disabled={!editMode} />
+          <TextField
+            id="standard-name"
+            label="Meeting Link"
+            value={link}
+            onChange={handleLinkChange}
+            disabled={!editMode}
+          />
+          <TextField
+            id="standard-name"
+            label="Meeting Password"
+            value={password}
+            onChange={handlePasswordChange}
+            disabled={!editMode}
+          />
         </form>
-      </Box>
+      </Grid>
 
-      <Box className='editButtonContainerContainer'>
-        <Box className='editButtonContainer'>
-          <IconButton aria-label="edit mode" onClick={handleEditMode} className={editMode ? classes.red : classes.blue}>
-            <EditIcon />
-          </IconButton>
-        </Box>
-      </Box>
+      {/* <Grid item className="editButtonContainerContainer"> */}
+      <Grid item>
+        {/* <Grid className="editButtonContainer"> */}
+        <IconButton
+          aria-label="edit mode"
+          onClick={handleEditMode}
+          className={editMode ? classes.red : classes.blue}
+        >
+          <EditIcon />
+        </IconButton>
+      </Grid>
     </>
-  )
+  );
 }
