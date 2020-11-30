@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'
-import { Avatar, Typography, Button, Modal, TextField } from '@material-ui/core';
+import { Avatar, Typography, Button, Modal, TextField, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -29,6 +29,17 @@ const useStyles = makeStyles((theme) => ({
     },
     editHeading: {
         marginBottom: '1rem'
+    },
+    menuButton: {
+        border: 'none',
+        fontFamily: 'Roboto',
+        fontSize: '16px',
+        marginLeft: '-6px',
+        backgroundColor: 'white',
+        "&:hover": {
+            backgroundColor: '#f5f5f5'
+        },
+        margin: theme.spacing(1),
     },
     element: {
         padding: '1rem',
@@ -60,7 +71,7 @@ const EditProfile = (state) => {
     // const currentUser = useSelector((state) => state.store.current_user)
     // const idd = currentUser.id
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [openModal, setOpenModal] = React.useState(false);
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -93,12 +104,12 @@ const EditProfile = (state) => {
         }
     };
 
-    const handleOpen = () => {
-        setOpen(true);
+    const handleOpenModal = () => {
+        setOpenModal(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseModal = () => {
+        setOpenModal(false);
     };
 
 
@@ -124,26 +135,26 @@ const EditProfile = (state) => {
 
         <div className='profile-edit__container'>
 
-            <button type="button" onClick={handleOpen}>
+            <button type="button" className={classes.menuButton} onClick={handleOpenModal}>
                 Edit Profile
             </button>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 className={classes.modal}
-                open={open}
-                onClose={handleClose}
+                open={openModal}
+                onClose={handleCloseModal}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
             >
-                <Fade in={open}>
+                <Fade in={openModal}>
                     <Typography variant='h5'>
                         <form className={classes.paper} noValidate autoComplete='off' onSubmit={updateProfile}>
                             {/* <form className={classes.paper} noValidate autoComplete='off'> */}
-                            <Button size='large' variant='contained' onClick={handleClose} className={classes.exitBtn} variant='outlined'>x</Button>
+                            <Button size='large' variant='contained' onClick={handleCloseModal} className={classes.exitBtn} variant='outlined'>x</Button>
                             <Avatar alt="" src={avatarUrl} className={classes.avatar} size='large'></Avatar>
                             <Typography variant='h4' className={classes.editHeading}>
                                 Edit Profile
