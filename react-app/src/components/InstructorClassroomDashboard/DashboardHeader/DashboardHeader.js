@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassrooms, setUserClasses } from "../../../../src/store/users";
 import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -115,12 +116,18 @@ export default function DashboardHeader({ props }) {
   return (
     <>
       <Grid item className="instructorCard">
+        <Typography align="center" variant="h5" gutterBottom>
+          Instructor
+        </Typography>
         <UserCardContainer
           props={{ ...props.instructors[0], checked_in: true }}
         />
       </Grid>
 
       <Grid item className="groupingMenu">
+        <Typography align="center" variant="subtitle2" gutterBottom>
+          Class Details
+        </Typography>
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-helper-label">Grouped</InputLabel>
           <Select
@@ -154,6 +161,9 @@ export default function DashboardHeader({ props }) {
         </FormControl>
       </Grid>
       <Grid item className="instructorMessage">
+        <Typography align="center" variant="subtitle2" gutterBottom>
+          Meeting Details
+        </Typography>
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
             id="standard-name"
