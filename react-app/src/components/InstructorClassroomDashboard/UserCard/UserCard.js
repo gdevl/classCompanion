@@ -165,7 +165,7 @@ export default function UserCard({ props }) {
                 ? user.username
                 : `${user.first_name} ${user.last_name}`}{" "}
             </Typography>
-            <Typography> {user.email} </Typography>
+            <Typography variant="caption"> {user.email} </Typography>
           </Box>
           <IconButton
             className={[

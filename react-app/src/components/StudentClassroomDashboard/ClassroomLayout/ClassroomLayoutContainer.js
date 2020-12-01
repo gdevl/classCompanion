@@ -5,7 +5,13 @@ import "./ClassroomLayout.css";
 
 export default function ClassroomLayoutContainer({ props }) {
   return (
-    <Grid container justify="center" spacing={3}>
+    <Grid
+      container
+      justify="center"
+      alignContent="center"
+      alignItems="center"
+      spacing={3}
+    >
       <ClassroomLayout props={props} />
     </Grid>
   );

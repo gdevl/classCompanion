@@ -5,7 +5,13 @@ import "./DashboardHeader.css";
 
 export default function DashboardHeaderContainer({ props }) {
   return (
-    <Grid container justify="space-evenly" alignItems="center" spacing={3}>
+    <Grid
+      // className="outlined"
+      container
+      justify="space-evenly"
+      alignItems="center"
+      spacing={3}
+    >
       <DashboardHeader props={props} />
     </Grid>
   );
