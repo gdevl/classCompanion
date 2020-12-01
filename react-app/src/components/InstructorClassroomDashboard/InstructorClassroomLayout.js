@@ -1,4 +1,5 @@
 import React from "react";
+import Typography from "@material-ui/core/Typography";
 import ClassroomLayoutContainer from "./ClassroomLayout/ClassroomLayoutContainer";
 import { useSelector } from "react-redux";
 import Divider from "@material-ui/core/Divider";
@@ -13,6 +14,9 @@ export default function InstructorClassroomLayout() {
     <>
       <DashboardHeadder props={classList[currentClassrom.id]} />
       <Divider className="content__divider" />
+      <Typography align="center" variant="h5" gutterBottom>
+        Class List
+      </Typography>
       <ClassroomLayoutContainer props={classList[currentClassrom.id]} />
     </>
   );

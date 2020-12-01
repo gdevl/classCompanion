@@ -5,5 +5,7 @@
     background-color: #4051b5;
     color: white;
     min-height: 64px;
+    position: fixed;
+    bottom: 0;
     width: 100%;
 }

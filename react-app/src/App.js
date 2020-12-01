@@ -61,7 +61,6 @@ function App() {
       <Route path="/login" exact={true}>
         <Grid
           container
-          xs={12}
           direction="column"
           justify="center"
           alignItems="center"
@@ -77,7 +76,6 @@ function App() {
       <Route path="/signup" exact={true}>
         <Grid
           container
-          xs={12}
           direction="column"
           justify="center"
           alignItems="center"
@@ -106,17 +104,11 @@ function App() {
         ) : (
           <>
             <StudentClassrooms />
-            <button
-              onClick={() =>
-                dispatch(setCurrentClassRoom(currentClassrooms[1]))
-              }
-            >
-              Class 1
-            </button>
           </>
         )}
         {/* </Grid> */}
 
+        <div className="negative-space"></div>
         <Footer />
       </ProtectedRoute>
       <Route path="/question" exact={true} authenticated={authenticated}>

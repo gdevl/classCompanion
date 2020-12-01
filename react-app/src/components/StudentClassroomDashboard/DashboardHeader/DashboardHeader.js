@@ -2,15 +2,9 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassrooms, setUserClasses } from "../../../../src/store/users";
 import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
-import EditIcon from "@material-ui/icons/Edit";
-import IconButton from "@material-ui/core/IconButton";
 import { red, blue } from "@material-ui/core/colors";
 import UserCardContainer from "../UserCard/UserCardContainer";
 import Button from "@material-ui/core/Button";
@@ -123,17 +117,23 @@ export default function DashboardHeader({ props }) {
   return (
     <>
       <Grid item className="instructorCard">
+        <Typography align="center" variant="h5" gutterBottom>
+          Instructor
+        </Typography>
         <UserCardContainer
           props={{ ...props.instructors[0], checked_in: true }}
         />
       </Grid>
 
       <Grid item className="instructorMessage">
+        <Typography align="center" variant="subtitle2" gutterBottom>
+          Class Details
+        </Typography>
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
             id="standard-name"
             label="Daily Message"
-            value={props.daily_objective}
+            value={props.daily_objective || ""}
             disabled={true}
           />
           <TextField
@@ -141,24 +141,27 @@ export default function DashboardHeader({ props }) {
             label="Course Description"
             multiline
             rowsMax={4}
-            value={props.description}
+            value={props.description || ""}
             disabled={true}
           />
         </form>
       </Grid>
 
       <Grid item className="meetingInfo">
+        <Typography align="center" variant="subtitle2" gutterBottom>
+          Meeting Details
+        </Typography>
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
             id="standard-name"
             label="Meeting Link"
-            value={props.meeting_link}
+            value={props.meeting_link || ""}
             disabled={true}
           />
           <TextField
             id="standard-name"
             label="Meeting Password"
-            value={props.meeting_pw}
+            value={props.meeting_pw || ""}
             disabled={true}
           />
         </form>
