@@ -17,6 +17,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useDispatch, useSelector } from "react-redux";
 import { setUserClasses, fetchClassrooms, setCurrentClassRoom } from "../../store/users";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -85,6 +87,9 @@ const useStyles = makeStyles((theme) => ({
     border: '2px solid white',
   },
 
+
+
+
   addClassSubmitButton: {
     marginTop: '2rem'
   },
@@ -100,12 +105,29 @@ const useStyles = makeStyles((theme) => ({
   },
 
   enrollStudentsModal: {
-    position: 'absolute',
-    top: 100,
-    left: 450,
+    // position: 'absolute',
+    // top: 100,
+    // left: 450,
+    top: '5rem',
+    left: '30rem',
     width: 700,
     height: 500,
-    // backgroundColor: theme.palette.background.paper,
+    position: 'relative',
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    backgroundColor: 'whitesmoke',
+  },
+
+  enrollStudentsModalSmall: {
+    // position: 'absolute',
+    // top: 100,
+    // left: 450,
+    // top: '5rem',
+    // left: '30rem',
+    width: 600,
+    height: 400,
+    position: 'relative',
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
@@ -169,7 +191,7 @@ const InstructorClassrooms = () => {
   const [currentClass, setCurrentClass] = useState('')
   const classroomData = useSelector(state => state.store.classrooms)
   const currentUserId = useSelector(state => state.store.current_user.id)
-
+  const matches = useMediaQuery('(min-width:600px)');
 
   let allClassrooms = []
   let classIds = []
@@ -607,7 +629,9 @@ const InstructorClassrooms = () => {
         onClose={handleCloseStudentModal}
       >
         {/* {tListHeadings} */}
-        <Grid container spacing={2} justify="center" alignItems="center" className={classes.enrollStudentsModal}>
+
+        <Grid container spacing={2} justify="center" alignItems="center" className = {matches === true ? classes.enrollStudentsModal : classes.enrollStudentsModalSmall}>
+
           <Grid item>
             <div>
               <h1>
@@ -615,9 +639,12 @@ const InstructorClassrooms = () => {
               </h1>
             </div>
             {customList(left)}
-            </Grid>
+          </Grid>
+
+
           <Grid item>
             <Grid container direction="column" alignItems="center">
+
               <Button
                 variant="outlined"
                 size="small"
@@ -628,6 +655,7 @@ const InstructorClassrooms = () => {
               >
                 ≫
               </Button>
+
               <Button
                 variant="outlined"
                 size="small"
@@ -638,6 +666,7 @@ const InstructorClassrooms = () => {
               >
                 &gt;
               </Button>
+
               <Button
                 variant="outlined"
                 size="small"
@@ -648,6 +677,8 @@ const InstructorClassrooms = () => {
               >
                 &lt;
               </Button>
+
+
               <Button
                 variant="outlined"
                 size="small"
@@ -658,9 +689,10 @@ const InstructorClassrooms = () => {
               >
                 ≪
               </Button>
+
             </Grid>
           </Grid>
-          <Grid item>
+          <Grid>
           <div>
               <h1>
                 Enrolled
@@ -668,7 +700,10 @@ const InstructorClassrooms = () => {
             </div>
             {customList(right)}
           </Grid>
+
+
           <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={updateEnrollment}>Enroll Students</Button>
+
         </Grid>
       </Modal>
     </div>
