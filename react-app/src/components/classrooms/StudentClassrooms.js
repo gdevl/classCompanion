@@ -104,12 +104,12 @@ const StudentClassrooms = () => {
 
   const handleViewClick = (classId) => {
     // alert(`re-routing to math class: ${classId}`)
-    console.log(classroomData);
-    console.log(classroomData[classId]);
+    // console.log(classroomData);
+    // console.log(classroomData[classId]);
     dispatch(setCurrentClassRoom(classroomData[classId]));
   };
 
-  console.log(classrooms);
+  // console.log(classrooms);
   return (
     <div className={classes.Container}>
       <Typography variant="h3" align="center">

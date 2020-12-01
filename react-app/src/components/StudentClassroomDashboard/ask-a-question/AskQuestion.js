@@ -134,7 +134,7 @@ const AskQuestion = ({ props }) => {
                                 multiline
                                 rows={4}
                                 // defaultValue="Default Value"
-                                variant="filled"
+                                // variant="filled"
                                 onChange={updateQuestion}
                             />
                             <Button variant='contained' color='primary' className={classes.button} onClick={postQuestion} >Submit</Button>
