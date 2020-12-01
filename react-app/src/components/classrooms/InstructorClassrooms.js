@@ -29,6 +29,9 @@ import {
   fetchClassrooms,
   setCurrentClassRoom,
 } from "../../store/users";
+import { setUserClasses, fetchClassrooms, setCurrentClassRoom } from "../../store/users";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -97,6 +100,9 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid white",
   },
 
+
+
+
   addClassSubmitButton: {
     marginTop: "2rem",
   },
@@ -112,6 +118,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   enrollStudentsModal: {
+<<<<<<< HEAD
     position: "absolute",
     top: 100,
     left: 450,
@@ -119,6 +126,32 @@ const useStyles = makeStyles((theme) => ({
     height: 500,
     // backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
+=======
+    // position: 'absolute',
+    // top: 100,
+    // left: 450,
+    top: '5rem',
+    left: '30rem',
+    width: 700,
+    height: 500,
+    position: 'relative',
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    backgroundColor: 'whitesmoke',
+  },
+
+  enrollStudentsModalSmall: {
+    // position: 'absolute',
+    // top: 100,
+    // left: 450,
+    // top: '5rem',
+    // left: '30rem',
+    width: 600,
+    height: 400,
+    position: 'relative',
+    border: '2px solid #000',
+>>>>>>> main
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
     backgroundColor: "whitesmoke",
@@ -173,6 +206,7 @@ const InstructorClassrooms = () => {
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
+<<<<<<< HEAD
   const [enrolledStudentIds, setEnrolledStudentIds] = useState([]);
   const [classToDelete, setClassToDelete] = useState(null);
   const [currentClass, setCurrentClass] = useState("");
@@ -184,6 +218,20 @@ const InstructorClassrooms = () => {
   let test = [];
   let ids = [];
   let id = [];
+=======
+  const [enrolledStudentIds, setEnrolledStudentIds] = useState([])
+  const [classToDelete, setClassToDelete] = useState(null)
+  const [currentClass, setCurrentClass] = useState('')
+  const classroomData = useSelector(state => state.store.classrooms)
+  const currentUserId = useSelector(state => state.store.current_user.id)
+  const matches = useMediaQuery('(min-width:600px)');
+
+  let allClassrooms = []
+  let classIds = []
+  let test = []
+  let ids = []
+  let id = []
+>>>>>>> main
   for (let classroomId in classroomData) {
     allClassrooms.push(classroomData[classroomId]);
     classIds.push(classroomId);
@@ -605,6 +653,7 @@ const InstructorClassrooms = () => {
 
       <Modal open={addStudentModalOpen} onClose={handleCloseStudentModal}>
         {/* {tListHeadings} */}
+<<<<<<< HEAD
         <Grid
           container
           spacing={2}
@@ -612,14 +661,25 @@ const InstructorClassrooms = () => {
           alignItems="center"
           className={classes.enrollStudentsModal}
         >
+=======
+
+        <Grid container spacing={2} justify="center" alignItems="center" className = {matches === true ? classes.enrollStudentsModal : classes.enrollStudentsModalSmall}>
+
+>>>>>>> main
           <Grid item>
             <div>
               <h1>Not Enrolled</h1>
             </div>
             {customList(left)}
           </Grid>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> main
           <Grid item>
             <Grid container direction="column" alignItems="center">
+
               <Button
                 variant="outlined"
                 size="small"
@@ -630,6 +690,7 @@ const InstructorClassrooms = () => {
               >
                 ≫
               </Button>
+
               <Button
                 variant="outlined"
                 size="small"
@@ -640,6 +701,7 @@ const InstructorClassrooms = () => {
               >
                 &gt;
               </Button>
+
               <Button
                 variant="outlined"
                 size="small"
@@ -650,6 +712,8 @@ const InstructorClassrooms = () => {
               >
                 &lt;
               </Button>
+
+
               <Button
                 variant="outlined"
                 size="small"
@@ -660,8 +724,10 @@ const InstructorClassrooms = () => {
               >
                 ≪
               </Button>
+
             </Grid>
           </Grid>
+<<<<<<< HEAD
           <Grid item>
             <div>
               <h1>Enrolled</h1>
@@ -677,6 +743,20 @@ const InstructorClassrooms = () => {
           >
             Enroll Students
           </Button>
+=======
+          <Grid>
+          <div>
+              <h1>
+                Enrolled
+              </h1>
+            </div>
+            {customList(right)}
+          </Grid>
+
+
+          <Button variant="contained" color="primary" style={{ color: "white" }} size="small" onClick={updateEnrollment}>Enroll Students</Button>
+
+>>>>>>> main
         </Grid>
       </Modal>
     </div>
