@@ -90,7 +90,7 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
 
   const handleGoBack = (e) => {
     e.preventDefault();
-    return <Redirect to="/login" />;
+    window.location.href = "/";
   };
 
   if (authenticated) {
