@@ -53,7 +53,8 @@ export default function DashboardHeader({ props }) {
   const [grouped, setGrouped] = React.useState(
     props.groups.length >= 1 ? true : false
   );
-  const [groupSize, setGroupSize] = React.useState(props.groups.length);
+  // console.log(props)
+  const [groupSize, setGroupSize] = React.useState(props.groups[0] ? props.groups[0].members.length : 0);
   const [message, setMessage] = React.useState(props.daily_objective);
   const [description, setDescription] = React.useState(props.description);
   const [link, setLink] = React.useState(props.meeting_link);

@@ -15,7 +15,7 @@ function User() {
   // console.log(userId);
   useEffect(() => {
     if (!userId) {
-      console.log('no user id')
+      // console.log('no user id')
       return;
     }
     (async () => {

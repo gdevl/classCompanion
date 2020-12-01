@@ -152,12 +152,16 @@ export default function DashboardHeader({ props }) {
           Meeting Details
         </Typography>
         <form className={classes.root} noValidate autoComplete="off">
-          <TextField
-            id="standard-name"
+          <Button
+            id="meeting-link"
             label="Meeting Link"
             value={props.meeting_link || ""}
-            disabled={true}
-          />
+            disabled={!props.meeting_link}
+            href={props.meeting_link || ''}
+            color='primary'
+          >
+            {props.meeting_link || 'No Meeting'}
+          </Button>
           <TextField
             id="standard-name"
             label="Meeting Password"

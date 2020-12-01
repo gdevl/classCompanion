@@ -36,6 +36,13 @@ function App() {
   const currentClassrooms = useSelector((state) => state.store.classrooms);
   const currentUserRole = useSelector((state) => state.store.current_user);
 
+  const interval = (id) =>{
+    setInterval(async function () {
+      const classrooms = await fetchClassrooms(id);
+      dispatch(setUserClasses(classrooms));
+    }, 10000);
+  }
+
   useEffect(() => {
     (async () => {
       const user = await authenticate();
@@ -46,10 +53,12 @@ function App() {
       setLoaded(true);
       dispatch(setCurrentUser(user));
       // setUserRole(user.role)
+      interval(user.id)
       const classrooms = await fetchClassrooms(user.id);
       dispatch(setUserClasses(classrooms));
     })();
   }, [authenticated]);
+
 
   if (!currentUserRole) return null;
   if (!loaded) {
@@ -97,15 +106,15 @@ function App() {
           currentClassroom ? (
             <InstructorLayout />
           ) : (
-            <InstructorClassrooms />
-          )
+              <InstructorClassrooms />
+            )
         ) : currentClassroom ? (
           <StudentLayout />
         ) : (
-          <>
-            <StudentClassrooms />
-          </>
-        )}
+              <>
+                <StudentClassrooms />
+              </>
+            )}
         {/* </Grid> */}
 
         <div className="negative-space"></div>
