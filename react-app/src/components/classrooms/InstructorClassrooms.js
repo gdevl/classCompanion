@@ -322,11 +322,11 @@ const InstructorClassrooms = () => {
     <Paper className={classes.enrollStudentsTransferList}>
       <List dense component="div" role="list">
         {items.map((value) => {
-          const labelId = `transfer-list-item-${value}-label`;
+          const labelId = `transfer-list-item-${value.id}-label`;
 
           return (
             <ListItem
-              key={value}
+              key={value.id}
               role="listitem"
               button
               onClick={handleToggle(value)}
@@ -340,7 +340,7 @@ const InstructorClassrooms = () => {
                 />
               </ListItemIcon>
               {/* <ListItemText id={labelId} primary={`List item ${value + 1}`} /> */}
-              <ListItemText id={labelId}>{value}</ListItemText>
+              <ListItemText id={labelId}>{value.description}</ListItemText>
             </ListItem>
           );
         })}
@@ -358,7 +358,9 @@ const InstructorClassrooms = () => {
   }
 
   const leftChecked = intersection(checked, left);
+  console.log('left' , leftChecked)
   const rightChecked = intersection(checked, right);
+  console.log('right' , rightChecked)
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -369,7 +371,7 @@ const InstructorClassrooms = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
+    console.log('rerender')
     setChecked(newChecked);
   };
 
@@ -403,7 +405,7 @@ const InstructorClassrooms = () => {
 
   // 5) THIS IS THE HELPER FUNCTION TO THE FOURTH FUNCTION AND SENDS THE ARRAY OF IDS OF THE ENROLLED STUDENTS TO THE FOLLOWING ENDPOINT
 
-  const submitEnrolledStudents = async () => {
+  const submitEnrolledStudents = async (ids) => {
     await fetch(`api/classes/${currentClass}/update-enrollment`, {
       method: "PATCH",
       headers: {
@@ -423,24 +425,29 @@ const InstructorClassrooms = () => {
     handleCloseStudentModal();
 
     let isNumber = true;
-    right.forEach((student) => {
-      isNumber = true;
-      let i = student.length - 1;
-      while (isNumber === true) {
-        if (Number(student[i])) {
-          id.unshift(student[i]);
-          i -= 1;
-          continue;
-        } else {
-          let currentId = id.pop();
-          Number(currentId);
-          ids.push(currentId);
-          isNumber = BsFillPauseFill;
-        }
-      }
-    });
+    ids = right.map((student) => student.id);
+    //  {
+    //   isNumber = true;
+    //   id = [];
+    //   let i = student.length - 1;
+    //   while (isNumber === true) {
+    //     if (typeof (Number(student[i])) == 'number') {
+    //       // console.log('what is this madness', Number(student[i]))
+    //       id.unshift(student[i]);
+    //       // console.log('id:   ', id)
+    //       i -= 1;
+    //       continue;
+    //     } else {
+    //       // console.log('id:  bottom   ', id)
+    //       let currentId = id.join('');
+    //       Number(currentId);
+    //       ids.push(currentId);
+    //       isNumber = BsFillPauseFill;
+    //     }
+    //   }
+    // });
 
-    submitEnrolledStudents();
+    submitEnrolledStudents(ids);
   };
 
   // 3) THIS IS THE HELPER FUNCTION OF THE SECOND FUNCTION THAT KEEPS TRACK OF ALL OF THE ENROLLED STUDENTS BY THEIR ID.
@@ -466,7 +473,7 @@ const InstructorClassrooms = () => {
         populateEnrolledStudentIdsArray(classroom.students);
         classroom.students.forEach((student) => {
           enrolledStudents.push(
-            `${student.first_name} ${student.last_name} - Student id: ${student.id}`
+            { description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`, id: student.id }
           );
         });
       }
@@ -487,7 +494,7 @@ const InstructorClassrooms = () => {
     allStudentsArr.forEach((student) => {
       if (!test.includes(student.id)) {
         unEnrolledStudents.push(
-          `${student.first_name} ${student.last_name} - Student id: ${student.id}`
+          { description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`, id: student.id }
         );
       }
     });
