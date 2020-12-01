@@ -126,7 +126,7 @@ export default function DashboardHeader({ props }) {
 
       <Grid item className="groupingMenu">
         <Typography align="center" variant="subtitle2" gutterBottom>
-          Class Details
+          Groups
         </Typography>
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-helper-label">Grouped</InputLabel>
@@ -162,7 +162,7 @@ export default function DashboardHeader({ props }) {
       </Grid>
       <Grid item className="instructorMessage">
         <Typography align="center" variant="subtitle2" gutterBottom>
-          Meeting Details
+          Class Details
         </Typography>
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
@@ -185,6 +185,9 @@ export default function DashboardHeader({ props }) {
       </Grid>
 
       <Grid item className="meetingInfo">
+        <Typography align="center" variant="subtitle2" gutterBottom>
+          Meeting Details
+        </Typography>
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
             id="standard-name"
