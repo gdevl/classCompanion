@@ -40,6 +40,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
       setAuthenticated(true);
       // dispatch(setCurrentUser(user));
     } else {
+      console.log(user.errors)
       setErrors(user.errors);
     }
     // console.log("user: ", user);

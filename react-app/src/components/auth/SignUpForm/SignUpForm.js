@@ -42,22 +42,24 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
 
   const onSignUp = async (e) => {
     e.preventDefault();
-    if (password === repeatPassword) {
+
       const user = await signUp(
         username,
         first_name,
         last_name,
         email,
         password,
+        repeatPassword,
         role
       );
       if (!user.errors) {
         setAuthenticated(true);
         setSignedUp(true);
       } else {
+        console.log(user.errors)
         setErrors(user.errors);
       }
-    }
+    
   };
 
   const updateUsername = (e) => {

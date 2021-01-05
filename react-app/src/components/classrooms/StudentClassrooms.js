@@ -116,7 +116,9 @@ const StudentClassrooms = () => {
         My Classes
       </Typography>
       <div className={classes.outlined}>
-        {allClassrooms.map((classroom, idx) => {
+        {allClassrooms.length === 0 ?
+        <div><h3>You Currently Are Not Enrolled in any Classes. You Will Be Enrolled by Your Instructor</h3></div> :
+          allClassrooms.map((classroom, idx) => {
           // console.log('CLASSROOM', classroom.classSize)
           return (
             <Card className={classes.paper} id={"HERE"} key={idx}>

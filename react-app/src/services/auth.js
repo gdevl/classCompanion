@@ -39,6 +39,7 @@ export const signUp = async (
   last_name,
   email,
   password,
+  repeatPassword,
   role
 ) => {
   const response = await fetch("/api/auth/signup", {
@@ -52,6 +53,7 @@ export const signUp = async (
       last_name,
       email,
       password,
+      repeatPassword,
       role,
     }),
   });
