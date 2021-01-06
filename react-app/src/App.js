@@ -12,8 +12,6 @@ import LoginForm from "./components/auth/LoginForm/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
 import Navigation from "./components/NavBar/Navigation";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import UsersList from "./components/UsersList";
-import User from "./components/User";
 import { authenticate } from "./services/auth";
 import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
 import StudentClassrooms from "./components/classrooms/StudentClassrooms";
@@ -27,7 +25,7 @@ import { Grid } from "@material-ui/core";
 
 const siteTitle = "ClassCorral";
 
-function App() {
+const App = ({ socket }) => {
   const dispatch = useDispatch();
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -36,12 +34,12 @@ function App() {
   const currentClassrooms = useSelector((state) => state.store.classrooms);
   const currentUserRole = useSelector((state) => state.store.current_user);
 
-  const interval = (id) =>{
+  const interval = (id) => {
     setInterval(async function () {
       const classrooms = await fetchClassrooms(id);
       dispatch(setUserClasses(classrooms));
     }, 10000);
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -53,12 +51,20 @@ function App() {
       setLoaded(true);
       dispatch(setCurrentUser(user));
       // setUserRole(user.role)
-      interval(user.id)
+      //   interval(user.id)
       const classrooms = await fetchClassrooms(user.id);
       dispatch(setUserClasses(classrooms));
     })();
   }, [authenticated]);
 
+  useEffect(() => {
+    (async () => {
+      if (socket) {
+        console.log("socket:");
+        console.log(socket);
+      }
+    })();
+  }, []);
 
   if (!currentUserRole) return null;
   if (!loaded) {
@@ -106,15 +112,15 @@ function App() {
           currentClassroom ? (
             <InstructorLayout />
           ) : (
-              <InstructorClassrooms />
-            )
+            <InstructorClassrooms />
+          )
         ) : currentClassroom ? (
           <StudentLayout />
         ) : (
-              <>
-                <StudentClassrooms />
-              </>
-            )}
+          <>
+            <StudentClassrooms />
+          </>
+        )}
         {/* </Grid> */}
 
         <div className="negative-space"></div>
@@ -125,6 +131,6 @@ function App() {
       </Route>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

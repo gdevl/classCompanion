@@ -2,14 +2,21 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Class Corral</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io();
+        socket.on('message', function () {
+            socket.emit('my event', { data: 'I\'m connected!' });
+        });
+    </script>
+    <title>Class Corral</title>
 </head>
 
 <body>
-  <div id="root"></div>
+    <div id="root"></div>
 </body>
 
 </html>

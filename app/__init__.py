@@ -1,5 +1,10 @@
 import os
 from flask import Flask, render_template, request, session
+from flask_socketio import SocketIO, emit, send
+from flask_socketio import join_room, leave_room
+import json
+import eventlet
+
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
@@ -59,3 +64,22 @@ def react_root(path):
     if path == 'favicon.ico':
         return app.send_static_file('favicon.ico')
     return app.send_static_file('index.html')
+
+# socket code
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(
+    app,
+    cors_allowed_origins='*',
+    logger=True,
+    engineio_logger=True,
+    async_mode='eventlet'
+)
+
+@socketio.on('connect')
+def test_connect():
+    print('Client connected')
+
+
+@socketio.on('disconnect')
+def test_disconnect():
+    print('Client disconnected')
