@@ -9,6 +9,7 @@ import Theme from "./theme";
 import { ThemeProvider } from "@material-ui/core/styles";
 import configureStore from "../src/store/configureStore";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import SocketContext from './socketContext'
 
 const store = configureStore();
 
@@ -20,11 +21,13 @@ socket.on("error", (error) => {
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={Theme}>
-        <CssBaseline />
-        <App socket={socket} />
-        {/* <App /> */}
-      </ThemeProvider>
+      <SocketContext.Provider value={socket}>
+        <ThemeProvider theme={Theme}>
+          <CssBaseline />
+          <App socket={socket} />
+          {/* <App /> */}
+        </ThemeProvider>
+      </SocketContext.Provider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

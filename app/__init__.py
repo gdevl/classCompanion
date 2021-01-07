@@ -87,35 +87,41 @@ def test_disconnect():
 def on_join(id):
     print("id: ")
     print(id)
-    try: 
-        Classroom.query.get(id)
-        join_room(f"classroom{id}")
-        print(f'client joined classroom {id}')
-        # send(username + ' has entered the room.', classroom=classroom)
-    except:
-        print(f'a classroom with that id does not exist')
+    # try:
+    Classroom.query.get(id)
+    room = f"classroom{id}"
+    join_room(room)
+
+    print(f'client joined classroom {id}')
+    send('has entered the room.', room=room)
+    # except:
+    #     print(f'a classroom with that id does not exist')
 
     # username = data['username']
     # classroom = data['classroom']
-    
+
 @socketio.on('leave')
 def on_leave(data):
     username = data['username']
     classroom = data['classroom']
-    leave_room(classroom)
-    send(username + ' has left the room.', classroom=classroom)
+    room = f'classroom{id}'
+    leave_room(room)
+    print(f'leaving room {room}')
+    # emit(username + ' has left the room.', room=classroom)
 
-@socketio.on('question')
-def ask_question(data):
+@socketio.event
+def question(data):
     print("asked a question")
     print(data['question'])
+    print(data['classroom'])
     question = data['question']
-    emit('question', question)
+    classroom = data['classroom']
+    emit('response', room=f'classroom{classroom}')
 
-@socketio.on('answer')
-def answer_question(data):
+@socketio.event
+def answer(data):
     print("answered a question")
     print(data['answer'])
     answer = data['answer']
-    emit('answer', answer)
-
+    classroom = data['classroom']
+    emit('response', room=f'classroom{classroom}')
