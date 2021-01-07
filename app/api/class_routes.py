@@ -178,12 +178,6 @@ def postQuestion(class_id, user_id):
     return question.to_dict()
 
 
-@socketio.on('question')
-def handle_question(question):
-    print('question:')
-    print(question)
-
-
 
 @class_routes.route('/<int:class_id>/user/<int:student_id>/checkin',
                     methods=['GET', 'POST'])

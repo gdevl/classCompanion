@@ -79,7 +79,21 @@ socketio = SocketIO(
 def test_connect():
     print('Client connected')
 
-
 @socketio.on('disconnect')
 def test_disconnect():
     print('Client disconnected')
+
+@socketio.on('question')
+def ask_question(data):
+    print("asked a question")
+    print(data['question'])
+    question = data['question']
+    send(question)
+
+@socketio.on('answer')
+def answer_question(data):
+    print("answered a question")
+    print(data['answer'])
+    answer = data['answer']
+    send(answer)
+

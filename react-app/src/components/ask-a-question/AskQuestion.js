@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentClassRoom } from "../../store/users";
 import {
   Avatar,
   Typography,
@@ -63,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AskQuestion = (state) => {
+  const dispatch = useDispatch();
   // const currentUser = useSelector((state) => state.store.current_user)
   // const idd = currentUser.id
   const classes = useStyles();
@@ -82,12 +84,6 @@ const AskQuestion = (state) => {
   // SOCKETS //
   const socket = io.connect("http://localhost:5000");
 
-  socket.on("question", (question) => {
-    console.log("question:");
-    console.log(question);
-    // socket.emit;
-  });
-
   if (!currentUser.current_user) return null;
   const user_id = currentUser.current_user.id;
 
@@ -105,6 +101,10 @@ const AskQuestion = (state) => {
       }
     );
     if (response.ok) {
+      console.log("response.content:");
+      console.log(response.content);
+      socket.emit("question", response.content);
+      dispatch(setCurrentClassRoom(class_id));
       window.location.reload();
     }
   };
@@ -146,7 +146,6 @@ const AskQuestion = (state) => {
               autoComplete="off"
               onSubmit={postQuestion}
             >
-              {/* <form className={classes.paper} noValidate autoComplete='off'> */}
               <Button
                 size="large"
                 variant="contained"
