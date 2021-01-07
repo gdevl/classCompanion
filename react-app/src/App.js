@@ -70,19 +70,25 @@ const App = ({ socket }) => {
     if (!currentClassroom) return;
     console.log("currentClassroom");
     console.log(currentClassroom);
+    socket.emit("leave", currentClassroom.id);
     socket.emit("join", currentClassroom.id);
   }, [currentClassroom]);
 
-  socket.on("question", async () => {
-    console.log("INSIDE SOCKET.ON");
-    console.log(socket);
-    console.log("currentUser: ");
-    console.log(currentUser);
-    console.log("currentUser.id: ");
-    console.log(currentUser.id);
-    const classrooms = await fetchClassrooms(currentUser.id);
-    dispatch(setUserClasses(classrooms));
+  useEffect(() => {
+    socket.on("response", async () => {
+      console.log("INSIDE SOCKET.ON");
+      console.log(socket);
+      console.log("currentUser: ");
+      console.log(currentUser);
+      console.log("currentUser.id: ");
+      // console.log(currentUser.id);
+      if (currentUser) {
+        const classrooms = await fetchClassrooms(currentUser.id);
+        dispatch(setUserClasses(classrooms));
+      }
+    });
   });
+
 
   if (!currentUser) return null;
   if (!loaded) {
@@ -130,15 +136,15 @@ const App = ({ socket }) => {
           currentClassroom ? (
             <InstructorLayout />
           ) : (
-            <InstructorClassrooms />
-          )
+              <InstructorClassrooms />
+            )
         ) : currentClassroom ? (
-          <StudentLayout />
+          <StudentLayout socket={socket} />
         ) : (
-          <>
-            <StudentClassrooms />
-          </>
-        )}
+              <>
+                <StudentClassrooms />
+              </>
+            )}
         {/* </Grid> */}
 
         <div className="negative-space"></div>

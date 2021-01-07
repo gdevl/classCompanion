@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,9 +13,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import SocketContext from '../../../socketContext'
 
 export default function AnswerModal({ props }) {
   //   const socket = io.connect("http://localhost:5000");
+  const socket = useContext(SocketContext)
   const dispatch = useDispatch();
 
   const currentUser = useSelector((state) => state.store.current_user);
@@ -69,9 +71,10 @@ export default function AnswerModal({ props }) {
     if (response.ok) {
       console.log("answer:");
       console.log(answer);
-      //   socket.emit("answer", {
-      //     answer: answer,
-      //   });
+      socket.emit("answer", {
+        answer: answer,
+        classroom: currentClass.id
+      });
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms));
       // dispatch(setCurrentClassRoom(currentClass));

@@ -103,6 +103,7 @@ const AskQuestion = ({ props, socket }) => {
       console.log(question);
       socket.emit("question", {
         question: question,
+        classroom: currentState.current_class.id
       });
       const classrooms = await fetchClassrooms(currentUser.current_user.id);
       dispatch(setUserClasses(classrooms));
