@@ -19,8 +19,8 @@ def delete_class(id):
        db.session.commit()
        return jsonify('success')
 
-@class_routes.route('/<int:id>/students')
-def get_students(id):
+@class_routes.route('/students')
+def get_students():
     all_students = User.query.filter(User.role.ilike("student%"))
     students_arr = []
     for student in all_students:
