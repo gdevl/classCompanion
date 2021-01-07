@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassrooms, setUserClasses } from "../../../../src/store/users";
 import Grid from "@material-ui/core/Grid";
@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import "./DashboardHeader.css";
 import AskQuestionContainer from "../ask-a-question/AskQuestionContainer";
 import AnswerViewContainer from "../AnswerView/AnswerViewContainer";
+import SocketContext from '../../../socketContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,9 +39,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DashboardHeader({ props, socket }) {
+export default function DashboardHeader({ props }) {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const socket = useContext(SocketContext)
 
   const currentUser = useSelector((state) => state.store.current_user);
   const currentState = useSelector((state) => state.store);
@@ -111,6 +113,9 @@ export default function DashboardHeader({ props, socket }) {
     if (checkIn.ok) {
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms));
+      socket.emit("checkin", {
+        classroom: currentClass.id
+      });
     }
   };
 
@@ -183,18 +188,18 @@ export default function DashboardHeader({ props, socket }) {
               View Answer
             </Button>
           ) : (
-            <Button color="primary" onClick={handleQuestion}>
-              Ask A Question
-            </Button>
-          )
+                <Button color="primary" onClick={handleQuestion}>
+                  Ask A Question
+                </Button>
+              )
         ) : (
-          <Button color="secondary" onClick={handleCheckin}>
-            Check In
-          </Button>
-        )}
+            <Button color="secondary" onClick={handleCheckin}>
+              Check In
+            </Button>
+          )}
         {/* </Grid> */}
       </Grid>
-      <AskQuestionContainer props={{ open, setOpen }} socket={socket} />
+      <AskQuestionContainer props={{ open, setOpen }} />
       <AnswerViewContainer
         props={{
           answer: pendingAnswer(currentUser.id),

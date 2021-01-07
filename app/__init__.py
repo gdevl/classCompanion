@@ -131,3 +131,9 @@ def dismiss(data):
     print("dismissed a question")
     classroom = data['classroom']
     emit('response', room=f'classroom{classroom}')
+
+@socketio.event
+def checkin(data):
+    print("checked in")
+    classroom = data['classroom']
+    emit('response', room=f'classroom{classroom}')

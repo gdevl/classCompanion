@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import io from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import "fontsource-roboto";
+import SocketContext from '../../../socketContext'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -63,9 +64,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AskQuestion = ({ props, socket }) => {
+const AskQuestion = ({ props }) => {
   // const socket = io.connect("http://localhost:5000");
   const dispatch = useDispatch();
+  const socket = useContext(SocketContext)
   // const currentUser = useSelector((state) => state.store.current_user)
   // const idd = currentUser.id
   const classes = useStyles();
