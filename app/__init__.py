@@ -88,12 +88,12 @@ def ask_question(data):
     print("asked a question")
     print(data['question'])
     question = data['question']
-    send(question)
+    emit('question', question)
 
 @socketio.on('answer')
 def answer_question(data):
     print("answered a question")
     print(data['answer'])
     answer = data['answer']
-    send(answer)
+    emit('answer', answer)
 

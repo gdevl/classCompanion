@@ -1,7 +1,11 @@
 import React from "react";
 import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchClassrooms, setUserClasses } from "../../../../src/store/users";
+import {
+  fetchClassrooms,
+  setUserClasses,
+  setCurrentClassRoom,
+} from "../../../../src/store/users";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -70,6 +74,7 @@ export default function AnswerModal({ props }) {
       });
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms));
+      dispatch(setCurrentClassRoom(currentClass.id));
       props.setExpanded(null);
       props.setOpen(null);
     }
