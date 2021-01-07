@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import DashboardHeader from "./DashboardHeader";
 import "./DashboardHeader.css";
 
-export default function DashboardHeaderContainer({ props }) {
+export default function DashboardHeaderContainer({ props, socket }) {
   return (
     <Grid
       // className="outlined"
@@ -12,7 +12,7 @@ export default function DashboardHeaderContainer({ props }) {
       alignItems="center"
       spacing={3}
     >
-      <DashboardHeader props={props} />
+      <DashboardHeader props={props} socket={socket} />
     </Grid>
   );
 }

@@ -63,8 +63,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AskQuestion = ({ props }) => {
-  const socket = io.connect("http://localhost:5000");
+const AskQuestion = ({ props, socket }) => {
+  // const socket = io.connect("http://localhost:5000");
   const dispatch = useDispatch();
   // const currentUser = useSelector((state) => state.store.current_user)
   // const idd = currentUser.id
@@ -101,8 +101,6 @@ const AskQuestion = ({ props }) => {
       //   console.log("response.content:");
       console.log("question:");
       console.log(question);
-      //   console.log("response.content:");
-      //   console.log(response.content);
       socket.emit("question", {
         question: question,
       });

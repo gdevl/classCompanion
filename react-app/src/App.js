@@ -32,14 +32,14 @@ const App = ({ socket }) => {
 
   const currentClassroom = useSelector((state) => state.store.current_class);
   const currentClassrooms = useSelector((state) => state.store.classrooms);
-  const currentUserRole = useSelector((state) => state.store.current_user);
+  const currentUser = useSelector((state) => state.store.current_user);
 
-  const interval = (id) => {
-    setInterval(async function () {
-      const classrooms = await fetchClassrooms(id);
-      dispatch(setUserClasses(classrooms));
-    }, 10000);
-  };
+  //   const interval = (id) => {
+  //     setInterval(async function () {
+  //       const classrooms = await fetchClassrooms(id);
+  //       dispatch(setUserClasses(classrooms));
+  //     }, 10000);
+  //   };
 
   useEffect(() => {
     (async () => {
@@ -66,7 +66,25 @@ const App = ({ socket }) => {
     })();
   }, []);
 
-  if (!currentUserRole) return null;
+  useEffect(() => {
+    if (!currentClassroom) return;
+    console.log("currentClassroom");
+    console.log(currentClassroom);
+    socket.emit("join", currentClassroom.id);
+  }, [currentClassroom]);
+
+  socket.on("question", async () => {
+    console.log("INSIDE SOCKET.ON");
+    console.log(socket);
+    console.log("currentUser: ");
+    console.log(currentUser);
+    console.log("currentUser.id: ");
+    console.log(currentUser.id);
+    const classrooms = await fetchClassrooms(currentUser.id);
+    dispatch(setUserClasses(classrooms));
+  });
+
+  if (!currentUser) return null;
   if (!loaded) {
     return null;
   }
@@ -108,7 +126,7 @@ const App = ({ socket }) => {
         <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
         <div className="negative-space"></div>
         {/* <Grid container justify="space-around" className="outlined"> */}
-        {currentUserRole.role === "instructor" ? (
+        {currentUser.role === "instructor" ? (
           currentClassroom ? (
             <InstructorLayout />
           ) : (
@@ -127,7 +145,7 @@ const App = ({ socket }) => {
         <Footer />
       </ProtectedRoute>
       <Route path="/question" exact={true} authenticated={authenticated}>
-        <AskQuestion />
+        {/* <AskQuestion socket={socket} /> */}
       </Route>
     </BrowserRouter>
   );

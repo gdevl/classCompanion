@@ -10,7 +10,7 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
 
-from .models import db, User
+from .models import db, User, Classroom
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.class_routes import class_routes
@@ -70,8 +70,8 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(
     app,
     cors_allowed_origins='*',
-    logger=True,
-    engineio_logger=True,
+    # logger=True,
+    # engineio_logger=True,
     async_mode='eventlet'
 )
 
@@ -82,6 +82,28 @@ def test_connect():
 @socketio.on('disconnect')
 def test_disconnect():
     print('Client disconnected')
+
+@socketio.on('join')
+def on_join(id):
+    print("id: ")
+    print(id)
+    try: 
+        Classroom.query.get(id)
+        join_room(f"classroom{id}")
+        print(f'client joined classroom {id}')
+        # send(username + ' has entered the room.', classroom=classroom)
+    except:
+        print(f'a classroom with that id does not exist')
+
+    # username = data['username']
+    # classroom = data['classroom']
+    
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    classroom = data['classroom']
+    leave_room(classroom)
+    send(username + ' has left the room.', classroom=classroom)
 
 @socketio.on('question')
 def ask_question(data):

@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import ClassroomLayoutContainer from "./ClassroomLayout/ClassroomLayoutContainer";
 import { useSelector } from "react-redux";
 import Divider from "@material-ui/core/Divider";
-import DashboardHeadder from "./DashboardHeader/DashboardHeaderContainer";
+import DashboardHeader from "./DashboardHeader/DashboardHeaderContainer";
 
 export default function InstructorClassroomLayout() {
   const classList = useSelector((state) => state.store.classrooms);
@@ -12,7 +12,7 @@ export default function InstructorClassroomLayout() {
   if (!classList) return null;
   return (
     <>
-      <DashboardHeadder props={classList[currentClassrom.id]} />
+      <DashboardHeader props={classList[currentClassrom.id]} />
       <Divider className="content__divider" />
       <Typography align="center" variant="h5" gutterBottom>
         Class List

@@ -15,7 +15,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 export default function AnswerModal({ props }) {
-  const socket = io.connect("http://localhost:5000");
+  //   const socket = io.connect("http://localhost:5000");
   const dispatch = useDispatch();
 
   const currentUser = useSelector((state) => state.store.current_user);
@@ -69,12 +69,12 @@ export default function AnswerModal({ props }) {
     if (response.ok) {
       console.log("answer:");
       console.log(answer);
-      socket.emit("answer", {
-        answer: answer,
-      });
+      //   socket.emit("answer", {
+      //     answer: answer,
+      //   });
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms));
-      dispatch(setCurrentClassRoom(currentClass.id));
+      // dispatch(setCurrentClassRoom(currentClass));
       props.setExpanded(null);
       props.setOpen(null);
     }
