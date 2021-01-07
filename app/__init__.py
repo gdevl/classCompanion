@@ -70,8 +70,8 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(
     app,
     cors_allowed_origins='*',
-    # logger=True,
-    # engineio_logger=True,
+    logger=True,
+    engineio_logger=True,
     async_mode='eventlet'
 )
 
@@ -88,11 +88,11 @@ def on_join(id):
     print("id: ")
     print(id)
     try: 
-        Classroom.query.get(id)
-        join_room(f"classroom{id}")
-        print(f'client joined classroom {id}')
+        room = Classroom.query.get(id)
+        join_room(f"classroom{room.id}")
+        print(f'client joined classroom {room.id}')
         # send(username + ' has entered the room.', classroom=classroom)
-    except:
+    except room.DoesNotExist:
         print(f'a classroom with that id does not exist')
 
     # username = data['username']

@@ -16,15 +16,17 @@ const socket = io.connect(socketUrl);
 socket.on("error", (error) => {
   console.error(error);
 });
+console.log("socket:");
+console.log(socket);
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={Theme}>
-        <CssBaseline />
-        <App socket={socket} />
-        {/* <App /> */}
-      </ThemeProvider>
+      <CssBaseline>
+        <ThemeProvider theme={Theme}>
+          <App socket={socket} />
+        </ThemeProvider>
+      </CssBaseline>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

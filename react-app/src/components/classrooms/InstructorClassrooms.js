@@ -15,7 +15,6 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { BsFillPauseFill, BsFillPlusSquareFill } from "react-icons/bs";
 import { BsPlusSquare } from "react-icons/bs";
 import Modal from "@material-ui/core/Modal";
 import List from "@material-ui/core/List";
@@ -62,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   outlined: {
-    // outline: '1px solid blue',
     margin: "0 auto",
     display: "flex",
     flexWrap: "wrap",
@@ -75,18 +73,12 @@ const useStyles = makeStyles((theme) => ({
   },
 
   classModal: {
-    // position: 'absolute',
     position: "relative",
     top: "20rem",
-    // top: 300,
-    // left: 550,
-    // left: 850,
     left: "20rem",
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    // // border: '2px solid #000',
     boxShadow: theme.shadows[5],
-    // padding: theme.spacing(2, 4, 3),
     paddingLeft: "5rem",
     paddingRight: "5rem",
     paddingTop: "2rem",
@@ -137,16 +129,11 @@ const useStyles = makeStyles((theme) => ({
   transferListGridContainer: {
     margin: "auto",
     backgroundColor: "white",
-    // position: 'absolute',
-    // top: 200,
-    // left: 200
   },
 
   addClass: {
     padding: theme.spacing(2),
     textAlign: "left",
-    // backgroundColor: theme.palette.secondary.light,
-    // background: theme.palette.success.light,
     color: "black",
     height: "200px",
     minWidth: "300px",
@@ -297,9 +284,7 @@ const InstructorClassrooms = () => {
     });
     const response = await res.json();
     const updatedClasses = await fetchClassrooms(currentUserId);
-    // console.log(updatedClasses)
     dispatch(setUserClasses(updatedClasses));
-    // alert('Deleted Class')
   };
 
   // ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -307,7 +292,6 @@ const InstructorClassrooms = () => {
   // VIEW A CLASS-------------------------------------------------------------------------------------------------------------------------------|
 
   const handleViewClick = async (classId) => {
-    // alert(`re-routing to math class: ${classId}`)
     dispatch(setCurrentClassRoom(classroomData[classId]));
   };
 
@@ -339,7 +323,6 @@ const InstructorClassrooms = () => {
                   inputProps={{ "aria-labelledby": labelId }}
                 />
               </ListItemIcon>
-              {/* <ListItemText id={labelId} primary={`List item ${value + 1}`} /> */}
               <ListItemText id={labelId}>{value.description}</ListItemText>
             </ListItem>
           );
@@ -358,9 +341,7 @@ const InstructorClassrooms = () => {
   }
 
   const leftChecked = intersection(checked, left);
-  console.log('left' , leftChecked)
   const rightChecked = intersection(checked, right);
-  console.log('right' , rightChecked)
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -371,7 +352,7 @@ const InstructorClassrooms = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    console.log('rerender')
+    console.log("rerender");
     setChecked(newChecked);
   };
 
@@ -423,29 +404,7 @@ const InstructorClassrooms = () => {
 
   const updateEnrollment = () => {
     handleCloseStudentModal();
-
-    let isNumber = true;
     ids = right.map((student) => student.id);
-    //  {
-    //   isNumber = true;
-    //   id = [];
-    //   let i = student.length - 1;
-    //   while (isNumber === true) {
-    //     if (typeof (Number(student[i])) == 'number') {
-    //       // console.log('what is this madness', Number(student[i]))
-    //       id.unshift(student[i]);
-    //       // console.log('id:   ', id)
-    //       i -= 1;
-    //       continue;
-    //     } else {
-    //       // console.log('id:  bottom   ', id)
-    //       let currentId = id.join('');
-    //       Number(currentId);
-    //       ids.push(currentId);
-    //       isNumber = BsFillPauseFill;
-    //     }
-    //   }
-    // });
 
     submitEnrolledStudents(ids);
   };
@@ -472,9 +431,10 @@ const InstructorClassrooms = () => {
       if (classroom.id === Number(classId)) {
         populateEnrolledStudentIdsArray(classroom.students);
         classroom.students.forEach((student) => {
-          enrolledStudents.push(
-            { description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`, id: student.id }
-          );
+          enrolledStudents.push({
+            description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`,
+            id: student.id,
+          });
         });
       }
     });
@@ -493,9 +453,10 @@ const InstructorClassrooms = () => {
     const allStudentsArr = await res.json();
     allStudentsArr.forEach((student) => {
       if (!test.includes(student.id)) {
-        unEnrolledStudents.push(
-          { description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`, id: student.id }
-        );
+        unEnrolledStudents.push({
+          description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`,
+          id: student.id,
+        });
       }
     });
     setLeft(unEnrolledStudents);
@@ -622,8 +583,6 @@ const InstructorClassrooms = () => {
       {/* CODE FOR THE TRANSFER LIST AND MODAL THAT CONTAINS IT */}
 
       <Modal open={addStudentModalOpen} onClose={handleCloseStudentModal}>
-        {/* {tListHeadings} */}
-
         <Grid
           container
           spacing={2}

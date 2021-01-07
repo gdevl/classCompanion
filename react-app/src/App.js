@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Box from "@material-ui/core/Box";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentUser,
   fetchClassrooms,
   setUserClasses,
-  setCurrentClassRoom,
 } from "../src/store/users";
 import { BrowserRouter, Route } from "react-router-dom";
 import LoginForm from "./components/auth/LoginForm/LoginForm";
@@ -16,11 +14,8 @@ import { authenticate } from "./services/auth";
 import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
 import StudentClassrooms from "./components/classrooms/StudentClassrooms";
 import Footer from "./components/footer/Footer";
-import EditProfile from "./components/edit_profile/EditProfile";
 import InstructorLayout from "./components/InstructorClassroomDashboard/InstructorClassroomLayout";
 import StudentLayout from "./components/StudentClassroomDashboard/StudentClassroomLayout";
-import MainLayout from "./MainLayout";
-import AskQuestion from "./components/ask-a-question/AskQuestion";
 import { Grid } from "@material-ui/core";
 
 const siteTitle = "ClassCorral";
@@ -31,15 +26,7 @@ const App = ({ socket }) => {
   const [loaded, setLoaded] = useState(false);
 
   const currentClassroom = useSelector((state) => state.store.current_class);
-  const currentClassrooms = useSelector((state) => state.store.classrooms);
   const currentUser = useSelector((state) => state.store.current_user);
-
-  //   const interval = (id) => {
-  //     setInterval(async function () {
-  //       const classrooms = await fetchClassrooms(id);
-  //       dispatch(setUserClasses(classrooms));
-  //     }, 10000);
-  //   };
 
   useEffect(() => {
     (async () => {
@@ -47,11 +34,8 @@ const App = ({ socket }) => {
       if (!user.errors) {
         setAuthenticated(true);
       }
-      // console.log("user: ", user);
       setLoaded(true);
       dispatch(setCurrentUser(user));
-      // setUserRole(user.role)
-      //   interval(user.id)
       const classrooms = await fetchClassrooms(user.id);
       dispatch(setUserClasses(classrooms));
     })();
@@ -125,7 +109,6 @@ const App = ({ socket }) => {
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
         <div className="negative-space"></div>
-        {/* <Grid container justify="space-around" className="outlined"> */}
         {currentUser.role === "instructor" ? (
           currentClassroom ? (
             <InstructorLayout />
@@ -139,14 +122,10 @@ const App = ({ socket }) => {
             <StudentClassrooms />
           </>
         )}
-        {/* </Grid> */}
 
         <div className="negative-space"></div>
         <Footer />
       </ProtectedRoute>
-      <Route path="/question" exact={true} authenticated={authenticated}>
-        {/* <AskQuestion socket={socket} /> */}
-      </Route>
     </BrowserRouter>
   );
 };
