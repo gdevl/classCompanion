@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DashboardHeader({ props }) {
+export default function DashboardHeader({ props, socket }) {
   const dispatch = useDispatch();
   const classes = useStyles();
 
@@ -157,10 +157,10 @@ export default function DashboardHeader({ props }) {
             label="Meeting Link"
             value={props.meeting_link || ""}
             disabled={!props.meeting_link}
-            href={props.meeting_link || ''}
-            color='primary'
+            href={props.meeting_link || ""}
+            color="primary"
           >
-            {props.meeting_link || 'No Meeting'}
+            {props.meeting_link || "No Meeting"}
           </Button>
           <TextField
             id="standard-name"
@@ -194,7 +194,7 @@ export default function DashboardHeader({ props }) {
         )}
         {/* </Grid> */}
       </Grid>
-      <AskQuestionContainer props={{ open, setOpen }} />
+      <AskQuestionContainer props={{ open, setOpen }} socket={socket} />
       <AnswerViewContainer
         props={{
           answer: pendingAnswer(currentUser.id),

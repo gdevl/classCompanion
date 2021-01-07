@@ -12,8 +12,6 @@ import LoginForm from "./components/auth/LoginForm/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
 import Navigation from "./components/NavBar/Navigation";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import UsersList from "./components/UsersList";
-import User from "./components/User";
 import { authenticate } from "./services/auth";
 import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
 import StudentClassrooms from "./components/classrooms/StudentClassrooms";
@@ -27,21 +25,21 @@ import { Grid } from "@material-ui/core";
 
 const siteTitle = "ClassCorral";
 
-function App() {
+const App = ({ socket }) => {
   const dispatch = useDispatch();
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   const currentClassroom = useSelector((state) => state.store.current_class);
   const currentClassrooms = useSelector((state) => state.store.classrooms);
-  const currentUserRole = useSelector((state) => state.store.current_user);
+  const currentUser = useSelector((state) => state.store.current_user);
 
-  const interval = (id) =>{
-    setInterval(async function () {
-      const classrooms = await fetchClassrooms(id);
-      dispatch(setUserClasses(classrooms));
-    }, 10000);
-  }
+  //   const interval = (id) => {
+  //     setInterval(async function () {
+  //       const classrooms = await fetchClassrooms(id);
+  //       dispatch(setUserClasses(classrooms));
+  //     }, 10000);
+  //   };
 
   useEffect(() => {
     (async () => {
@@ -53,14 +51,40 @@ function App() {
       setLoaded(true);
       dispatch(setCurrentUser(user));
       // setUserRole(user.role)
-      interval(user.id)
+      //   interval(user.id)
       const classrooms = await fetchClassrooms(user.id);
       dispatch(setUserClasses(classrooms));
     })();
   }, [authenticated]);
 
+  useEffect(() => {
+    (async () => {
+      if (socket) {
+        console.log("socket:");
+        console.log(socket);
+      }
+    })();
+  }, []);
 
-  if (!currentUserRole) return null;
+  useEffect(() => {
+    if (!currentClassroom) return;
+    console.log("currentClassroom");
+    console.log(currentClassroom);
+    socket.emit("join", currentClassroom.id);
+  }, [currentClassroom]);
+
+  socket.on("question", async () => {
+    console.log("INSIDE SOCKET.ON");
+    console.log(socket);
+    console.log("currentUser: ");
+    console.log(currentUser);
+    console.log("currentUser.id: ");
+    console.log(currentUser.id);
+    const classrooms = await fetchClassrooms(currentUser.id);
+    dispatch(setUserClasses(classrooms));
+  });
+
+  if (!currentUser) return null;
   if (!loaded) {
     return null;
   }
@@ -102,29 +126,29 @@ function App() {
         <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
         <div className="negative-space"></div>
         {/* <Grid container justify="space-around" className="outlined"> */}
-        {currentUserRole.role === "instructor" ? (
+        {currentUser.role === "instructor" ? (
           currentClassroom ? (
             <InstructorLayout />
           ) : (
-              <InstructorClassrooms />
-            )
+            <InstructorClassrooms />
+          )
         ) : currentClassroom ? (
           <StudentLayout />
         ) : (
-              <>
-                <StudentClassrooms />
-              </>
-            )}
+          <>
+            <StudentClassrooms />
+          </>
+        )}
         {/* </Grid> */}
 
         <div className="negative-space"></div>
         <Footer />
       </ProtectedRoute>
       <Route path="/question" exact={true} authenticated={authenticated}>
-        <AskQuestion />
+        {/* <AskQuestion socket={socket} /> */}
       </Route>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
