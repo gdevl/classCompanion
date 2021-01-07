@@ -46,6 +46,10 @@ export default function AnswerModal({ props }) {
     if (response.ok) {
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms));
+      socket.emit("dismiss", {
+        answer: answer,
+        classroom: currentClass.id
+      });
       props.setExpanded(null);
       props.setOpen(null);
     }

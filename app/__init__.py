@@ -125,3 +125,9 @@ def answer(data):
     answer = data['answer']
     classroom = data['classroom']
     emit('response', room=f'classroom{classroom}')
+
+@socketio.event
+def dismiss(data):
+    print("dismissed a question")
+    classroom = data['classroom']
+    emit('response', room=f'classroom{classroom}')
