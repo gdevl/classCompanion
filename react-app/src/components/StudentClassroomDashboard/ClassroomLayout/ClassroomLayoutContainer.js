@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import ClassroomLayout from "./ClassroomLayout";
 import "./ClassroomLayout.css";
 
-export default function ClassroomLayoutContainer({ props }) {
+export default function ClassroomLayoutContainer({ props, socket }) {
   return (
     <Grid
       container
@@ -12,7 +12,7 @@ export default function ClassroomLayoutContainer({ props }) {
       alignItems="center"
       spacing={3}
     >
-      <ClassroomLayout props={props} />
+      <ClassroomLayout props={props} socket={socket} />
     </Grid>
   );
 }

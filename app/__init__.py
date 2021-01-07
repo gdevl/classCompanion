@@ -1,11 +1,16 @@
 import os
 from flask import Flask, render_template, request, session
+from flask_socketio import SocketIO, emit, send
+from flask_socketio import join_room, leave_room
+import json
+import eventlet
+
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
 
-from .models import db, User
+from .models import db, User, Classroom
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.class_routes import class_routes
@@ -59,3 +64,76 @@ def react_root(path):
     if path == 'favicon.ico':
         return app.send_static_file('favicon.ico')
     return app.send_static_file('index.html')
+
+# socket code
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(
+    app,
+    cors_allowed_origins='*',
+    # logger=True,
+    # engineio_logger=True,
+    async_mode='eventlet'
+)
+
+@socketio.on('connect')
+def test_connect():
+    print('Client connected')
+
+@socketio.on('disconnect')
+def test_disconnect():
+    print('Client disconnected')
+
+@socketio.on('join')
+def on_join(id):
+    print("id: ")
+    print(id)
+    # try:
+    Classroom.query.get(id)
+    room = f"classroom{id}"
+    join_room(room)
+
+    print(f'client joined classroom {id}')
+    send('has entered the room.', room=room)
+    # except:
+    #     print(f'a classroom with that id does not exist')
+
+    # username = data['username']
+    # classroom = data['classroom']
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    classroom = data['classroom']
+    room = f'classroom{id}'
+    leave_room(room)
+    print(f'leaving room {room}')
+    # emit(username + ' has left the room.', room=classroom)
+
+@socketio.event
+def question(data):
+    print("asked a question")
+    print(data['question'])
+    print(data['classroom'])
+    question = data['question']
+    classroom = data['classroom']
+    emit('response', room=f'classroom{classroom}')
+
+@socketio.event
+def answer(data):
+    print("answered a question")
+    print(data['answer'])
+    answer = data['answer']
+    classroom = data['classroom']
+    emit('response', room=f'classroom{classroom}')
+
+@socketio.event
+def dismiss(data):
+    print("dismissed a question")
+    classroom = data['classroom']
+    emit('response', room=f'classroom{classroom}')
+
+@socketio.event
+def checkin(data):
+    print("checked in")
+    classroom = data['classroom']
+    emit('response', room=f'classroom{classroom}')

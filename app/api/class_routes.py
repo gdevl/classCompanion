@@ -173,7 +173,10 @@ def postQuestion(class_id, user_id):
 
     db.session.add(question)
     db.session.commit()
+
+    # emit question
     return question.to_dict()
+
 
 
 @class_routes.route('/<int:class_id>/user/<int:student_id>/checkin',
