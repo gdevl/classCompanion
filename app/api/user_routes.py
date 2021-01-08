@@ -58,19 +58,20 @@ def defaultView():
 
 
 # update user info route example
-@user_routes.route("/<int:id>/update", methods=["GET", "PUT"])
+@user_routes.route("/<int:id>/update", methods=["PUT"])
 # @login_required
 def updateUser(id):
-    user = User.query.get(id)
-    req_data = request.get_json()
-    # return f"{req_data}"
-    user.username = req_data['username']
-    user.email = req_data['email']
-    user.avatar_url = req_data['avatarUrl']
-    # user.hashed_password = generate_password_hash(req_data['password'])
-    db.session.add(user)
-    db.session.commit()
-    return user.to_dict()
+    if request.method == 'PUT':
+        user = User.query.get(id)
+        req_data = request.get_json()
+        # return f"{req_data}"
+        user.username = req_data['username']
+        user.email = req_data['email']
+        user.avatar_url = req_data['avatarUrl']
+        # user.hashed_password = generate_password_hash(req_data['password'])
+        db.session.add(user)
+        db.session.commit()
+        return user.to_dict()
 
 # @user_routes.route("/<int:id>/update", methods=["GET", "PUT"])
 # # @login_required

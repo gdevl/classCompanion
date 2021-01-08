@@ -1,28 +1,24 @@
-export const GET_CLASS_QUESTIONS = "GET_CLASS_QUESTIONS";
+export const GET_UNRESOLVED_QUESTIONS = "GET_UNRESOLVED_QUESTIONS";
 
-export const getClassQuestions = (classroomId) => {
-  return { type: SET_CURRENT_USER, user };
+export const getUnresolvedQuestions = (classroomId) => {
+  return { type: GET_UNRESOLVED_QUESTIONS, classroomId };
 };
 
-export const fetchQuestions = async (classId) => {
-  const response = await fetch(`/api/questions/${classId}/classrooms`, {
+export const fetchUnresolvedQuestions = async (classId) => {
+  const request = await fetch(`/api/classes/${classId}/questions`, {
     headers: {
       "Content-Type": "application/json",
     },
   });
-  const result = await response.json();
-  const classrooms = {};
-  result.classes.classrooms.forEach((classroom) => {
-    if (classroom.active !== false) {
-      classrooms[classroom.id] = classroom;
-    }
-  });
-  return classrooms;
+  const questions = await request.json();
+  console.log("Questions:");
+  console.log(questions);
+  return questions;
 };
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
-    case GET_CLASS_QUESTIONS: {
+    case GET_UNRESOLVED_QUESTIONS: {
       return {
         ...state,
         questions: action.questions,

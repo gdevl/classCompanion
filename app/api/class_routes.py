@@ -19,6 +19,29 @@ def delete_class(id):
        db.session.commit()
        return jsonify('success')
 
+
+@class_routes.route('/<int:id>/students')
+def get_students(id):
+    all_students = User.query.filter(User.role.ilike("student%"))
+    students_arr = []
+    for student in all_students:
+        student_dict = student.to_dict()
+        # print(student_dict['first_name'])
+        first_name = student_dict['first_name']
+        last_name = student_dict['last_name']
+        student_id = student_dict['id']
+        students_arr.append({
+            'id': student_id,
+            'first_name': first_name,
+            'last_name': last_name
+        })
+    print(students_arr)
+    # print(all_students)
+    return jsonify(students_arr)
+    # return jsonify(classroom.students)
+
+
+
 @class_routes.route('/<int:id>/update-enrollment', methods=['GET', 'PATCH'])
 def update_enrollment(id):
     if request.method == 'PATCH':
@@ -102,7 +125,6 @@ def group_class(id, size):
         return jsonify("TEST")
 
 
-
 @class_routes.route('/<int:id>/groups')
 def get_class_groups(id):
     class_groups = Group.query.filter(Group.class_id == id, Group.active == True).all()
@@ -115,6 +137,13 @@ def get_unresolved_questions(id):
     return {"questions": [class_question.to_dict() for class_question in class_questions]}
 
 
+@class_routes.route('/<int:id>/questions/archive')
+def get_resolved_questions(id):
+    archived_questions = Question.query.filter(
+        Question.class_id == id,
+        Question.resolved == True
+    ).all()
+    return {"questions": [archived_question.to_dict() for archived_question in archived_questions]}
 
 
 @class_routes.route('/<int:class_id>/question/<int:question_id>/answer', methods=['GET', 'POST'])

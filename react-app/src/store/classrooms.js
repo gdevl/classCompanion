@@ -1,10 +1,6 @@
-export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const SET_CURRENT_CLASSROOM = "SET_CURRENT_CLASSROOM";
-export const SET_CURRENT_CLASSROOMS = "SET_CURRENT_CLASSROOMS";
-
-export const setCurrentUser = (user) => {
-  return { type: SET_CURRENT_USER, user };
-};
+export const GET_USER_CLASSROOMS = "GET_USER_CLASSROOMS";
+export const GET_CLASSROOM_GROUPS = "GET_CLASSROOM_GROUPS";
 
 export const setCurrentClassRoom = (classroom) => {
   // console.log(classroom)
@@ -14,7 +10,7 @@ export const setCurrentClassRoom = (classroom) => {
   };
 };
 
-export const fetchClassrooms = async (userId) => {
+export const fetchUserClassrooms = async (userId) => {
   const response = await fetch(`/api/users/${userId}/classrooms`, {
     headers: {
       "Content-Type": "application/json",
@@ -33,7 +29,7 @@ export const fetchClassrooms = async (userId) => {
 
 export const setUserClasses = (classrooms) => {
   return {
-    type: SET_CURRENT_CLASSROOMS,
+    type: GET_USER_CLASSROOMS,
     classrooms,
   };
 };
@@ -52,7 +48,7 @@ export default function reducer(state = {}, action) {
         current_class: action.classroom,
       };
     }
-    case SET_CURRENT_CLASSROOMS: {
+    case GET_USER_CLASSROOMS: {
       return {
         ...state,
         classrooms: action.classrooms,
