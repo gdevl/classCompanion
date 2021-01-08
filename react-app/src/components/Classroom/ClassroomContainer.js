@@ -1,23 +1,27 @@
+//Framework
 import React from "react";
-import Typography from "@material-ui/core/Typography";
-import ClassroomLayoutContainer from "./ClassroomLayout/ClassroomLayoutContainer";
 import { useSelector } from "react-redux";
+//MUI
+import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import DashboardHeader from "./DashboardHeader/DashboardHeaderContainer";
+//Components
+import Dashboard from './Dashboard/DashboardContainer'
+import ClassroomLayout from "./ClassLayout/ClassLayoutContainer";
 
-export default function ClassroomDashboardContainer() {
+//Classroom Container
+export default function ClassroomContainer() {
   const classList = useSelector((state) => state.store.classrooms);
   const currentClassroom = useSelector((state) => state.store.current_class);
 
   if (!classList) return null;
   return (
     <>
-      <DashboardHeader props={classList[currentClassroom.id]} />
+      <Dashboard props={classList[currentClassroom.id]} />
       <Divider className="content__divider" />
       <Typography align="center" variant="h5" gutterBottom>
         Class List
       </Typography>
-      <ClassroomLayoutContainer props={classList[currentClassroom.id]} />
+      <ClassLayout props={classList[currentClassroom.id]} />
     </>
   );
 };
