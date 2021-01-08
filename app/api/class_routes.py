@@ -106,7 +106,14 @@ def group_class(id, size):
 @class_routes.route('/<int:id>/groups')
 def get_class_groups(id):
     class_groups = Group.query.filter(Group.class_id == id, Group.active == True).all()
-    return {"groups": [class_group.to_dict() for class_group in class_groups]}
+    return {"groups": [class_group.less_to_dict() for class_group in class_groups]}
+
+
+@class_routes.route('/<int:id>/questions')
+def get_unresolved_questions(id):
+    class_questions = Question.query.filter(Question.class_id == id, Question.resolved == False).all()
+    return {"questions": [class_question.to_dict() for class_question in class_questions]}
+
 
 
 
