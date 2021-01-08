@@ -19,27 +19,6 @@ def delete_class(id):
        db.session.commit()
        return jsonify('success')
 
-@class_routes.route('/students')
-def get_students():
-    all_students = User.query.filter(User.role.ilike("student%"))
-    students_arr = []
-    for student in all_students:
-        student_dict = student.to_dict()
-        # print(student_dict['first_name'])
-        first_name = student_dict['first_name']
-        last_name = student_dict['last_name']
-        student_id = student_dict['id']
-        students_arr.append({
-            'id': student_id,
-            'first_name': first_name,
-            'last_name': last_name
-        })
-    print(students_arr)
-    # print(all_students)
-    return jsonify(students_arr)
-    # return jsonify(classroom.students)
-
-
 @class_routes.route('/<int:id>/update-enrollment', methods=['GET', 'PATCH'])
 def update_enrollment(id):
     if request.method == 'PATCH':
@@ -123,6 +102,14 @@ def group_class(id, size):
         return jsonify("TEST")
 
 
+
+@class_routes.route('/<int:id>/groups')
+def get_class_groups(id):
+    class_groups = Group.query.filter(Group.class_id == id, Group.active == True).all()
+    return {"groups": [class_group.to_dict() for class_group in class_groups]}
+
+
+
 @class_routes.route('/<int:class_id>/question/<int:question_id>/answer', methods=['GET', 'POST'])
 def answer_question(class_id, question_id):
     if request.method == 'POST':
@@ -137,7 +124,7 @@ def answer_question(class_id, question_id):
         selected_question.resolved = True
         db.session.add(selected_question)
         db.session.commit()
-        return jsonify("QUESITON ANSWER TEST")
+        return jsonify("Answer submitted.")
 
 
 @class_routes.route('/<int:class_id>/question/<int:question_id>/dismiss', methods=['GET', 'POST'])
@@ -155,7 +142,7 @@ def dismiss_question(class_id, question_id):
         selected_question.resolved = True
         db.session.add(selected_question)
         db.session.commit()
-        return jsonify("QUESITON DISMISS TEST")
+        return jsonify("Question dismissed.")
 
 
 # post question
