@@ -8,6 +8,7 @@ import {
   InputLabel,
   Input,
   Typography,
+  TextField, DialogContentText, DialogContent
 } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -82,6 +83,29 @@ const useStyles = makeStyles((theme) => ({
     // left: 550,
     // left: 850,
     left: "20rem",
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    // // border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    // padding: theme.spacing(2, 4, 3),
+    paddingLeft: "5rem",
+    paddingRight: "5rem",
+    paddingTop: "2rem",
+    paddingBottom: "3rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "2px solid white",
+  },
+  classDialog: {
+    // position: 'absolute',
+    position: "relative",
+    // top: "20rem",
+    // top: 300,
+    // left: 550,
+    // left: 850,
+    // left: "20rem",
     width: 400,
     backgroundColor: theme.palette.background.paper,
     // // border: '2px solid #000',
@@ -174,6 +198,7 @@ const useStyles = makeStyles((theme) => ({
 const InstructorClassrooms = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [open, setOpen] = React.useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [className, setClassName] = useState("");
@@ -203,12 +228,17 @@ const InstructorClassrooms = () => {
   // CREATE A CLASS ------------------------------------------------------------------------------------------------------------------------
 
   const handleAddClass = () => {
-    setModalOpen(true);
+    setOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
+  const handleClose = () => {
+    setOpen(false);
   };
+
+  // const handleCloseModal = () => {
+  //   setModalOpen(false);
+  // };
+
 
   const handleInputChange = (e) => {
     if (e.target.id === "name-input") {
@@ -242,12 +272,12 @@ const InstructorClassrooms = () => {
 
   const handleCreateClass = (e) => {
     e.preventDefault();
-    setModalOpen(false);
+    setOpen(false);
     submitClass();
   };
 
   const addClassBody = (
-    <div className={classes.classModal}>
+    <div className={classes.classDialog}>
       <h2 id="simple-modal-title">Class Info:</h2>
       <div>
         <FormControl>
@@ -358,9 +388,9 @@ const InstructorClassrooms = () => {
   }
 
   const leftChecked = intersection(checked, left);
-  console.log('left' , leftChecked)
+  console.log('left', leftChecked)
   const rightChecked = intersection(checked, right);
-  console.log('right' , rightChecked)
+  console.log('right', rightChecked)
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -610,14 +640,13 @@ const InstructorClassrooms = () => {
 
       {/* CODE FOR THE ADD A CLASS MODAL */}
 
-      <Modal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
       >
         {addClassBody}
-      </Modal>
+      </Dialog>
 
       {/* CODE FOR THE TRANSFER LIST AND MODAL THAT CONTAINS IT */}
 
