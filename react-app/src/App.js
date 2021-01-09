@@ -5,6 +5,7 @@ import {
   fetchClassrooms,
   setUserClasses,
 } from "../src/store/users";
+import { getUserClassrooms, fetchClassDisplay } from "../src/store/classrooms";
 import { BrowserRouter, Route } from "react-router-dom";
 import LoginForm from "./components/auth/LoginForm/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
@@ -38,6 +39,8 @@ const App = ({ socket }) => {
       dispatch(setCurrentUser(user));
       const classrooms = await fetchClassrooms(user.id);
       dispatch(setUserClasses(classrooms));
+      const short_classrooms = await fetchClassDisplay(user.id);
+      dispatch(getUserClassrooms(short_classrooms));
     })();
   }, [authenticated]);
 

@@ -148,6 +148,7 @@ def get_unenrolled(class_id):
     ]}
 
 
+
 # Fetch groups by class_id
 @class_routes.route('/<int:id>/groups')
 def get_groups(id):
