@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'
-import { Avatar, Typography, Button, Modal, TextField, MenuItem } from '@material-ui/core';
+import { Avatar, Typography, Button, TextField, DialogTitle, Dialog, DialogContentText, DialogContent, DialogActions } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -64,18 +64,26 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '1rem',
         width: theme.spacing(7),
         height: theme.spacing(7)
-    }
+    },
+
 }));
 
-const EditProfile = (state) => {
-    // const currentUser = useSelector((state) => state.store.current_user)
-    // const idd = currentUser.id
+const EditProfile = (props) => {
+
     const classes = useStyles();
-    const [openModal, setOpenModal] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [avatarUrl, setAvatarUrl] = useState("");
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     // access current_user id object from redux store
     // ---------------------------------------
@@ -93,7 +101,9 @@ const EditProfile = (state) => {
 
 
 
-    const updateProfile = async () => {
+    const updateProfile = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const response = await fetch(`/api/users/${id}/update`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -103,15 +113,6 @@ const EditProfile = (state) => {
             window.location.reload()
         }
     };
-
-    const handleOpenModal = () => {
-        setOpenModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setOpenModal(false);
-    };
-
 
     const updateUsername = (e) => {
         setUsername(e.target.value);
@@ -135,10 +136,10 @@ const EditProfile = (state) => {
 
         <div className='profile-edit__container'>
 
-            <button type="button" className={classes.menuButton} onClick={handleOpenModal}>
+            {/* <button type="button" className={classes.menuButton} onClick={handleClickOpen}>
                 Edit Profile
-            </button>
-            <Modal
+            </button> */}
+            {/* <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 className={classes.modal}
@@ -153,8 +154,8 @@ const EditProfile = (state) => {
                 <Fade in={openModal}>
                     <Typography variant='h5'>
                         <form className={classes.paper} noValidate autoComplete='off' onSubmit={updateProfile}>
-                            {/* <form className={classes.paper} noValidate autoComplete='off'> */}
-                            <Button size='large' variant='contained' onClick={handleCloseModal} className={classes.exitBtn} variant='outlined'>x</Button>
+
+
                             <Avatar alt="" src={avatarUrl} className={classes.avatar} size='large'></Avatar>
                             <Typography variant='h4' className={classes.editHeading}>
                                 Edit Profile
@@ -167,7 +168,33 @@ const EditProfile = (state) => {
                         </form>
                     </Typography>
                 </Fade>
-            </Modal>
+            </Modal> */}
+
+            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                Open form dialog
+      </Button>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Edit Profile</DialogTitle>
+                <DialogContent>
+                    {/* <DialogContentText>
+                        To subscribe to this website, please enter your email address here. We will send updates
+                        occasionally.
+          </DialogContentText> */}
+                    <TextField id='standard-basic' value={username} onChange={updateUsername} label='Username' autoFocus />
+                    <TextField id='standard-basic' value={email} onChange={updateEmail} label='Email' />
+                    <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' />
+                    <TextField id='standard-basic' value={avatarUrl} onChange={updateAvatarUrl} label='Avatar URL' />
+                    <Button variant='contained' color='primary' className={classes.button} type='submit'>Submit</Button>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+          </Button>
+                    <Button onClick={handleClose} color="primary">
+                        Subscribe
+          </Button>
+                </DialogActions>
+            </Dialog>
 
 
 
