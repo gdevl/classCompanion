@@ -358,9 +358,9 @@ const InstructorClassrooms = () => {
   }
 
   const leftChecked = intersection(checked, left);
-  console.log("left", leftChecked);
+  //   console.log("left", leftChecked);
   const rightChecked = intersection(checked, right);
-  console.log("right", rightChecked);
+  //   console.log("right", rightChecked);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);

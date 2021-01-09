@@ -10,4 +10,4 @@ student_routes = Blueprint('students', __name__)
 def get_students():
     students = User.query.filter(User.role.ilike("student%")).all()
     # return {"students": [student.less_to_dict() for student in students]}
-    return jsonify([student.less_to_dict() for student in students])
+    return jsonify([student.less_to_dict_checkins() for student in students])

@@ -20,6 +20,9 @@ def delete_class(id):
        return jsonify('success')
 
 
+
+
+
 @class_routes.route('/<int:id>/students')
 def get_students(id):
     all_students = User.query.filter(User.role.ilike("student%"))
@@ -125,18 +128,41 @@ def group_class(id, size):
         return jsonify("TEST")
 
 
+# Fetch enrolled students by class_id
+@class_routes.route('/<int:class_id>/enrolled')
+def get_enrolled(class_id):
+    classroom = Classroom.query.get(class_id)
+    students = classroom.students
+    return {"students": [student.truncated() for student in students]}
+
+
+# Fetch unenrolled students by class_id
+@class_routes.route('/<int:class_id>/unenrolled')
+def get_unenrolled(class_id):
+    students = User.query.filter(User.role == 'student')
+    return {"unenrolled": [
+        student.truncated() 
+        for student in students 
+        if class_id not in 
+        [classroom.id for classroom in student.classrooms]
+    ]}
+
+
+# Fetch groups by class_id
 @class_routes.route('/<int:id>/groups')
-def get_class_groups(id):
+def get_groups(id):
     class_groups = Group.query.filter(Group.class_id == id, Group.active == True).all()
     return {"groups": [class_group.less_to_dict() for class_group in class_groups]}
 
 
+# Fetch unresolved questions by class_id
 @class_routes.route('/<int:id>/questions')
 def get_unresolved_questions(id):
     class_questions = Question.query.filter(Question.class_id == id, Question.resolved == False).all()
     return {"questions": [class_question.to_dict() for class_question in class_questions]}
 
 
+# Fetch archived questions by class_id
 @class_routes.route('/<int:id>/questions/archive')
 def get_resolved_questions(id):
     archived_questions = Question.query.filter(

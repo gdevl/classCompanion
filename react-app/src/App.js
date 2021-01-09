@@ -42,25 +42,26 @@ const App = ({ socket }) => {
   }, [authenticated]);
 
   useEffect(() => {
-    (async () => {
-      if (socket) {
-        console.log("socket:");
-        console.log(socket);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
     if (!currentClassroom) return;
     console.log("currentClassroom");
     console.log(currentClassroom);
+    socket.emit("leave", currentClassroom.id);
     socket.emit("join", currentClassroom.id);
   }, [currentClassroom]);
 
-  socket.on("question", async () => {
-    console.log("INSIDE SOCKET.ON");
-    const classrooms = await fetchClassrooms(currentUser.id);
-    dispatch(setUserClasses(classrooms));
+  useEffect(() => {
+    socket.on("response", async () => {
+      console.log("INSIDE SOCKET.ON");
+      console.log(socket);
+      console.log("currentUser: ");
+      console.log(currentUser);
+      console.log("currentUser.id: ");
+      // console.log(currentUser.id);
+      if (currentUser) {
+        const classrooms = await fetchClassrooms(currentUser.id);
+        dispatch(setUserClasses(classrooms));
+      }
+    });
   });
 
   if (!currentUser) return null;
