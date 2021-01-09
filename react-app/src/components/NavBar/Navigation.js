@@ -117,6 +117,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     backgroundColor: theme.palette.background.paper,
   },
+  medium: {
+    width: theme.spacing(5),
+    height: theme.spacing(5),
+  }
 }));
 
 const Navigation = ({ setAuthenticated }) => {
@@ -259,7 +263,13 @@ const Navigation = ({ setAuthenticated }) => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <FaceIcon />
+                {currentUser.current_user.avatar_url ? <Avatar
+                  alt=""
+                  src={avatarUrl}
+                  className={classes.medium}
+
+                ></Avatar>
+                  : <FaceIcon />}
               </IconButton>
               <Menu
                 id="menu-appbar"
