@@ -24,7 +24,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import LogoutButton from "../auth/LogoutButton";
 import { logout } from "../../services/auth";
-import EditProfile from "../edit_profile/EditProfile";
 import FaceIcon from "@material-ui/icons/Face";
 
 const useStyles = makeStyles((theme) => ({
