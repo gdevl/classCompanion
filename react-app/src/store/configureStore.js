@@ -3,6 +3,7 @@ import { createStore, applyMiddleware, combineReducers, compose } from "redux";
 import store from "./users";
 import questions from "./questions";
 import classrooms from "./classrooms";
+import groups from "./groups";
 // import archivedQuestions from "./archived_questions";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -10,6 +11,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const reducer = combineReducers({
   //   archivedQuestions,
   classrooms,
+  groups,
   questions,
   store,
 });

@@ -12,15 +12,12 @@ class_routes = Blueprint('classes', __name__)
 @class_routes.route('/<int:id>/delete', methods=['GET', 'PATCH'])
 def delete_class(id):
     if request.method == 'PATCH':
-       selected_class = Classroom.query.get(id)
-      #  print(selected_class.active)
-       selected_class.active = False
-       db.session.add(selected_class)
-       db.session.commit()
-       return jsonify('success')
-
-
-
+        selected_class = Classroom.query.get(id)
+       #  print(selected_class.active)
+        selected_class.active = False
+        db.session.add(selected_class)
+        db.session.commit()
+        return jsonify('success')
 
 
 @class_routes.route('/<int:id>/students')
@@ -42,7 +39,6 @@ def get_students(id):
     # print(all_students)
     return jsonify(students_arr)
     # return jsonify(classroom.students)
-
 
 
 @class_routes.route('/<int:id>/update-enrollment', methods=['GET', 'PATCH'])
@@ -133,33 +129,36 @@ def group_class(id, size):
 def get_enrolled(class_id):
     classroom = Classroom.query.get(class_id)
     students = classroom.students
-    return {"students": [student.truncated() for student in students]}
+    return {
+        "students": [student.less_to_dict_checkins() for student in students]
+    }
 
 
 # Fetch unenrolled students by class_id
 @class_routes.route('/<int:class_id>/unenrolled')
 def get_unenrolled(class_id):
     students = User.query.filter(User.role == 'student')
-    return {"unenrolled": [
-        student.truncated() 
-        for student in students 
-        if class_id not in 
-        [classroom.id for classroom in student.classrooms]
-    ]}
-
+    return {
+        "unenrolled": [student.truncated()
+                       for student in students
+                       if class_id not in
+                       [classroom.id for classroom in student.classrooms]
+                       ]}
 
 
 # Fetch groups by class_id
 @class_routes.route('/<int:id>/groups')
 def get_groups(id):
-    class_groups = Group.query.filter(Group.class_id == id, Group.active == True).all()
+    class_groups = Group.query.filter(
+        Group.class_id == id, Group.active == True).all()
     return {"groups": [class_group.less_to_dict() for class_group in class_groups]}
 
 
 # Fetch unresolved questions by class_id
 @class_routes.route('/<int:id>/questions')
 def get_unresolved_questions(id):
-    class_questions = Question.query.filter(Question.class_id == id, Question.resolved == False).all()
+    class_questions = Question.query.filter(
+        Question.class_id == id, Question.resolved == False).all()
     return {"questions": [class_question.to_dict() for class_question in class_questions]}
 
 
@@ -226,7 +225,6 @@ def postQuestion(class_id, user_id):
 
     # emit question
     return question.to_dict()
-
 
 
 @class_routes.route('/<int:class_id>/user/<int:student_id>/checkin',
