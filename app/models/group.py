@@ -30,3 +30,11 @@ class Group(db.Model):
             "active": self.active,
             "members": [member.to_dict() for member in self.members],
         }
+    
+    def less_to_dict(self):
+        return {
+            "id": self.id,
+            "class_id": self.class_id,
+            "active": self.active,
+            "members": [member.id for member in self.members]
+        }

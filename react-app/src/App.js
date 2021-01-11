@@ -16,7 +16,6 @@ import { authenticate } from "./services/auth";
 import InstructorClassrooms from "./components/classrooms/InstructorClassrooms";
 import StudentClassrooms from "./components/classrooms/StudentClassrooms";
 import Footer from "./components/footer/Footer";
-import EditProfile from "./components/edit_profile/EditProfile";
 import InstructorLayout from "./components/InstructorClassroomDashboard/InstructorClassroomLayout";
 import StudentLayout from "./components/StudentClassroomDashboard/StudentClassroomLayout";
 import MainLayout from "./MainLayout";

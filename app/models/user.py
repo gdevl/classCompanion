@@ -50,6 +50,14 @@ class User(db.Model, UserMixin):
             "avatar_url": self.avatar_url,
             "role": self.role,
         }
+    
+    def less_to_dict(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "checkins": [check_in.to_dict() for check_in in self.check_ins]
+        }
 
     def get_user_classrooms(self):
         return {
