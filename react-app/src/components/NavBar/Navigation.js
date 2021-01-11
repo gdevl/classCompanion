@@ -24,7 +24,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import LogoutButton from "../auth/LogoutButton";
 import { logout } from "../../services/auth";
-import EditProfile from "../edit_profile/EditProfile";
 import FaceIcon from "@material-ui/icons/Face";
 
 const useStyles = makeStyles((theme) => ({
@@ -117,6 +116,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     backgroundColor: theme.palette.background.paper,
   },
+  medium: {
+    width: theme.spacing(5),
+    height: theme.spacing(5),
+  }
 }));
 
 const Navigation = ({ setAuthenticated }) => {
@@ -139,10 +142,10 @@ const Navigation = ({ setAuthenticated }) => {
 
   //grab current user from store (imported section from EditProfile component)
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(currentUser.current_user.username);
+  const [email, setEmail] = useState(currentUser.current_user.email);
   // const [password, setPassword] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState(currentUser.current_user.avatar_url);
 
   if (!currentUser.current_user) return null;
   const id = currentUser.current_user.id;
@@ -183,10 +186,11 @@ const Navigation = ({ setAuthenticated }) => {
   // collectUserDataForEdit()
   // console.log('look here: ', userObj)
 
-  const handleOpenModal = () => {
-    setEmail(currentUser.current_user.email);
-    setUsername(currentUser.current_user.username);
-    setAvatarUrl(currentUser.current_user.avatar_url);
+  const handleOpenModal = (e) => {
+    e.stopPropagation();
+    // setEmail(currentUser.current_user.email);
+    // setUsername(currentUser.current_user.username);
+    // setAvatarUrl(currentUser.current_user.avatar_url);
     setOpen(true);
   };
 
@@ -244,8 +248,8 @@ const Navigation = ({ setAuthenticated }) => {
               My Classes
             </Button>
           ) : (
-            ""
-          )}
+              ""
+            )}
           <Typography variant="h6" className={classes.title} align="center">
             {displayTitle}
           </Typography>
@@ -258,7 +262,13 @@ const Navigation = ({ setAuthenticated }) => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <FaceIcon />
+                {currentUser.current_user.avatar_url ? <Avatar
+                  alt=""
+                  src={avatarUrl}
+                  className={classes.medium}
+
+                ></Avatar>
+                  : <FaceIcon />}
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -330,6 +340,7 @@ const Navigation = ({ setAuthenticated }) => {
                             id="standard-basic"
                             value={email}
                             onChange={updateEmail}
+                            placeholder={currentUser.current_user.email}
                             label="Email"
                           />
                           {/* <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' /> */}

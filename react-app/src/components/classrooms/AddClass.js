@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, InputLabel, Input } from "@material-ui/core";
+import { FormControl, InputLabel, Input, Button, TextField, DialogTitle, Dialog, DialogContentText, DialogContent, DialogActions } from "@material-ui/core";
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from "@material-ui/core/styles";
@@ -36,10 +36,10 @@ const AddClass = () => {
 
 
   const handleInputChange = (e) => {
-    if(e.target.id === 'name-input') {
+    if (e.target.id === 'name-input') {
       setClassName(e.target.value)
       // console.log(className)
-    } else if(e.target.id === 'description-input') {
+    } else if (e.target.id === 'description-input') {
       setClassDescription(e.target.value)
     } else {
       setClassTime(e.target.value)
@@ -85,19 +85,19 @@ const AddClass = () => {
       <div>
         <FormControl>
           <InputLabel htmlFor="name-input">Name</InputLabel>
-          <Input id="name-input" onChange={handleInputChange}/>
+          <Input id="name-input" onChange={handleInputChange} />
         </FormControl>
       </div>
       <div>
         <FormControl>
           <InputLabel htmlFor="description-input">Description</InputLabel>
-          <Input id="description-input" onChange={handleInputChange}/>
+          <Input id="description-input" onChange={handleInputChange} />
         </FormControl>
       </div>
       <div>
         <FormControl>
           <InputLabel htmlFor="timeslot-input">Time Slot</InputLabel>
-          <Input id="timeslot-input" onChange={handleInputChange}/>
+          <Input id="timeslot-input" onChange={handleInputChange} />
         </FormControl>
       </div>
       <div>
