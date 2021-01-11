@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 //Components
-import Dashboard from './Dashboard/DashboardContainer'
-import ClassroomLayout from "./ClassLayout/ClassLayoutContainer";
+import Dashboard from './Dashboard/Dashboard'
+import ClassLayout from "./ClassLayout/ClassLayout";
 
 //Classroom Container
 export default function ClassroomContainer() {
