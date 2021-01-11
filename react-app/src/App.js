@@ -21,6 +21,7 @@ import StudentLayout from "./components/StudentClassroomDashboard/StudentClassro
 import MainLayout from "./MainLayout";
 import AskQuestion from "./components/ask-a-question/AskQuestion";
 import { Grid } from "@material-ui/core";
+import ClassroomContainer from './components/Classroom/ClassroomContainer'
 
 const siteTitle = "ClassCorral";
 
@@ -133,7 +134,7 @@ const App = ({ socket }) => {
         {/* <Grid container justify="space-around" className="outlined"> */}
         {currentUser.role === "instructor" ? (
           currentClassroom ? (
-            <InstructorLayout />
+            <ClassroomContainer />
           ) : (
               <InstructorClassrooms />
             )
@@ -151,6 +152,9 @@ const App = ({ socket }) => {
       </ProtectedRoute>
       <Route path="/question" exact={true} authenticated={authenticated}>
         {/* <AskQuestion socket={socket} /> */}
+      </Route>
+      <Route path='/combine' exact={true} authenticated={authenticated}>
+        <ClassroomContainer />
       </Route>
     </BrowserRouter>
   );
