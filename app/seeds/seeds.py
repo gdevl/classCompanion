@@ -107,7 +107,7 @@ def seed_users():
     )
 
     garrett = Student(
-        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/2/2b/5x3_Promotional_photo_1.jpg/revision/latest/top-crop/width/300/height/300?cb=20151003174956",
+        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/2/2b/5x3_Promotional_photo_1.jpg",
         username="glambert",
         first_name="Garrett",
         last_name="Lambert",
@@ -116,7 +116,7 @@ def seed_users():
     )
 
     rich = Student(
-        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/e/e6/It_should_have_been_you%21.jpg/revision/latest/top-crop/width/220/height/220?cb=20130919164050",
+        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/e/e6/It_should_have_been_you%21.jpg",
         username="rstephenson",
         first_name="Rich",
         last_name="Stephenson",
@@ -127,7 +127,7 @@ def seed_users():
     # faculty
 
     benChang = Instructor(
-        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/c/c1/Chang_S5_headshot.jpg/revision/latest/scale-to-width-down/340?cb=20140101080218",
+        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/c/c1/Chang_S5_headshot.jpg",
         username="bchang",
         first_name="Ben",
         last_name="Chang",
@@ -136,7 +136,7 @@ def seed_users():
     )
 
     ianDuncan = Instructor(
-        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/a/ab/Duncan.jpg/revision/latest/scale-to-width-down/340?cb=20131128194323",
+        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/a/ab/Duncan.jpg",
         username="iduncan",
         first_name="Ian",
         last_name="Duncan",
@@ -163,7 +163,7 @@ def seed_users():
     )
 
     juneBauer = Instructor(
-        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/4/4b/Betty_White7.jpg/revision/latest/top-crop/width/150/height/150?cb=20141018172908",
+        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/4/4b/Betty_White7.jpg",
         username="jbauer",
         first_name="June",
         last_name="Bauer",
@@ -181,7 +181,7 @@ def seed_users():
     )
 
     marshallKane = Instructor(
-        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/e/ea/3x01-Marshall_Kane_interrupted.jpg/revision/latest/scale-to-width-down/340?cb=20140206232521",
+        avatar_url="https://static.wikia.nocookie.net/community-sitcom/images/e/ea/3x01-Marshall_Kane_interrupted.jpg",
         username="mkane",
         first_name="Marshall",
         last_name="Kane",
