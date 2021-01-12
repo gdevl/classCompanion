@@ -72,14 +72,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserCard({ props }) {
   const classes = useStyles();
+  console.log("props: ", props);
 
-  //GRAB STUDENT INFO FROM CLASS
+  // GRAB STUDENT INFO FROM CLASS
   const currentState = useSelector((state) => state.store);
-  const currentClass = currentState.classrooms[currentState.current_class.id];
-  //FUNCTIONS FOR GRABBING USER INFO FROM CLASS
+  const currentClassroomId = useSelector((state) => state.currentClassroomId);
+  const classMeta = useSelector((state) => state.currentClassroomMeta);
+  // const currentClass = currentState.classrooms[currentState.current_class.id];
+  // FUNCTIONS FOR GRABBING USER INFO FROM CLASS
   const hasQuestion = (student_id) => {
     let activeQuestion = "";
-    currentClass.questions.forEach((question) => {
+    classMeta.questions.forEach((question) => {
       if (question.student_id === student_id && question.resolved === false) {
         activeQuestion = { id: question.id, content: question.content };
       }
@@ -90,7 +93,7 @@ export default function UserCard({ props }) {
     let checkedIn = false;
     if (props.role === "instructor") checkedIn = true;
     let today = new Date();
-    currentClass.check_ins.forEach((checkIn) => {
+    classMeta.check_ins.forEach((checkIn) => {
       let checkInDay = new Date(checkIn.created_on);
       if (
         checkIn.student_id === student_id &&
@@ -119,6 +122,7 @@ export default function UserCard({ props }) {
 
   if (!props) return null;
   const user = props;
+
   return (
     <>
       <Card

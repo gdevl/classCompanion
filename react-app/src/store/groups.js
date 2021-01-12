@@ -1,7 +1,7 @@
-export const GET_CLASS_GROUPS = "GET_CLASS_GROUPS";
+export const SET_CLASS_GROUPS = "SET_CLASS_GROUPS";
 
-export const getClassGroups = (classroomId) => {
-  return { type: GET_CLASS_GROUPS, classroomId };
+export const setClassGroups = (classroomId) => {
+  return { type: SET_CLASS_GROUPS, classroomId };
 };
 
 export const fetchClassGroups = async (classId) => {
@@ -18,10 +18,10 @@ export const fetchClassGroups = async (classId) => {
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
-    case GET_CLASS_GROUPS: {
+    case SET_CLASS_GROUPS: {
       return {
         ...state,
-        groups: action.groups,
+        ...action.groups,
       };
     }
     default:

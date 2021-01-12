@@ -18,7 +18,9 @@ import Menu from "@material-ui/core/Menu";
 import LogoutButton from "../auth/LogoutButton";
 import { logout } from "../../services/auth";
 import FaceIcon from "@material-ui/icons/Face";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { clearCurrentClassroom } from "../../store/current_classroom";
+import { clearClassroomMeta } from "../../store/classroom_meta";
 
 const useStyles = makeStyles((theme) => ({
   navigation: {
@@ -114,16 +116,20 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(5),
     height: theme.spacing(5),
   },
+  back: {
+    color: "white",
+  },
+  padMe: {
+    marginLeft: "4rem",
+  },
 }));
 
 const Navigation = ({ setAuthenticated }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser);
-  const currentClassroom = useSelector((state) => state.currentClassroom);
-  const classrooms = useSelector((state) => state.classrooms);
-  const displayTitle = currentClassroom
-    ? classrooms[currentClassroom].name
-    : "Class Companion";
+  const currentClassroomId = useSelector((state) => state.currentClassroomId);
+  const classMeta = useSelector((state) => state.currentClassroomMeta);
+  const displayTitle = classMeta.name ? classMeta.name : "Class Companion";
 
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
@@ -152,6 +158,7 @@ const Navigation = ({ setAuthenticated }) => {
   const displayAllClasses = (e) => {
     e.preventDefault();
     dispatch(clearCurrentClassroom());
+    dispatch(clearClassroomMeta());
   };
 
   const handleOpenModal = (e) => {
@@ -199,18 +206,12 @@ const Navigation = ({ setAuthenticated }) => {
     <div className={classes.navigation}>
       <AppBar position="static">
         <Toolbar>
-          {currentClassroom ? (
-            <Button
-              size="large"
-              variant="contained"
-              onClick={displayAllClasses}
-              className={classes.backBtn}
-              variant="outlined"
-            >
-              ⬅ BACK
-            </Button>
+          {currentClassroomId ? (
+            <IconButton size="medium" onClick={displayAllClasses}>
+              <ArrowBackIcon className={classes.back} />
+            </IconButton>
           ) : (
-            ""
+            <div className={classes.padMe}></div>
           )}
           <Typography variant="h6" className={classes.title} align="center">
             {displayTitle}
@@ -222,12 +223,12 @@ const Navigation = ({ setAuthenticated }) => {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleMenu}
-                color="inherit"
+                color="secondary"
               >
                 {currentUser.avatar_url ? (
                   <Avatar
                     alt=""
-                    src={avatarUrl}
+                    src={currentUser.avatar_url}
                     className={classes.medium}
                   ></Avatar>
                 ) : (

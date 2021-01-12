@@ -8,6 +8,11 @@ import random
 
 class_routes = Blueprint('classes', __name__)
 
+@class_routes.route('/<int:class_id>')
+def get_class_data(class_id):
+    class_data = Classroom.query.get(class_id)
+    return class_data.to_dict()
+
 
 @class_routes.route('/<int:id>/delete', methods=['GET', 'PATCH'])
 def delete_class(id):

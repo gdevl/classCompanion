@@ -31,7 +31,10 @@ const App = ({ socket }) => {
 
   //   const currentClassroom = useSelector((state) => state.store.current_class);
   //   const currentUser = useSelector((state) => state.store.current_user);
-  const currentClassroom = useSelector((state) => state.classrooms[state.currentClassroom]);
+  //   const currentClassroomId = useSelector(
+  //     (state) => state.classrooms[state.currentClassroomId]
+  //   );
+  const currentClassroomId = useSelector((state) => state.currentClassroomId);
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
@@ -50,13 +53,13 @@ const App = ({ socket }) => {
   }, [authenticated]);
 
   useEffect(() => {
-    if (!currentClassroom) return;
+    if (!currentClassroomId) return;
     console.log("currentClassroom");
-    console.log(currentClassroom);
+    console.log(currentClassroomId);
 
-    socket.emit("leave", currentClassroom.id);
-    socket.emit("join", currentClassroom.id);
-  }, [currentClassroom]);
+    socket.emit("leave", currentClassroomId);
+    socket.emit("join", currentClassroomId);
+  }, [currentClassroomId]);
 
   useEffect(() => {
     socket.on("response", async () => {
@@ -69,8 +72,8 @@ const App = ({ socket }) => {
       if (currentUser) {
         // const classrooms = await fetchClassrooms(currentUser.id);
         // dispatch(setUserClasses(classrooms));
-        const short_classrooms = await fetchClassDisplay(currentUser.id);
-        dispatch(getUserClassrooms(short_classrooms));
+        const classrooms = await fetchClassDisplay(currentUser.id);
+        dispatch(getUserClassrooms(classrooms));
       }
     });
   });
@@ -80,7 +83,7 @@ const App = ({ socket }) => {
     return null;
   }
   console.log("currentClassroom:");
-  console.log(currentClassroom);
+  console.log(currentClassroomId);
   return (
     <BrowserRouter>
       <Route path="/login" exact={true}>
@@ -130,7 +133,7 @@ const App = ({ socket }) => {
             <StudentClassrooms socket={socket} />
           </>
         )} */}
-        {currentClassroom ? <SingleClassroom props={currentClassroom}/> : <AllClassrooms />}
+        {currentClassroomId ? <SingleClassroom /> : <AllClassrooms />}
 
         <div className="negative-space"></div>
         <Footer />
