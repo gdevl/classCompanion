@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setCurrentUser,
-  //   fetchClassrooms,
-  //   setUserClasses,
-} from "../src/store/current_user";
+import { setCurrentUser } from "../src/store/users";
 import { getUserClassrooms, fetchClassDisplay } from "../src/store/classrooms";
-import { fetchClassroomDetails } from "../src/store/current_classroom";
 import { BrowserRouter, Route } from "react-router-dom";
 import LoginForm from "./components/auth/LoginForm/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm/SignUpForm";
@@ -19,20 +14,18 @@ import Footer from "./components/footer/Footer";
 import InstructorLayout from "./components/InstructorClassroomDashboard/InstructorClassroomLayout";
 import StudentLayout from "./components/StudentClassroomDashboard/StudentClassroomLayout";
 import { Grid } from "@material-ui/core";
-import AllClassrooms from "./components/classrooms/AllClassrooms";
 import SingleClassroom from "./components/classrooms/SingleClassroom";
+import AllClassrooms from "./components/classrooms/AllClassrooms";
 
 const siteTitle = "Class Companion";
 
-const App = ({ socket }) => {
+const NewApp = ({ socket }) => {
   const dispatch = useDispatch();
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  //   const currentClassroom = useSelector((state) => state.store.current_class);
-  //   const currentUser = useSelector((state) => state.store.current_user);
-  const currentClassroom = useSelector((state) => state.classrooms[state.currentClassroom]);
-  const currentUser = useSelector((state) => state.currentUser);
+  const currentClassroom = useSelector((state) => state.store.currentClassroom);
+  const currentUser = useSelector((state) => state.store.currentUser);
 
   useEffect(() => {
     (async () => {
@@ -42,8 +35,6 @@ const App = ({ socket }) => {
       }
       setLoaded(true);
       dispatch(setCurrentUser(user));
-      //   const classrooms = await fetchClassrooms(user.id);
-      //   dispatch(setUserClasses(classrooms));
       const classrooms = await fetchClassDisplay(user.id);
       dispatch(getUserClassrooms(classrooms));
     })();
@@ -53,7 +44,6 @@ const App = ({ socket }) => {
     if (!currentClassroom) return;
     console.log("currentClassroom");
     console.log(currentClassroom);
-
     socket.emit("leave", currentClassroom.id);
     socket.emit("join", currentClassroom.id);
   }, [currentClassroom]);
@@ -67,20 +57,17 @@ const App = ({ socket }) => {
       console.log("currentUser.id: ");
       // console.log(currentUser.id);
       if (currentUser) {
-        // const classrooms = await fetchClassrooms(currentUser.id);
-        // dispatch(setUserClasses(classrooms));
-        const short_classrooms = await fetchClassDisplay(currentUser.id);
-        dispatch(getUserClassrooms(short_classrooms));
+        const classrooms = await fetchClassDisplay(currentUser.id);
+        dispatch(getUserClassrooms(classrooms));
       }
     });
-  });
+  }, []);
 
   if (!currentUser) return null;
   if (!loaded) {
     return null;
   }
-  console.log("currentClassroom:");
-  console.log(currentClassroom);
+
   return (
     <BrowserRouter>
       <Route path="/login" exact={true}>
@@ -130,7 +117,7 @@ const App = ({ socket }) => {
             <StudentClassrooms socket={socket} />
           </>
         )} */}
-        {currentClassroom ? <SingleClassroom props={currentClassroom}/> : <AllClassrooms />}
+        {currentClassroom ? <SingleClassroom /> : <AllClassrooms />}
 
         <div className="negative-space"></div>
         <Footer />
@@ -139,4 +126,4 @@ const App = ({ socket }) => {
   );
 };
 
-export default App;
+export default NewApp;

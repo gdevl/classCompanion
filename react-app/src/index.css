@@ -35,7 +35,24 @@ body {
         "f f f f f f f f f f f f"; */
 }
 
+.classroom__grid {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    margin: 1rem;
+    padding: 1rem;
+}
 
+.classroom__grid-title {
+    text-align: center;
+}
+
+.classroom__grid-item {
+    background-color: teal;
+    border: 1px solid blue;
+    flex: 1 1 30%;
+    padding: 1rem;
+}
 
 .classrooms-container {
   width: 100%;

@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Avatar,
-  Button,
-  Modal,
-  TextField,
-  ClickAwayListener,
-} from "@material-ui/core";
+import { Avatar, Button, Modal, TextField } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import AppBar from "@material-ui/core/AppBar";
@@ -25,6 +18,7 @@ import Menu from "@material-ui/core/Menu";
 import LogoutButton from "../auth/LogoutButton";
 import { logout } from "../../services/auth";
 import FaceIcon from "@material-ui/icons/Face";
+import { clearCurrentClassroom } from "../../store/current_classroom";
 
 const useStyles = makeStyles((theme) => ({
   navigation: {
@@ -119,16 +113,17 @@ const useStyles = makeStyles((theme) => ({
   medium: {
     width: theme.spacing(5),
     height: theme.spacing(5),
-  }
+  },
 }));
 
 const Navigation = ({ setAuthenticated }) => {
-  // let userObj = { hola: 1 }
-
-  const currentUser = useSelector((state) => state.store);
-  const displayTitle = currentUser.current_class
-    ? currentUser.current_class.name
-    : "ClassCorral";
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.currentUser);
+  const currentClassroom = useSelector((state) => state.currentClassroom);
+  const classrooms = useSelector((state) => state.classrooms);
+  const displayTitle = currentClassroom
+    ? classrooms[currentClassroom].name
+    : "Class Companion";
 
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
@@ -136,26 +131,12 @@ const Navigation = ({ setAuthenticated }) => {
   const open1 = Boolean(anchorEl);
   const [open, setOpen] = React.useState(false);
 
-  //   const handleChange = (event) => {
-  //     setAuth(event.target.checked);
-  //   };
+  const [username, setUsername] = useState(currentUser.username);
+  const [email, setEmail] = useState(currentUser.email);
+  const [avatarUrl, setAvatarUrl] = useState(currentUser.avatar_url);
 
-  //grab current user from store (imported section from EditProfile component)
-
-  const [username, setUsername] = useState(currentUser.current_user.username);
-  const [email, setEmail] = useState(currentUser.current_user.email);
-  // const [password, setPassword] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState(currentUser.current_user.avatar_url);
-
-  if (!currentUser.current_user) return null;
-  const id = currentUser.current_user.id;
-
-  // (() => {
-  //   setEmail(currentUser.current_user.email)
-  //   setUsername(currentUser.current_user.username)
-  //   setAvatarUrl(currentUser.current_user.avatar_url)
-
-  // })()
+  if (!currentUser) return null;
+  const id = currentUser.id;
 
   const updateProfile = async () => {
     const response = await fetch(`/api/users/${id}/update`, {
@@ -168,35 +149,18 @@ const Navigation = ({ setAuthenticated }) => {
     }
   };
 
-  // const collectUserDataForEdit = async () => {
-  //   const response = await fetch(`/api/users/${id}/update`, {
-  //     method: "GET"
-  //   });
-  //   const users = await response.json()
-  //   // console.log('hola')
-  //   userObj.username = users.username
-  //   userObj.email = users.email
-  //   userObj.avatar_url = users.avatar_url
-
-  //   if (response.ok) {
-  //     window.location.reload()
-  //   }
-  // };
-
-  // collectUserDataForEdit()
-  // console.log('look here: ', userObj)
+  const displayAllClasses = (e) => {
+    e.preventDefault();
+    dispatch(clearCurrentClassroom());
+  };
 
   const handleOpenModal = (e) => {
     e.stopPropagation();
-    // setEmail(currentUser.current_user.email);
-    // setUsername(currentUser.current_user.username);
-    // setAvatarUrl(currentUser.current_user.avatar_url);
     setOpen(true);
   };
 
   const handleCloseModal = (e) => {
     e.stopPropagation();
-    // console.log(e.target)
     setOpen(false);
   };
 
@@ -235,21 +199,19 @@ const Navigation = ({ setAuthenticated }) => {
     <div className={classes.navigation}>
       <AppBar position="static">
         <Toolbar>
-          {currentUser.current_class ? (
+          {currentClassroom ? (
             <Button
               size="large"
               variant="contained"
-              onClick={() => {
-                window.location.reload();
-              }}
+              onClick={displayAllClasses}
               className={classes.backBtn}
               variant="outlined"
             >
-              My Classes
+              ⬅ BACK
             </Button>
           ) : (
-              ""
-            )}
+            ""
+          )}
           <Typography variant="h6" className={classes.title} align="center">
             {displayTitle}
           </Typography>
@@ -262,13 +224,15 @@ const Navigation = ({ setAuthenticated }) => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                {currentUser.current_user.avatar_url ? <Avatar
-                  alt=""
-                  src={avatarUrl}
-                  className={classes.medium}
-
-                ></Avatar>
-                  : <FaceIcon />}
+                {currentUser.avatar_url ? (
+                  <Avatar
+                    alt=""
+                    src={avatarUrl}
+                    className={classes.medium}
+                  ></Avatar>
+                ) : (
+                  <FaceIcon />
+                )}
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -340,7 +304,7 @@ const Navigation = ({ setAuthenticated }) => {
                             id="standard-basic"
                             value={email}
                             onChange={updateEmail}
-                            placeholder={currentUser.current_user.email}
+                            placeholder={currentUser.email}
                             label="Email"
                           />
                           {/* <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' /> */}
