@@ -36,7 +36,7 @@ h5, h6 {
 
 
 #root {
-    /* align-items: center;
+   /* align-items: center;
     justify-content: center;
     display: flex;
     flex-direction: column; */
@@ -270,6 +270,11 @@ h5, h6 {
     background-color: #4051b5;
     padding: 2rem;
     width: 100%;
+}
+
+.splash__topbar-title {
+    font-family: 'Prompt', sans-serif !important;
+    font-weight: 700;
 }
 
 .splash__callout-featured-icon {

@@ -117,18 +117,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
         <Box>
           <TextField
             className={classes.inputs}
-            name="username"
-            type="text"
-            value={username}
-            onChange={updateUsername}
-            id="username"
-            label="Username"
-            variant="filled"
-          />
-        </Box>
-        <Box>
-          <TextField
-            className={classes.inputs}
             name="first_name"
             type="text"
             value={first_name}
@@ -147,6 +135,18 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
             onChange={updateLastName}
             id="last_name"
             label="Last Name"
+            variant="filled"
+          />
+        </Box>
+        <Box>
+          <TextField
+            className={classes.inputs}
+            name="username"
+            type="text"
+            value={username}
+            onChange={updateUsername}
+            id="username"
+            label="Username (optional)"
             variant="filled"
           />
         </Box>

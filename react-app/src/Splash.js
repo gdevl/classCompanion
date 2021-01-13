@@ -96,6 +96,7 @@ const Splash = () => {
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography
+              classes="splash__topbar-title"
               component="h1"
               variant="h2"
               align="center"
