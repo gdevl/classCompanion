@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import { signUp } from "../../../services/auth";
 import SignUpFormHeader from "./SignUpFormHeader";
 import { makeStyles } from "@material-ui/core/styles";
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignUpForm = ({ authenticated, setAuthenticated }) => {
+  const history = useHistory();
   const classes = useStyles();
   const [errors, setErrors] = useState([]);
   const [username, setUsername] = useState("");
@@ -90,9 +91,8 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
     setRole(e.target.value);
   };
 
-  const handleGoBack = (e) => {
-    e.preventDefault();
-    window.location.href = "/";
+  const handleGoBack = () => {
+      history.push('/login');
   };
 
   if (authenticated) {
