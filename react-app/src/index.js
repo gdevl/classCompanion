@@ -26,8 +26,6 @@ ReactDOM.render(
         <ThemeProvider theme={Theme}>
           <CssBaseline />
           <App socket={socket} />
-          {/* <NewApp socket={socket} /> */}
-          {/* <App /> */}
         </ThemeProvider>
       </SocketContext.Provider>
     </Provider>

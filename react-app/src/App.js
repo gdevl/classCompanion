@@ -21,6 +21,8 @@ import StudentLayout from "./components/StudentClassroomDashboard/StudentClassro
 import { Grid } from "@material-ui/core";
 import AllClassrooms from "./components/classrooms/AllClassrooms";
 import SingleClassroom from "./components/classrooms/SingleClassroom";
+import Landing from "./Landing";
+import Splash from "./Splash";
 
 const siteTitle = "Class Companion";
 
@@ -45,8 +47,6 @@ const App = ({ socket }) => {
       }
       setLoaded(true);
       dispatch(setCurrentUser(user));
-      //   const classrooms = await fetchClassrooms(user.id);
-      //   dispatch(setUserClasses(classrooms));
       const classrooms = await fetchClassDisplay(user.id);
       dispatch(getUserClassrooms(classrooms));
     })();
@@ -63,22 +63,16 @@ const App = ({ socket }) => {
 
   useEffect(() => {
     socket.on("response", async () => {
-      console.log("INSIDE SOCKET.ON");
-      console.log(socket);
-      console.log("currentUser: ");
-      console.log(currentUser);
-      console.log("currentUser.id: ");
-      // console.log(currentUser.id);
       if (currentUser) {
-        // const classrooms = await fetchClassrooms(currentUser.id);
-        // dispatch(setUserClasses(classrooms));
         const classrooms = await fetchClassDisplay(currentUser.id);
         dispatch(getUserClassrooms(classrooms));
       }
     });
   });
 
-  if (!currentUser) return null;
+  if (!currentUser) {
+    return <Landing />;
+  }
   if (!loaded) {
     return null;
   }
@@ -86,55 +80,26 @@ const App = ({ socket }) => {
   console.log(currentClassroomId);
   return (
     <BrowserRouter>
-      <Route path="/login" exact={true}>
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-          alignContent="center"
-          className="login__container-height"
-        >
-          <LoginForm
-            authenticated={authenticated}
-            setAuthenticated={setAuthenticated}
-          />
-        </Grid>
+      <Route exact path="/landing">
+        <Splash />
       </Route>
-      <Route path="/signup" exact={true}>
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-          alignContent="center"
-          className="login__container-height"
-        >
-          <SignUpForm
-            authenticated={authenticated}
-            setAuthenticated={setAuthenticated}
-          />
-        </Grid>
+      <Route exact path="/login">
+        <LoginForm
+          authenticated={authenticated}
+          setAuthenticated={setAuthenticated}
+        />
+      </Route>
+      <Route exact path="/signup">
+        <SignUpForm
+          authenticated={authenticated}
+          setAuthenticated={setAuthenticated}
+        />
       </Route>
 
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
         <Navigation setAuthenticated={setAuthenticated} title={siteTitle} />
         <div className="negative-space"></div>
-        {/* {currentUser.role === "instructor" ? (
-          currentClassroom ? (
-            <InstructorLayout socket={socket} />
-          ) : (
-            <InstructorClassrooms socket={socket} />
-          )
-        ) : currentClassroom ? (
-          <StudentLayout socket={socket} />
-        ) : (
-          <>
-            <StudentClassrooms socket={socket} />
-          </>
-        )} */}
         {currentClassroomId ? <SingleClassroom /> : <AllClassrooms />}
-
         <div className="negative-space"></div>
         <Footer />
       </ProtectedRoute>

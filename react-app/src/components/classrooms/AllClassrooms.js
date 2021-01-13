@@ -22,7 +22,7 @@ const AllClassrooms = () => {
         {Object.values(classrooms).map((classroom) => {
           return (
             <div key={`cs-${classroom.id}`} className="classroom__grid-item">
-              <h4>{classroom.name}</h4>
+              <h3>{classroom.name}</h3>
               <p>Size: {classroom.size}</p>
               <button value={classroom.id} onClick={handleViewClassroom}>
                 View
