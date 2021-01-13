@@ -76,7 +76,7 @@ const App = ({ socket }) => {
   return (
     <BrowserRouter>
         <Route exact path="/landing">
-            <Splash />
+           <Splash />
       </Route>
       <Route exact path="/login">
         <LoginForm
