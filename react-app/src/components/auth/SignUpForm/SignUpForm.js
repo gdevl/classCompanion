@@ -59,7 +59,7 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
         console.log(user.errors)
         setErrors(user.errors);
       }
-    
+
   };
 
   const updateUsername = (e) => {
@@ -104,7 +104,7 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
   }
 
   return (
-    <>
+    <div className="signup__wrapper">
       <Box>
         <SignUpFormHeader />
       </Box>
@@ -224,7 +224,7 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
           </Button>
         </Box>
       </form>
-    </>
+    </div>
   );
 };
 

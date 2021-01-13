@@ -251,6 +251,15 @@ h5, h6 {
     color: white;
 }
 
+.signup__wrapper {
+    align-items: center;
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100vh;
+    justify-content: center;
+
+}
+
 .splash__footer-negative-space {
     height: 64px;
     position: absolute;
