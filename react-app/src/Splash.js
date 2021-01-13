@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
@@ -19,6 +19,8 @@ import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import IconButton from "@material-ui/core/IconButton";
+import LoginForm from "./components/auth/LoginForm/LoginForm.js";
+
 
 function Copyright() {
   return (
@@ -64,14 +66,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Splash = () => {
+    const history = useHistory();
   const classes = useStyles();
   const handleGitHubClick = () => {
     window.location.href = "https://github.com/gdevl/classCorral.git";
   };
 
-  const handleClick = () => {
-    window.location.href = "/login";
-  };
+    const handleClick = () => {
+        history.push('/login');
+    };
 
   return (
     <React.Fragment>
@@ -115,7 +118,7 @@ const Splash = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleClick()}
+                    onClick={handleClick}
                   >
                     Get Started
                   </Button>

@@ -31,11 +31,6 @@ const App = ({ socket }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  //   const currentClassroom = useSelector((state) => state.store.current_class);
-  //   const currentUser = useSelector((state) => state.store.current_user);
-  //   const currentClassroomId = useSelector(
-  //     (state) => state.classrooms[state.currentClassroomId]
-  //   );
   const currentClassroomId = useSelector((state) => state.currentClassroomId);
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -71,7 +66,7 @@ const App = ({ socket }) => {
   });
 
   if (!currentUser) {
-    return <Landing />;
+    return null;
   }
   if (!loaded) {
     return null;
@@ -80,8 +75,8 @@ const App = ({ socket }) => {
   console.log(currentClassroomId);
   return (
     <BrowserRouter>
-      <Route exact path="/landing">
-        <Splash />
+        <Route exact path="/landing">
+            <Splash />
       </Route>
       <Route exact path="/login">
         <LoginForm
@@ -94,6 +89,9 @@ const App = ({ socket }) => {
           authenticated={authenticated}
           setAuthenticated={setAuthenticated}
         />
+      </Route>
+      <Route exact path="/jerry">
+          <h1>Hello Jerry</h1>
       </Route>
 
       <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
