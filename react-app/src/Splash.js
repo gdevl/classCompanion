@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Splash = () => {
-    const history = useHistory();
+  const history = useHistory();
   const classes = useStyles();
   const handleGitHubClick = () => {
     window.location.href = "https://github.com/gdevl/classCorral.git";
