@@ -107,7 +107,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
   }
 
   return (
-    <>
+    <div className="login__wrapper">
       <div className="login__container">
         <Box>
           <LoginFormHeader />
@@ -188,7 +188,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
           </Typography>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
