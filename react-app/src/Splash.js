@@ -26,7 +26,7 @@ function Copyright() {
   return (
     <Typography variant="body2" className="footer__text" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://github.com/gdevl/classCorral.git">
+      <Link className="footer__copyright-link" color="inherit" href="https://github.com/gdevl/classCorral.git">
         Class Companion
       </Link>{" "}
       {new Date().getFullYear()}
@@ -77,125 +77,115 @@ const Splash = () => {
     };
 
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography
-            className="splash__topbar-title"
-            variant="h6"
-            color="inherit"
-            noWrap
-          >
-            Class Companion
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main className="splash__main">
-        {/* Hero unit */}
-        <div className={classes.heroContent}>
-          <Container maxWidth="sm">
+      <React.Fragment>
+        <CssBaseline />
+        <AppBar position="relative">
+          <Toolbar>
             <Typography
-              classes="splash__topbar-title"
-              component="h1"
-              variant="h2"
-              align="center"
-              color="textPrimary"
-              gutterBottom
+                className="splash__topbar-title"
+                variant="h6"
+                color="inherit"
+                noWrap
             >
               Class Companion
             </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="textSecondary"
-              paragraph
-            >
-              Virtual classroom management... simplified.
-            </Typography>
-            <div className={classes.heroButtons}>
-              <Grid container spacing={2} justify="center">
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleClick}
-                  >
-                    Get Started
-                  </Button>
+          </Toolbar>
+        </AppBar>
+        <main className="splash__main">
+          {/* Hero unit */}
+          <div className={classes.heroContent}>
+            <Container maxWidth="sm">
+              <h1 className="splash__hero-title"
+              >
+                Class Companion
+              </h1>
+              <h5 className="splash__hero-subtitle" >
+                Virtual classroom management... simplified.
+              </h5>
+              <div className={classes.heroButtons}>
+                <Grid container spacing={2} justify="center">
+                  <Grid item>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleClick}
+                    >
+                      Get Started
+                    </Button>
+                  </Grid>
+                  {/* <Grid item>
+                      <Button variant="outlined" color="primary">
+                      Secondary action
+                      </Button>
+                      </Grid> */}
                 </Grid>
-                {/* <Grid item>
-                  <Button variant="outlined" color="primary">
-                    Secondary action
-                  </Button>
-                </Grid> */}
+              </div>
+            </Container>
+          </div>
+          {/* <Container className={classes.cardGrid} maxWidth="md"> */}
+            {/* End hero unit */}
+            <div className="splash__callout-features">
+              <Grid container spacing={4}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Card className={classes.card}>
+                    <CardContent className={classes.cardContent}>
+                      <EmojiPeopleIcon className="splash__callout-featured-icon" />
+                      <Typography className="splash__callout-boxes" gutterBottom variant="h5" component="h2">
+                        Take Attendance
+                      </Typography>
+                      <Typography className="splash__callout-boxes">With dynamic daily check-ins</Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Card className={classes.card}>
+                    <CardContent className={classes.cardContent}>
+                      <QuestionAnswerIcon className="splash__callout-featured-icon" />
+                      <Typography className="splash__callout-boxes" gutterBottom variant="h5" component="h2">
+                        Take Questions
+                      </Typography>
+                      <Typography className="splash__callout-boxes">And answer them in real-time</Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Card className={classes.card}>
+                    <CardContent className={classes.cardContent}>
+                      <GroupWorkIcon className="splash__callout-featured-icon" />
+                      <Typography className="splash__callout-boxes" gutterBottom variant="h5" component="h2">
+                        Take Control
+                      </Typography>
+                      <Typography className="splash__callout-boxes">With flexible group creation</Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
               </Grid>
             </div>
-          </Container>
-        </div>
-        {/* <Container className={classes.cardGrid} maxWidth="md"> */}
-        {/* End hero unit */}
-        <div className="splash__callout-features">
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className={classes.card}>
-                <CardContent className={classes.cardContent}>
-                  <EmojiPeopleIcon className="splash__callout-featured-icon" />
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Take Attendance
-                  </Typography>
-                  <Typography>With dynamic daily check-ins</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className={classes.card}>
-                <CardContent className={classes.cardContent}>
-                  <QuestionAnswerIcon className="splash__callout-featured-icon" />
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Take Questions
-                  </Typography>
-                  <Typography>And answer them in real-time</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className={classes.card}>
-                <CardContent className={classes.cardContent}>
-                  <GroupWorkIcon className="splash__callout-featured-icon" />
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Take Control
-                  </Typography>
-                  <Typography>With flexible group creation</Typography>
-                </CardContent>
-              </Card>
+            {/* </Container> */}
+        </main>
+        {/* Footer */}
+        <div className="splash__footer-negative-space"></div>
+        <footer className="splash__footer">
+          <Grid container spacing={2} justify="center">
+            <Grid item>
+              <IconButton onClick={handleGitHubClick}>
+                <GitHubIcon className="footer__icon" />
+              </IconButton>
             </Grid>
           </Grid>
-        </div>
-        {/* </Container> */}
-      </main>
-      {/* Footer */}
-      <div className="splash__footer-negative-space"></div>
-      <footer className="splash__footer">
-        <Grid container spacing={2} justify="center">
-          <Grid item>
-            <IconButton onClick={handleGitHubClick}>
-              <GitHubIcon className="footer__icon" />
-            </IconButton>
-          </Grid>
-        </Grid>
-        <Typography
-          variant="subtitle2"
-          align="center"
-          className="footer__text"
-          component="p"
-        >
-          Ranson Knorr, Gabriel Lane, Ryan Matuszak, Warren Tamagri
-        </Typography>
-        <Copyright />
-      </footer>
-      {/* End footer */}
-    </React.Fragment>
+          <div className="footer__devs">
+            <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">Ranson Knorr</a>
+            <span>|</span>
+            <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">Gabriel Lane</a>
+            <span>|</span>
+            <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">Ryan Matuszak</a>
+            <span>|</span>
+            <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">Warren Tamagri</a>
+          </div>
+          <Copyright />
+        </footer>
+        {/* End footer */}
+      </React.Fragment>
   );
 };
 

@@ -249,6 +249,37 @@ h5, h6 {
 .footer__icon
 {
     color: white;
+    font-family: "Mukta" !important;
+}
+
+.footer__devs {
+    color: white;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+
+.footer__devs a {
+    box-sizing: border-box;
+    color: white;
+    margin: 0 0.5rem;
+    text-decoration: none;
+}
+
+.footer__devs a:hover {
+    background-color: white;
+    color: #4051b5;
+}
+
+.footer__copyright-link {
+    box-sizing: border-box;
+    padding: 0 0.25rem;
+}
+
+.footer__copyright-link:hover {
+    background-color: white;
+    color: #4051b5;
+    text-decoration: none !important;
 }
 
 .signup__wrapper {
@@ -268,13 +299,34 @@ h5, h6 {
 
 .splash__footer {
     background-color: #4051b5;
+    font-family: "Mukta" !important;
     padding: 2rem;
     width: 100%;
 }
 
-.splash__topbar-title {
+.splash__topbar-title,
+.splash__hero-title
+{
     font-family: 'Prompt', sans-serif !important;
     font-weight: 700;
+}
+
+.splash__hero-title {
+    font-size: 3.25rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+}
+
+.splash__callout-boxes {
+    font-family: "Mukta" !important;
+}
+
+.splash__hero-subtitle {
+    color: gray;
+    font-size: 1.5rem;
+    margin: 0 1rem;
+    text-align: center;
 }
 
 .splash__callout-featured-icon {
@@ -287,6 +339,8 @@ h5, h6 {
     margin: 2rem;
     padding: 2rem;
 }
+
+
 
 .splash__main {
     /* border: 1px solid green; */
