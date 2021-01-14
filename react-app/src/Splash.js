@@ -174,13 +174,13 @@ const Splash = () => {
             </Grid>
           </Grid>
           <div className="footer__devs">
-            <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">Ranson Knorr</a>
+            <a href="https://www.linkedin.com/in/ranson-knorr-b132391b7/">Ranson Knorr</a>
             <span>|</span>
             <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">Gabriel Lane</a>
             <span>|</span>
-            <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">Ryan Matuszak</a>
+            <a href="https://www.linkedin.com/in/ryan-matuszak-962440147/">Ryan Matuszak</a>
             <span>|</span>
-            <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">Warren Tamagri</a>
+            <a href="https://www.linkedin.com/in/warren-tamagri-5648a71ba/">Warren Tamagri</a>
           </div>
           <Copyright />
         </footer>

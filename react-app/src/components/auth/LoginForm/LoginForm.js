@@ -9,7 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+/* import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle"; */
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import SchoolIcon from "@material-ui/icons/School";
 import LoginFormHeader from "./LoginFormHeader";
 
@@ -172,7 +173,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
               color="secondary"
               size="large"
               //   className={classes.instructor}
-              startIcon={<SupervisedUserCircleIcon />}
+              startIcon={<SupervisorAccountIcon />}
               onClick={handleInstructorDemo}
             >
               DEMO LOGIN (instructor)
