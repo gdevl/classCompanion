@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import LoginForm from "../auth/LoginForm/LoginForm.js";
+import SignUpForm from "./SignUpForm/SignUpForm.js";
 
-const LoginDialog = ({ open, setOpen, authenticated, setAuthenticated }) => {
+const SignUpDialog = ({
+    showSignUp,
+    setShowSignUp,
+    authenticated,
+    setAuthenticated,
+}) => {
     const handleClose = () => {
-        setOpen(false);
+        setShowSignUp(false);
     };
 
     return (
         <div>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={showSignUp} onClose={handleClose}>
                 <DialogContent>
-                    <LoginForm
+                    <SignUpForm
                         authenticated={authenticated}
                         setAuthenticated={setAuthenticated}
                     />
@@ -21,4 +26,4 @@ const LoginDialog = ({ open, setOpen, authenticated, setAuthenticated }) => {
         </div>
     );
 };
-export default LoginDialog;
+export default SignUpDialog;

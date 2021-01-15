@@ -340,6 +340,9 @@ h5, h6 {
     padding: 2rem;
 }
 
+.MuiTextField-root > label {
+    font-family: 'Mukta', sans-serif !important;
+}
 
 
 .splash__main {
