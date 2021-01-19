@@ -1,41 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentClassroom } from '../../store/current_classroom';
 import { removeClassroom, deleteClassroom } from '../../store/classrooms';
+import EnrollStudents from './EnrollStudents';
 
 const ClassroomsActions = ({ role, classroom }) => {
     const dispatch = useDispatch();
+    const [hideEnrollment, setHideEnrollment] = useState(true);
+
     const handleViewClassroom = async (e) => {
         e.preventDefault();
         dispatch(setCurrentClassroom(e.target.value));
     };
 
     const handleDeleteClassroom = async (e) => {
-        // alert(`you clicked the delete button`);
         const classroomToDelete = await deleteClassroom(e.target.value);
         dispatch(removeClassroom(classroomToDelete));
     };
 
     const handleEnrollment = () => {
-        alert(`you clicked the enroll button`);
+        setHideEnrollment(false);
     };
 
     return (
-        <div className="classrooms__actions">
-            <button value={classroom.id} onClick={handleViewClassroom}>
-                View
-            </button>
-            {role === 'instructor' ? (
-                <button value={classroom.id} onClick={handleEnrollment}>
-                    Enroll
+        <>
+            <div className="classrooms__actions">
+                <button value={classroom.id} onClick={handleViewClassroom}>
+                    View
                 </button>
-            ) : null}
-            {role === 'instructor' ? (
-                <button value={classroom.id} onClick={handleDeleteClassroom}>
-                    Delete
-                </button>
-            ) : null}
-        </div>
+                {role === 'instructor' ? (
+                    <button value={classroom.id} onClick={handleEnrollment}>
+                        Enroll
+                    </button>
+                ) : null}
+                {role === 'instructor' ? (
+                    <button
+                        value={classroom.id}
+                        onClick={handleDeleteClassroom}
+                    >
+                        Delete
+                    </button>
+                ) : null}
+            </div>
+            {!hideEnrollment ? <EnrollStudents /> : null}
+        </>
     );
 };
 

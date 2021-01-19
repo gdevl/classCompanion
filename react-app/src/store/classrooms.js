@@ -1,9 +1,7 @@
-// export const SET_CURRENT_CLASSROOM = "SET_CURRENT_CLASSROOM";
 export const GET_USER_CLASSROOMS = 'GET_USER_CLASSROOMS';
 export const CLEAR_CLASSROOMS = 'CLEAR_CLASSROOMS';
 export const CREATE_CLASSROOM = 'CREATE_CLASSROOM';
 export const DELETE_CLASSROOM = 'DELETE_CLASSROOM';
-// export const GET_CLASSROOM_GROUPS = "GET_CLASSROOM_GROUPS";
 
 export const getUserClassrooms = (classrooms) => {
     return {
@@ -50,9 +48,6 @@ export const createClassroom = async (classroomCreationData) => {
 };
 
 export const deleteClassroom = async (classroom_id) => {
-    console.log('classroom_id:');
-    console.log(classroom_id);
-
     const request = await fetch(`/api/classes/${classroom_id}/delete`, {
         method: 'PATCH',
         headers: {
@@ -60,8 +55,6 @@ export const deleteClassroom = async (classroom_id) => {
         },
     });
     const response = await request.json();
-    console.log('response:');
-    console.log(response);
     return response;
 };
 
