@@ -202,6 +202,7 @@ const Navigation = ({ setAuthenticated }) => {
 
     const handleLogout = async (e) => {
         await logout();
+        dispatch(clearCurrentClassroom());
         dispatch(clearClassrooms());
         dispatch(clearCurrentUser());
         setAuthenticated(false);
