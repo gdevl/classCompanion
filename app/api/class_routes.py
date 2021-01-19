@@ -14,15 +14,14 @@ def get_class_data(class_id):
     return class_data.to_dict()
 
 
-@class_routes.route('/<int:id>/delete', methods=['GET', 'PATCH'])
-def delete_class(id):
+@class_routes.route('/<int:class_id>/delete', methods=['GET', 'PATCH'])
+def delete_class(class_id):
     if request.method == 'PATCH':
-        selected_class = Classroom.query.get(id)
-       #  print(selected_class.active)
+        selected_class = Classroom.query.get(class_id)
         selected_class.active = False
         db.session.add(selected_class)
         db.session.commit()
-        return jsonify('success')
+        return jsonify(f'{selected_class.name} was deleted successfully.')
 
 
 @class_routes.route('/<int:id>/students')

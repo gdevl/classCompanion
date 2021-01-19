@@ -35,25 +35,21 @@ def get_classes(user_id):
     return jsonify([classroom.truncated() for classroom in user.classrooms])
 
 
-@user_routes.route('/<int:id>/classes/create', methods=['GET', 'POST'])
-def create_class(id):
+@user_routes.route('/<int:user_id>/classes/create', methods=['POST'])
+def create_class(user_id):
     if request.method == 'POST':
         req_data = request.get_json()
+        print(f'req_data {req_data}')
         classroom = Classroom(
             name=req_data['className'],
-            class_image_url=None,
             description=req_data['classDescription'],
-            daily_objective=None,
-            meeting_link=None,
-            meeting_pw=None,
-            active=True
         )
 
-        user = User.query.get(id)
+        instructor = User.query.get(user_id)
         db.session.add(classroom)
-        classroom.instructors.append(user)
+        classroom.instructors.append(instructor)
         db.session.commit()
-        return jsonify('hello')
+        return jsonify(classroom.truncated())
 
 
 @user_routes.route('/me')

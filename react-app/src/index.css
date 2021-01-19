@@ -245,6 +245,13 @@ h5, h6 {
     color: #2A9D8F;
 }
 
+.add_classroom_action {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+
+
 .footer__text,
 .footer__icon
 {

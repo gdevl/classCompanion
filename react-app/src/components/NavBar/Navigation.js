@@ -22,6 +22,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { clearCurrentClassroom } from '../../store/current_classroom';
 import { clearClassroomMeta } from '../../store/classroom_meta';
 import { clearClassrooms } from '../../store/classrooms';
+import { clearCurrentUser } from '../../store/current_user';
 
 const useStyles = makeStyles((theme) => ({
     navigation: {
@@ -202,6 +203,7 @@ const Navigation = ({ setAuthenticated }) => {
     const handleLogout = async (e) => {
         await logout();
         dispatch(clearClassrooms());
+        dispatch(clearCurrentUser());
         setAuthenticated(false);
     };
 
