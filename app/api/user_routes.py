@@ -32,7 +32,7 @@ def classes(id):
 @user_routes.route('/<int:user_id>/rooms')
 def get_classes(user_id):
     user = User.query.get(user_id)
-    return jsonify([classroom.truncated() for classroom in user.classrooms])
+    return jsonify([classroom.truncated() for classroom in user.classrooms if classroom.active])
 
 
 @user_routes.route('/<int:user_id>/classes/create', methods=['POST'])

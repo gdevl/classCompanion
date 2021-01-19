@@ -36,29 +36,39 @@ const SingleClassroom = () => {
     }
 
     if (!classMeta.students) {
-        console.log('loaded:');
-        console.log(loaded);
-        console.log('no students');
         return (
             <>
-                <div className="enroll-students-instructions-container">
-                    <div>
-                        <h3 className="enroll-students-instructions-heading">
-                            You Have not yet Enrolled any Students
-                        </h3>
-                    </div>
-                    <br></br>
-                    <div>
-                        <h3>
-                            You Can Enroll Students by Clicking "My Classes"
-                            Followed by "Enroll Students" on the Desired Class
-                            Card
-                        </h3>
-                    </div>
+                <div className="loading">
+                    <p>Loading...</p>
                 </div>
             </>
         );
     }
+
+    // if (!classMeta.students) {
+    //     console.log('loaded:');
+    //     console.log(loaded);
+    //     console.log('no students');
+    //     return (
+    //         <>
+    //             <div className="enroll-students-instructions-container">
+    //                 <div>
+    //                     <h3 className="enroll-students-instructions-heading">
+    //                         You Have not yet Enrolled any Students
+    //                     </h3>
+    //                 </div>
+    //                 <br></br>
+    //                 <div>
+    //                     <h3>
+    //                         You Can Enroll Students by Clicking "My Classes"
+    //                         Followed by "Enroll Students" on the Desired Class
+    //                         Card
+    //                     </h3>
+    //                 </div>
+    //             </div>
+    //         </>
+    //     );
+    // }
 
     //if there aren't any groups set, render everyone individually
     if (!classMeta.groups.length >= 1) {

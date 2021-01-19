@@ -25,9 +25,10 @@ export const addClassroom = (classroom) => {
     };
 };
 
-export const removeClassroom = () => {
+export const removeClassroom = (classroom_id) => {
     return {
         type: DELETE_CLASSROOM,
+        classroom_id,
     };
 };
 
@@ -59,6 +60,8 @@ export const deleteClassroom = async (classroom_id) => {
         },
     });
     const response = await request.json();
+    console.log('response:');
+    console.log(response);
     return response;
 };
 
@@ -91,8 +94,10 @@ export default function reducer(state = {}, action) {
             };
         }
         case DELETE_CLASSROOM: {
+            let newState = { ...state };
+            delete newState[`${action.classroom_id}`];
             return {
-                ...state,
+                ...newState,
             };
         }
         default:

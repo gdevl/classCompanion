@@ -33,6 +33,11 @@ h5, h6 {
     font-weight: 500;
 }
 
+.loading {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
 
 
 #root {

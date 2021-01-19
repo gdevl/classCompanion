@@ -21,7 +21,7 @@ def delete_class(class_id):
         selected_class.active = False
         db.session.add(selected_class)
         db.session.commit()
-        return jsonify(f'{selected_class.name} was deleted successfully.')
+        return jsonify(selected_class.id)
 
 
 @class_routes.route('/<int:id>/students')
