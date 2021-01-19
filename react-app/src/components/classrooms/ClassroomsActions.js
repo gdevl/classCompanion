@@ -4,9 +4,18 @@ import { setCurrentClassroom } from '../../store/current_classroom';
 import { removeClassroom, deleteClassroom } from '../../store/classrooms';
 import EnrollStudents from './EnrollStudents';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+
 const ClassroomsActions = ({ role, classroom }) => {
     const dispatch = useDispatch();
+    const [open, setOpen] = useState(false);
+    const [activeClassroom, setActiveClassroom] = useState(null);
     const [hideEnrollment, setHideEnrollment] = useState(true);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const handleViewClassroom = async (e) => {
         e.preventDefault();
@@ -18,8 +27,10 @@ const ClassroomsActions = ({ role, classroom }) => {
         dispatch(removeClassroom(classroomToDelete));
     };
 
-    const handleEnrollment = () => {
+    const handleEnrollment = (e) => {
         setHideEnrollment(false);
+        setOpen(true);
+        setActiveClassroom(e.target.value);
     };
 
     return (
@@ -30,7 +41,7 @@ const ClassroomsActions = ({ role, classroom }) => {
                 </button>
                 {role === 'instructor' ? (
                     <button value={classroom.id} onClick={handleEnrollment}>
-                        Enroll
+                        Enrollment
                     </button>
                 ) : null}
                 {role === 'instructor' ? (
@@ -42,7 +53,18 @@ const ClassroomsActions = ({ role, classroom }) => {
                     </button>
                 ) : null}
             </div>
-            {!hideEnrollment ? <EnrollStudents /> : null}
+            {/* {!hideEnrollment ? (
+                <EnrollStudents classroomId={activeClassroom} />
+            ) : null} */}
+            {!hideEnrollment ? (
+                <div className="transfer_list_dialog">
+                    <Dialog open={open} onClose={handleClose}>
+                        <DialogContent>
+                            <EnrollStudents classroomId={activeClassroom} />
+                        </DialogContent>
+                    </Dialog>
+                </div>
+            ) : null}
         </>
     );
 };

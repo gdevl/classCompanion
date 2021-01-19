@@ -73,6 +73,12 @@ class User(db.Model, UserMixin):
             "checkins": [check_in.to_dict() for check_in in self.check_ins],
             "questions": [question.to_dict() for question in self.questions],
         }
+    
+    def get_name(self):
+        return {
+            "id": self.id,
+            "name": f'{self.first_name} {self.last_name}',
+        }
 
     def get_user_classrooms(self):
         return {

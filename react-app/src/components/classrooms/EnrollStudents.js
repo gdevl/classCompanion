@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -9,6 +9,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+
+import { fetchEnrollment, getEnrolledStudents } from '../../store/enrolled';
+import { fetchUnenrolled, getUnenrolledStudents } from '../../store/unenrolled';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,11 +35,27 @@ function intersection(a, b) {
     return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-const EnrollStudents = () => {
+const EnrollStudents = ({ classroomId }) => {
     const classes = useStyles();
     const [checked, setChecked] = useState([]);
+    const [loaded, setLoaded] = useState(false);
     const [left, setLeft] = useState([0, 1, 2, 3]);
     const [right, setRight] = useState([4, 5, 6, 7]);
+
+    useEffect(() => {
+        (async () => {
+            // get enrolled and unenrolled students
+            const requestEnrolled = await fetchEnrollment(classroomId);
+            const requestUnenrolled = await fetchUnenrolled(classroomId);
+            // console.log('requestEnrolled:');
+            // console.log(requestEnrolled);
+            // console.log('requestUnenrolled:');
+            // console.log(requestUnenrolled);
+            setLeft(requestEnrolled);
+            setRight(requestUnenrolled);
+            setLoaded(true);
+        })();
+    }, []);
 
     const leftChecked = intersection(checked, left);
     const rightChecked = intersection(checked, right);
@@ -79,12 +98,12 @@ const EnrollStudents = () => {
     const customList = (items) => (
         <Paper className={classes.paper}>
             <List dense component="div" role="list">
-                {items.map((value) => {
-                    const labelId = `transfer-list-item-${value}-label`;
+                {Array.from(items).map((value) => {
+                    const labelId = `transfer-list-item-${value.name}-label`;
 
                     return (
                         <ListItem
-                            key={value}
+                            key={value.id}
                             role="listitem"
                             button
                             onClick={handleToggle(value)}
@@ -99,7 +118,8 @@ const EnrollStudents = () => {
                             </ListItemIcon>
                             <ListItemText
                                 id={labelId}
-                                primary={`List item ${value + 1}`}
+                                // primary={`List item ${value + 1}`}
+                                primary={`${value.name}`}
                             />
                         </ListItem>
                     );
@@ -109,6 +129,8 @@ const EnrollStudents = () => {
         </Paper>
     );
 
+    if (!loaded) return null;
+
     return (
         <Grid
             container
@@ -117,7 +139,10 @@ const EnrollStudents = () => {
             alignItems="center"
             className={classes.root}
         >
-            <Grid item>{customList(left)}</Grid>
+            <Grid item>
+                <div className="transfer_list_header">Enrolled</div>
+                {customList(left)}
+            </Grid>
             <Grid item>
                 <Grid container direction="column" alignItems="center">
                     <Button
@@ -162,7 +187,10 @@ const EnrollStudents = () => {
                     </Button>
                 </Grid>
             </Grid>
-            <Grid item>{customList(right)}</Grid>
+            <Grid item>
+                <div className="transfer_list_header">Unenrolled</div>
+                {customList(right)}
+            </Grid>
         </Grid>
     );
 };

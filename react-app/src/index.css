@@ -69,8 +69,7 @@ h5, h6 {
 }
 
 .classroom__grid-item {
-    background-color: teal;
-    border: 2px dotted rgba(0, 0, 0, 0.5);
+    background-color: rgba(42, 157, 143, 1);
     border-radius: 10px;
     color: white;
     flex: 0 1 300px;
@@ -96,20 +95,35 @@ h5, h6 {
   text-decoration: underline;
 }
 
-/* .classroom-size{
-  padding: 2px;
+.classrooms__actions button {
+    background-color: rgba(64, 81, 181, 1);
+    border-radius: 4px;
+    border: none;
+    color: rgba(250, 250, 250, 1);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: "Prompt", sans-serif;
+    letter-spacing: 0.03em;
+    line-height: 1.75;
+    margin: 0 .25rem 0 0;
+    padding: 3px 8px;
+    text-transform: uppercase;
 }
 
-.classroom-time{
-  padding: 2px;
-} */
+.classrooms__actions button:hover {
+    background-color: rgba(250, 250, 250, 1);
+    color: rgba(64, 81, 181, 1);
+    transition: background-color 250ms, color 250ms;
+}
 
-/* .classroom-buttons-container{
-  margin-top: 150px;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-} */
+.classrooms__actions button:focus {
+    outline: none;
+}
+
+.classrooms__actions {
+    display: flex;
+    flex-flow: row nowrap;
+}
 
 .plus-icon{
   display: flex;
@@ -143,7 +157,7 @@ h5, h6 {
 }
 
 .landing__container {
-    background-color: rgb(64, 81, 181);
+    background-color: rgba(64, 81, 181, 1);
     display: flex;
     height: 100%;
 }
@@ -256,6 +270,21 @@ h5, h6 {
     justify-content: center;
 }
 
+.add_classroom_action button {
+    font-family: "Prompt", sans-serif;
+}
+
+.add_classroom_action button:hover {
+    background-color: rgb(64, 81, 181);
+}
+
+.transfer_list_header {
+    /* background: white;
+    font-weight: 700;
+    margin-top: 0;
+    padding: 1rem; */
+    text-align: center;
+}
 
 .footer__text,
 .footer__icon

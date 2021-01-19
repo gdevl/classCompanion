@@ -133,21 +133,28 @@ def group_class(id, size):
 def get_enrolled(class_id):
     classroom = Classroom.query.get(class_id)
     students = classroom.students
-    return {
-        "students": [student.less_to_dict_checkins() for student in students]
-    }
+    # return {
+    #     "students": [student.less_to_dict_checkins() for student in students]
+    # }
+    return jsonify([student.get_name() for student in students])
 
 
 # Fetch unenrolled students by class_id
 @class_routes.route('/<int:class_id>/unenrolled')
 def get_unenrolled(class_id):
     students = User.query.filter(User.role == 'student')
-    return {
-        "unenrolled": [student.truncated()
-                       for student in students
-                       if class_id not in
-                       [classroom.id for classroom in student.classrooms]
-                       ]}
+    # return {
+    #     "unenrolled": [student.less_to_dict_checkins()
+    #                    for student in students
+    #                    if class_id not in
+    #                    [classroom.id for classroom in student.classrooms]
+    #                    ]}
+    return jsonify([
+            student.get_name() for student in students
+            if class_id not in
+            [classroom.id for classroom in student.classrooms]
+        ]
+    )
 
 
 # Fetch groups by class_id
