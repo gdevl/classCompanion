@@ -74,6 +74,38 @@ def update_enrollment(id):
         return jsonify('success')
 
 
+@class_routes.route('/<int:class_id>/enroll', methods=['PATCH'])
+def enroll(class_id):
+    data = request.get_json()
+
+    to_add = data["add"]
+    to_remove = data["remove"]
+
+    # get classroom by id
+    classroom = Classroom.query.get(class_id)
+
+    # get all students in the database
+    all_students = User.query.filter(User.role == 'student').all()
+
+    # create list of students to add (if any)
+    students_to_add = [
+        student for student in all_students if student.id in to_add
+    ]
+
+    # add new students to classroom (if any)
+    classroom.students.extend(students_to_add)
+
+    # remove students from classroom (if any)
+    classroom.students = [
+        student for student in classroom.students
+        if student.id not in to_remove
+    ]
+
+    db.session.commit()
+    
+    return jsonify('Operation complete.')
+
+
 @class_routes.route('/<int:id>/update', methods=['GET', 'PUT'])
 def update_class(id):
     if request.method == 'PUT':

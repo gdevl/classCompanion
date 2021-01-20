@@ -12,7 +12,7 @@ const AllClassrooms = () => {
 
     return (
         <>
-            <h1 className="classroom__grid-title">All Classrooms</h1>
+            <h1 className="classroom__grid-title">My Classrooms</h1>
             {currentUser.role === 'instructor' ? (
                 <AddClassroom userId={currentUser.id} />
             ) : null}

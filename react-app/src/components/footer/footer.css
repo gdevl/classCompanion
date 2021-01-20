@@ -1,8 +1,9 @@
-.footer__container{
+.footer__container {
     display: flex;
     justify-content: space-around;
     align-items: center;
     background-color: #4051b5;
+    font-family: "Mukta", sans-serif;
     color: white;
     min-height: 64px;
     position: fixed;

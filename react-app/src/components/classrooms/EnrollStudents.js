@@ -118,6 +118,7 @@ const EnrollStudents = ({ classroomId }) => {
                             </ListItemIcon>
                             <ListItemText
                                 id={labelId}
+                                className="transfer_list-student"
                                 // primary={`List item ${value + 1}`}
                                 primary={`${value.name}`}
                             />
@@ -140,7 +141,9 @@ const EnrollStudents = ({ classroomId }) => {
             className={classes.root}
         >
             <Grid item>
-                <div className="transfer_list_header">Enrolled</div>
+                <div className="transfer_list_header">
+                    <h3>Enrolled</h3>
+                </div>
                 {customList(left)}
             </Grid>
             <Grid item>
@@ -188,7 +191,9 @@ const EnrollStudents = ({ classroomId }) => {
                 </Grid>
             </Grid>
             <Grid item>
-                <div className="transfer_list_header">Unenrolled</div>
+                <div className="transfer_list_header">
+                    <h3>Unenrolled</h3>
+                </div>
                 {customList(right)}
             </Grid>
         </Grid>

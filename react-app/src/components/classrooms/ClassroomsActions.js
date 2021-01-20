@@ -6,6 +6,8 @@ import EnrollStudents from './EnrollStudents';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const ClassroomsActions = ({ role, classroom }) => {
     const dispatch = useDispatch();
@@ -53,12 +55,18 @@ const ClassroomsActions = ({ role, classroom }) => {
                     </button>
                 ) : null}
             </div>
-            {/* {!hideEnrollment ? (
-                <EnrollStudents classroomId={activeClassroom} />
-            ) : null} */}
             {!hideEnrollment ? (
                 <div className="transfer_list_dialog">
                     <Dialog open={open} onClose={handleClose}>
+                        <div className="transfer_list__title-bar">
+                            <h3>Add / Remove Students</h3>
+                            <IconButton
+                                aria-label="close"
+                                onClick={handleClose}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </div>
                         <DialogContent>
                             <EnrollStudents classroomId={activeClassroom} />
                         </DialogContent>

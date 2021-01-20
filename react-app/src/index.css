@@ -75,7 +75,7 @@ h5, h6 {
     /* box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.4); */
     box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
     color: white;
-    flex: 0 1 300px;
+    flex: 0 1 1;
     margin: 1rem;
     padding: 1rem;
 }
@@ -282,11 +282,25 @@ h5, h6 {
 }
 
 .transfer_list_header {
-    /* background: white;
-    font-weight: 700;
     margin-top: 0;
-    padding: 1rem; */
     text-align: center;
+}
+
+.transfer_list__title-bar {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin-bottom: 0;
+    padding: 0 1rem;
+}
+
+.transfer_list__title-bar h3 {
+    margin: 0;
+    padding: 12px;
+}
+
+.transfer_list-student span {
+    font-family: "Mukta", sans-serif !important;
 }
 
 .footer__text,
