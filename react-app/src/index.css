@@ -33,6 +33,14 @@ h5, h6 {
     height: 100%;
 }
 
+.student_list_header {
+    font-family: "Prompt", sans-serif !important;
+}
+
+.student_list_item span {
+    font-family: "Mukta", sans-serif !important;
+}
+
 .classroom__grid {
     display: flex;
     flex-flow: row wrap;
@@ -261,6 +269,7 @@ h5, h6 {
 }
 
 .transfer_list__title-bar h3 {
+    font-family: "Mukta", sans-serif;
     margin: 0;
     padding: 12px;
 }

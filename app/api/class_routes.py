@@ -77,7 +77,6 @@ def update_enrollment(id):
 @class_routes.route('/<int:class_id>/enroll', methods=['PATCH'])
 def enroll(class_id):
     data = request.get_json()
-
     to_add = data["add"]
     to_remove = data["remove"]
 
@@ -168,7 +167,7 @@ def get_enrolled(class_id):
     # return {
     #     "students": [student.less_to_dict_checkins() for student in students]
     # }
-    return jsonify([student.get_name() for student in students])
+    return jsonify([student.get_transfer_list() for student in students])
 
 
 # Fetch unenrolled students by class_id
@@ -182,7 +181,7 @@ def get_unenrolled(class_id):
     #                    [classroom.id for classroom in student.classrooms]
     #                    ]}
     return jsonify([
-            student.get_name() for student in students
+            student.get_transfer_list() for student in students
             if class_id not in
             [classroom.id for classroom in student.classrooms]
         ]

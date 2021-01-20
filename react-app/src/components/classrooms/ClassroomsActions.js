@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setCurrentClassroom } from '../../store/current_classroom';
 import { removeClassroom, deleteClassroom } from '../../store/classrooms';
 import EnrollStudents from './EnrollStudents';
+import StudentList from './StudentList';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -68,7 +69,8 @@ const ClassroomsActions = ({ role, classroom }) => {
                             </IconButton>
                         </div>
                         <DialogContent>
-                            <EnrollStudents classroomId={activeClassroom} />
+                            {/* <EnrollStudents classroomId={activeClassroom} /> */}
+                            <StudentList classroomId={activeClassroom} />
                         </DialogContent>
                     </Dialog>
                 </div>
