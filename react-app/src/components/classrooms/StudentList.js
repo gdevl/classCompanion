@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -17,18 +18,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { fetchEnrollment, getEnrolledStudents } from '../../store/enrolled';
 import { fetchUnenrolled, getUnenrolledStudents } from '../../store/unenrolled';
 
-function generate(element) {
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) =>
-        React.cloneElement(element, {
-            key: value,
-        })
-    );
-}
-
 const StudentList = ({ classroomId }) => {
+    const dispatch = useDispatch();
     const [loaded, setLoaded] = useState(false);
-    const [enrolled, setEnrolled] = useState([]);
-    const [unenrolled, setUnenrolled] = useState([]);
+    const enrolled = useSelector((state) => state.enrolled);
+    const unenrolled = useSelector((state) => state.unenrolled);
+    // const [enrolled, setEnrolled] = useState([]);
+    // const [unenrolled, setUnenrolled] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -39,11 +35,29 @@ const StudentList = ({ classroomId }) => {
             // console.log(enrolled);
             // console.log('unenrolled:');
             // console.log(unenrolled);
-            setEnrolled(getEnrolled);
-            setUnenrolled(getUnenrolled);
+            // setEnrolled(getEnrolled);
+            // setUnenrolled(getUnenrolled);
+            dispatch(getEnrolledStudents(getEnrolled));
+            dispatch(getUnenrolledStudents(getUnenrolled));
             setLoaded(true);
         })();
-    }, []);
+    }, [enrolled, unenrolled]);
+
+    const handleAdd = (e) => {
+        alert(`You've enrolled the student with id:${e.target}`);
+        console.log('e.target:');
+        console.log(e.target);
+    };
+
+    const handleRemove = (id) => {
+        alert(`You've unenrolled the student with id:${id}`);
+        console.log(id);
+        // console.log('e.target:');
+        // console.log(e.target);
+        // console.log(typeof e.id);
+        // console.log('e.props:');
+        // console.log(e.props);
+    };
 
     return (
         <Grid container>
@@ -52,9 +66,9 @@ const StudentList = ({ classroomId }) => {
                     Enrolled
                 </Typography>
                 <div className="student_list">
-                    {loaded ? (
+                    {enrolled && Object.keys(enrolled).length > 0 ? (
                         <List>
-                            {enrolled.map((student) => {
+                            {Object.values(enrolled).map((student) => {
                                 return (
                                     <ListItem>
                                         <ListItemAvatar>
@@ -75,6 +89,11 @@ const StudentList = ({ classroomId }) => {
                                                 <IconButton
                                                     edge="end"
                                                     color="primary"
+                                                    id={student.id}
+                                                    props={student.id}
+                                                    onClick={() =>
+                                                        handleRemove(student.id)
+                                                    }
                                                 >
                                                     <RemoveCircleIcon />
                                                 </IconButton>
@@ -94,9 +113,9 @@ const StudentList = ({ classroomId }) => {
                     Unenrolled
                 </Typography>
                 <div className="student_list">
-                    {loaded ? (
+                    {unenrolled && Object.keys(unenrolled).length > 0 ? (
                         <List>
-                            {unenrolled.map((student) => {
+                            {Object.values(unenrolled).map((student) => {
                                 return (
                                     <ListItem className="student_list_item">
                                         <ListItemAvatar>
@@ -116,6 +135,8 @@ const StudentList = ({ classroomId }) => {
                                                 <IconButton
                                                     edge="end"
                                                     color="secondary"
+                                                    value={student.id}
+                                                    onClick={handleAdd}
                                                 >
                                                     <AddCircleIcon />
                                                 </IconButton>
