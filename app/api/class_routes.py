@@ -74,8 +74,8 @@ def update_enrollment(id):
         return jsonify('success')
 
 
-@class_routes.route('/<int:class_id>/enroll', methods=['PATCH'])
-def enroll(class_id):
+@class_routes.route('/<int:class_id>/bulk_enroll', methods=['PATCH'])
+def bulk_enroll(class_id):
     data = request.get_json()
     to_add = data["add"]
     to_remove = data["remove"]
@@ -103,6 +103,45 @@ def enroll(class_id):
     db.session.commit()
     
     return jsonify('Operation complete.')
+
+# add student to classroom
+@class_routes.route('/<int:class_id>/enroll', methods=['PATCH'])
+def enroll(class_id):
+    data = request.get_json()
+    user_id = data["userId"]
+    classroom_id = data["classroomId"]
+
+    classroom = Classroom.query.get(classroom_id)
+    student_to_add = User.query.get(user_id)
+
+    classroom.students.append(student_to_add)
+
+    new_student = student_to_add.added()
+    db.session.commit()
+
+    return jsonify(new_student)
+
+# remove student from classroom
+@class_routes.route('/<int:class_id>/unenroll', methods=['PATCH'])
+def unenroll(class_id):
+    # destructure request data
+    data = request.get_json()
+    user_id = data["userId"]
+    classroom_id = data["classroomId"]
+
+    # query classroom
+    classroom = Classroom.query.get(classroom_id)
+    # query student
+    student_to_remove = User.query.get(user_id)
+
+    # remove student from classroom
+    classroom.students.remove(student_to_remove)
+
+    # prepare student dict to return
+    removed_student = student_to_remove.removed()
+    db.session.commit()
+
+    return jsonify(removed_student)
 
 
 @class_routes.route('/<int:id>/update', methods=['GET', 'PUT'])
@@ -164,9 +203,6 @@ def group_class(id, size):
 def get_enrolled(class_id):
     classroom = Classroom.query.get(class_id)
     students = classroom.students
-    # return {
-    #     "students": [student.less_to_dict_checkins() for student in students]
-    # }
     return jsonify([student.get_transfer_list() for student in students])
 
 
@@ -174,12 +210,6 @@ def get_enrolled(class_id):
 @class_routes.route('/<int:class_id>/unenrolled')
 def get_unenrolled(class_id):
     students = User.query.filter(User.role == 'student')
-    # return {
-    #     "unenrolled": [student.less_to_dict_checkins()
-    #                    for student in students
-    #                    if class_id not in
-    #                    [classroom.id for classroom in student.classrooms]
-    #                    ]}
     return jsonify([
             student.get_transfer_list() for student in students
             if class_id not in

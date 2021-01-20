@@ -60,7 +60,7 @@ const ClassroomsActions = ({ role, classroom }) => {
                 <div className="transfer_list_dialog">
                     <Dialog open={open} onClose={handleClose}>
                         <div className="transfer_list__title-bar">
-                            <h3>Add / Remove Students</h3>
+                            <h3>{`Add / Remove Students from ${classroom.name}`}</h3>
                             <IconButton
                                 aria-label="close"
                                 onClick={handleClose}

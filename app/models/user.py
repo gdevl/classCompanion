@@ -86,6 +86,20 @@ class User(db.Model, UserMixin):
             "name": f'{self.first_name} {self.last_name}',
             "avatar_url": self.avatar_url,
         }
+    
+    def removed(self):
+        return {
+            "id": self.id,
+            "name": f'{self.first_name} {self.last_name}',
+            "operation": "removed",
+        }
+
+    def added(self):
+        return {
+            "id": self.id,
+            "name": f'{self.first_name} {self.last_name}',
+            "operation": "added",
+        }
 
     def get_user_classrooms(self):
         return {

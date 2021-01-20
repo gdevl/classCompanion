@@ -25,14 +25,14 @@ export const fetchEnrollment = async (classroomId) => {
     return response;
 };
 
-export const enrollNewStudent = async (enrollmentData) => {
+export const addStudentToClassroom = async (enrollmentData) => {
     const { userId, classroomId } = enrollmentData;
     const body = {
         userId,
         classroomId,
     };
     const request = await fetch(`/api/classes/${classroomId}/enroll`, {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -48,6 +48,12 @@ export default function reducer(state = {}, action) {
             return {
                 ...state,
                 ...action.students,
+            };
+        }
+        case ENROLL_STUDENT: {
+            return {
+                ...state,
+                ...action.student,
             };
         }
         default:
