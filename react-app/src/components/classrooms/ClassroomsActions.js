@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentClassroom } from '../../store/current_classroom';
 import { removeClassroom, deleteClassroom } from '../../store/classrooms';
-import EnrollStudents from './EnrollStudents';
+import { clearEnrolledStudents } from '../../store/enrolled';
+import { clearUnenrolledStudents } from '../../store/unenrolled';
 import StudentList from './StudentList';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -17,7 +18,10 @@ const ClassroomsActions = ({ role, classroom }) => {
     const [hideEnrollment, setHideEnrollment] = useState(true);
 
     const handleClose = () => {
+        setActiveClassroom(null);
         setOpen(false);
+        dispatch(clearEnrolledStudents());
+        dispatch(clearUnenrolledStudents());
     };
 
     const handleViewClassroom = async (e) => {

@@ -1,5 +1,6 @@
 export const GET_ENROLLED_STUDENTS = 'GET_ENROLLED_STUDENTS';
 export const ENROLL_STUDENT = 'ENROLL_STUDENT';
+export const CLEAR_ENROLLED_STUDENTS = 'CLEAR_ENROLLED_STUDENTS';
 
 export const getEnrolledStudents = (students) => {
     return {
@@ -12,6 +13,12 @@ export const enrollStudent = (student) => {
     return {
         type: ENROLL_STUDENT,
         student,
+    };
+};
+
+export const clearEnrolledStudents = () => {
+    return {
+        type: CLEAR_ENROLLED_STUDENTS,
     };
 };
 
@@ -55,6 +62,9 @@ export default function reducer(state = {}, action) {
                 ...state,
                 ...action.student,
             };
+        }
+        case CLEAR_ENROLLED_STUDENTS: {
+            return {};
         }
         default:
             return state;

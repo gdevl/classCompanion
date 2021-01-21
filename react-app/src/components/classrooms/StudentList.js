@@ -15,8 +15,18 @@ import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import Tooltip from '@material-ui/core/Tooltip';
-import { fetchEnrollment, getEnrolledStudents } from '../../store/enrolled';
-import { fetchUnenrolled, getUnenrolledStudents } from '../../store/unenrolled';
+import {
+    addStudentToClassroom,
+    enrollStudent,
+    fetchEnrollment,
+    getEnrolledStudents,
+} from '../../store/enrolled';
+import {
+    fetchUnenrolled,
+    getUnenrolledStudents,
+    removeStudentFromClassroom,
+    unenrollStudent,
+} from '../../store/unenrolled';
 
 const StudentList = ({ classroomId }) => {
     const dispatch = useDispatch();
@@ -41,22 +51,16 @@ const StudentList = ({ classroomId }) => {
             dispatch(getUnenrolledStudents(getUnenrolled));
             setLoaded(true);
         })();
-    }, [enrolled, unenrolled]);
+    }, [dispatch, classroomId]);
 
-    const handleAdd = (e) => {
-        alert(`You've enrolled the student with id:${e.target}`);
-        console.log('e.target:');
-        console.log(e.target);
+    const handleAdd = (id) => {
+        alert(`You've clicked the student with id:${id}`);
+        console.log(id);
     };
 
     const handleRemove = (id) => {
-        alert(`You've unenrolled the student with id:${id}`);
+        alert(`You've clicked the student with id:${id}`);
         console.log(id);
-        // console.log('e.target:');
-        // console.log(e.target);
-        // console.log(typeof e.id);
-        // console.log('e.props:');
-        // console.log(e.props);
     };
 
     return (

@@ -1,5 +1,6 @@
 export const GET_UNENROLLED_STUDENTS = 'GET_UNENROLLED_STUDENTS';
 export const UNENROLL_STUDENT = 'UNENROLL_STUDENT';
+export const CLEAR_UNENROLLED_STUDENTS = 'CLEAR_UNENROLLED_STUDENTS';
 
 export const getUnenrolledStudents = (students) => {
     return {
@@ -12,6 +13,12 @@ export const unenrollStudent = (student) => {
     return {
         type: UNENROLL_STUDENT,
         student,
+    };
+};
+
+export const clearUnenrolledStudents = () => {
+    return {
+        type: CLEAR_UNENROLLED_STUDENTS,
     };
 };
 
@@ -55,6 +62,9 @@ export default function reducer(state = {}, action) {
                 ...state,
                 ...action.student,
             };
+        }
+        case CLEAR_UNENROLLED_STUDENTS: {
+            return {};
         }
         default:
             return state;
