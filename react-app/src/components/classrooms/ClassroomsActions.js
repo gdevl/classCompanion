@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentClassroom } from '../../store/current_classroom';
 import { removeClassroom, deleteClassroom } from '../../store/classrooms';
 import { clearEnrolledStudents } from '../../store/enrolled';
 import { clearUnenrolledStudents } from '../../store/unenrolled';
-import StudentList from './StudentList';
-
+import TransferList from './TransferList';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-const ClassroomsActions = ({ role, classroom }) => {
+const ClassroomsActions = ({ classroomId }) => {
     const dispatch = useDispatch();
+    const role = useSelector((state) => state.currentUser.role);
+    const userId = useSelector((state) => state.currentUser.id);
     const [open, setOpen] = useState(false);
     const [activeClassroom, setActiveClassroom] = useState(null);
     const [hideEnrollment, setHideEnrollment] = useState(true);
@@ -26,45 +27,38 @@ const ClassroomsActions = ({ role, classroom }) => {
 
     const handleViewClassroom = async (e) => {
         e.preventDefault();
-        dispatch(setCurrentClassroom(e.target.value));
+        dispatch(setCurrentClassroom(classroomId));
     };
 
     const handleDeleteClassroom = async (e) => {
-        const classroomToDelete = await deleteClassroom(e.target.value);
+        const classroomToDelete = await deleteClassroom(classroomId);
         dispatch(removeClassroom(classroomToDelete));
     };
 
     const handleEnrollment = (e) => {
+        console.log('classroomId:');
+        console.log(classroomId);
         setHideEnrollment(false);
         setOpen(true);
-        setActiveClassroom(e.target.value);
+        setActiveClassroom(classroomId);
     };
 
     return (
         <>
             <div className="classrooms__actions">
-                <button value={classroom.id} onClick={handleViewClassroom}>
-                    View
-                </button>
+                <button onClick={handleViewClassroom}>View</button>
                 {role === 'instructor' ? (
-                    <button value={classroom.id} onClick={handleEnrollment}>
-                        Enrollment
-                    </button>
+                    <button onClick={handleEnrollment}>Enrollment</button>
                 ) : null}
                 {role === 'instructor' ? (
-                    <button
-                        value={classroom.id}
-                        onClick={handleDeleteClassroom}
-                    >
-                        Delete
-                    </button>
+                    <button onClick={handleDeleteClassroom}>Delete</button>
                 ) : null}
             </div>
             {!hideEnrollment ? (
                 <div className="transfer_list_dialog">
                     <Dialog open={open} onClose={handleClose}>
                         <div className="transfer_list__title-bar">
-                            <h3>{`Add / Remove Students from ${classroom.name}`}</h3>
+                            <h3>{`Add / Remove Students`}</h3>
                             <IconButton
                                 aria-label="close"
                                 onClick={handleClose}
@@ -73,8 +67,7 @@ const ClassroomsActions = ({ role, classroom }) => {
                             </IconButton>
                         </div>
                         <DialogContent>
-                            {/* <EnrollStudents classroomId={activeClassroom} /> */}
-                            <StudentList classroomId={activeClassroom} />
+                            <TransferList classroomId={classroomId} />
                         </DialogContent>
                     </Dialog>
                 </div>

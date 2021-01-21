@@ -58,10 +58,9 @@ export default function reducer(state = {}, action) {
             };
         }
         case UNENROLL_STUDENT: {
-            return {
-                ...state,
-                ...action.student,
-            };
+            const newState = { ...state };
+            delete newState[action.student.id];
+            return newState;
         }
         case CLEAR_UNENROLLED_STUDENTS: {
             return {};

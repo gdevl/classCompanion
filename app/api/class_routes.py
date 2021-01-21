@@ -116,7 +116,7 @@ def enroll(class_id):
 
     classroom.students.append(student_to_add)
 
-    new_student = student_to_add.added()
+    new_student = student_to_add.get_transfer_list()
     db.session.commit()
 
     return jsonify(new_student)
@@ -138,7 +138,7 @@ def unenroll(class_id):
     classroom.students.remove(student_to_remove)
 
     # prepare student dict to return
-    removed_student = student_to_remove.removed()
+    removed_student = student_to_remove.get_transfer_list()
     db.session.commit()
 
     return jsonify(removed_student)
@@ -209,13 +209,28 @@ def get_enrolled(class_id):
 # Fetch unenrolled students by class_id
 @class_routes.route('/<int:class_id>/unenrolled')
 def get_unenrolled(class_id):
-    students = User.query.filter(User.role == 'student')
+    students = User.query.filter(User.role == 'student').all()
     return jsonify([
             student.get_transfer_list() for student in students
             if class_id not in
             [classroom.id for classroom in student.classrooms]
         ]
     )
+
+@class_routes.route('/<int:class_id>/roster')
+def get_enrollment(class_id):
+    students = User.query.filter(User.role == 'student').all()
+    classroom = Classroom.query.get(class_id)
+
+    enrolled = [student.id for student in classroom.students]
+    all = [student.get_transfer_list() for student in students]
+
+    roster = {
+        "all": all,
+        "enrolled": enrolled,
+    }
+
+    return roster
 
 
 # Fetch groups by class_id

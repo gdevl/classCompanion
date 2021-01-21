@@ -4,8 +4,7 @@ import classrooms from './classrooms';
 import currentUser from './current_user';
 import currentClassroomId from './current_classroom';
 import currentClassroomMeta from './classroom_meta';
-import enrolled from './enrolled';
-import unenrolled from './unenrolled';
+import roster from './roster';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -14,8 +13,7 @@ const reducer = combineReducers({
     currentClassroomMeta,
     currentUser,
     currentClassroomId,
-    enrolled,
-    unenrolled,
+    roster,
 });
 
 const configureStore = (initialState) => {

@@ -25,10 +25,7 @@ const AllClassrooms = () => {
                         >
                             <h3>{classroom.name}</h3>
                             <p>Size: {classroom.size}</p>
-                            <ClassroomsActions
-                                role={currentUser.role}
-                                classroom={classroom}
-                            />
+                            <ClassroomsActions classroomId={classroom.id} />
                         </div>
                     );
                 })}
