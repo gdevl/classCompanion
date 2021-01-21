@@ -25,7 +25,10 @@ const AllClassrooms = () => {
                         >
                             <h3>{classroom.name}</h3>
                             <p>Size: {classroom.size}</p>
-                            <ClassroomsActions classroomId={classroom.id} />
+                            <ClassroomsActions
+                                classroomId={classroom.id}
+                                classroomName={classroom.name}
+                            />
                         </div>
                     );
                 })}

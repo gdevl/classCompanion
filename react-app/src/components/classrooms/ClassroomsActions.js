@@ -6,14 +6,14 @@ import { clearEnrolledStudents } from '../../store/enrolled';
 import { clearUnenrolledStudents } from '../../store/unenrolled';
 import TransferList from './TransferList';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-const ClassroomsActions = ({ classroomId }) => {
+const ClassroomsActions = ({ classroomId, classroomName }) => {
     const dispatch = useDispatch();
     const role = useSelector((state) => state.currentUser.role);
-    const userId = useSelector((state) => state.currentUser.id);
     const [open, setOpen] = useState(false);
     const [activeClassroom, setActiveClassroom] = useState(null);
     const [hideEnrollment, setHideEnrollment] = useState(true);
@@ -25,19 +25,16 @@ const ClassroomsActions = ({ classroomId }) => {
         dispatch(clearUnenrolledStudents());
     };
 
-    const handleViewClassroom = async (e) => {
-        e.preventDefault();
+    const handleViewClassroom = async () => {
         dispatch(setCurrentClassroom(classroomId));
     };
 
-    const handleDeleteClassroom = async (e) => {
+    const handleDeleteClassroom = async () => {
         const classroomToDelete = await deleteClassroom(classroomId);
         dispatch(removeClassroom(classroomToDelete));
     };
 
-    const handleEnrollment = (e) => {
-        console.log('classroomId:');
-        console.log(classroomId);
+    const handleEnrollment = () => {
         setHideEnrollment(false);
         setOpen(true);
         setActiveClassroom(classroomId);
@@ -58,7 +55,7 @@ const ClassroomsActions = ({ classroomId }) => {
                 <div className="transfer_list_dialog">
                     <Dialog open={open} onClose={handleClose}>
                         <div className="transfer_list__title-bar">
-                            <h3>{`Add / Remove Students`}</h3>
+                            <h3>{`${classroomName} Enrollment`}</h3>
                             <IconButton
                                 aria-label="close"
                                 onClick={handleClose}
