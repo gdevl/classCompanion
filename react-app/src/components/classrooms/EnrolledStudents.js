@@ -22,7 +22,10 @@ const EnrolledStudents = ({ roster, unenrollStudent }) => {
                     </ListItemAvatar>
                     <ListItemText primary={student.name} />
                     <ListItemSecondaryAction>
-                        <Tooltip title="Remove" aria-label="Remove">
+                        <Tooltip
+                            title={`Remove ${student.name}`}
+                            aria-label="Remove Student"
+                        >
                             <IconButton
                                 edge="end"
                                 color="primary"
