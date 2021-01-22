@@ -8,16 +8,42 @@ import random
 
 class_routes = Blueprint('classes', __name__)
 
+@class_routes.route('/<int:class_id>')
+def get_class_data(class_id):
+    class_data = Classroom.query.get(class_id)
+    return class_data.to_dict()
 
-@class_routes.route('/<int:id>/delete', methods=['GET', 'PATCH'])
-def delete_class(id):
+
+@class_routes.route('/<int:class_id>/delete', methods=['GET', 'PATCH'])
+def delete_class(class_id):
     if request.method == 'PATCH':
-       selected_class = Classroom.query.get(id)
-      #  print(selected_class.active)
-       selected_class.active = False
-       db.session.add(selected_class)
-       db.session.commit()
-       return jsonify('success')
+        selected_class = Classroom.query.get(class_id)
+        selected_class.active = False
+        db.session.add(selected_class)
+        db.session.commit()
+        return jsonify(selected_class.id)
+
+
+@class_routes.route('/<int:id>/students')
+def get_students(id):
+    all_students = User.query.filter(User.role.ilike("student%"))
+    students_arr = []
+    for student in all_students:
+        student_dict = student.to_dict()
+        # print(student_dict['first_name'])
+        first_name = student_dict['first_name']
+        last_name = student_dict['last_name']
+        student_id = student_dict['id']
+        students_arr.append({
+            'id': student_id,
+            'first_name': first_name,
+            'last_name': last_name
+        })
+    print(students_arr)
+    # print(all_students)
+    return jsonify(students_arr)
+    # return jsonify(classroom.students)
+
 
 @class_routes.route('/<int:id>/update-enrollment', methods=['GET', 'PATCH'])
 def update_enrollment(id):
@@ -46,6 +72,76 @@ def update_enrollment(id):
         db.session.add(selected_class)
         db.session.commit()
         return jsonify('success')
+
+
+@class_routes.route('/<int:class_id>/bulk_enroll', methods=['PATCH'])
+def bulk_enroll(class_id):
+    data = request.get_json()
+    to_add = data["add"]
+    to_remove = data["remove"]
+
+    # get classroom by id
+    classroom = Classroom.query.get(class_id)
+
+    # get all students in the database
+    all_students = User.query.filter(User.role == 'student').all()
+
+    # create list of students to add (if any)
+    students_to_add = [
+        student for student in all_students if student.id in to_add
+    ]
+
+    # add new students to classroom (if any)
+    classroom.students.extend(students_to_add)
+
+    # remove students from classroom (if any)
+    classroom.students = [
+        student for student in classroom.students
+        if student.id not in to_remove
+    ]
+
+    db.session.commit()
+    
+    return jsonify('Operation complete.')
+
+# add student to classroom
+@class_routes.route('/<int:class_id>/enroll', methods=['PATCH'])
+def enroll(class_id):
+    data = request.get_json()
+    user_id = data["userId"]
+    classroom_id = data["classroomId"]
+
+    classroom = Classroom.query.get(classroom_id)
+    student_to_add = User.query.get(user_id)
+
+    classroom.students.append(student_to_add)
+
+    new_student = student_to_add.get_transfer_list()
+    db.session.commit()
+
+    return jsonify(new_student)
+
+# remove student from classroom
+@class_routes.route('/<int:class_id>/unenroll', methods=['PATCH'])
+def unenroll(class_id):
+    # destructure request data
+    data = request.get_json()
+    user_id = data["userId"]
+    classroom_id = data["classroomId"]
+
+    # query classroom
+    classroom = Classroom.query.get(classroom_id)
+    # query student
+    student_to_remove = User.query.get(user_id)
+
+    # remove student from classroom
+    classroom.students.remove(student_to_remove)
+
+    # prepare student dict to return
+    removed_student = student_to_remove.get_transfer_list()
+    db.session.commit()
+
+    return jsonify(removed_student)
 
 
 @class_routes.route('/<int:id>/update', methods=['GET', 'PUT'])
@@ -102,19 +198,65 @@ def group_class(id, size):
         return jsonify("TEST")
 
 
+# Fetch enrolled students by class_id
+@class_routes.route('/<int:class_id>/enrolled')
+def get_enrolled(class_id):
+    classroom = Classroom.query.get(class_id)
+    students = classroom.students
+    return jsonify([student.get_transfer_list() for student in students])
 
+
+# Fetch unenrolled students by class_id
+@class_routes.route('/<int:class_id>/unenrolled')
+def get_unenrolled(class_id):
+    students = User.query.filter(User.role == 'student').all()
+    return jsonify([
+            student.get_transfer_list() for student in students
+            if class_id not in
+            [classroom.id for classroom in student.classrooms]
+        ]
+    )
+
+@class_routes.route('/<int:class_id>/roster')
+def get_enrollment(class_id):
+    students = User.query.filter(User.role == 'student').all()
+    classroom = Classroom.query.get(class_id)
+
+    enrolled = [student.id for student in classroom.students]
+    all = [student.get_transfer_list() for student in students]
+
+    roster = {
+        "all": all,
+        "enrolled": enrolled,
+    }
+
+    return roster
+
+
+# Fetch groups by class_id
 @class_routes.route('/<int:id>/groups')
-def get_class_groups(id):
-    class_groups = Group.query.filter(Group.class_id == id, Group.active == True).all()
+def get_groups(id):
+    class_groups = Group.query.filter(
+        Group.class_id == id, Group.active == True).all()
     return {"groups": [class_group.less_to_dict() for class_group in class_groups]}
 
 
+# Fetch unresolved questions by class_id
 @class_routes.route('/<int:id>/questions')
 def get_unresolved_questions(id):
-    class_questions = Question.query.filter(Question.class_id == id, Question.resolved == False).all()
+    class_questions = Question.query.filter(
+        Question.class_id == id, Question.resolved == False).all()
     return {"questions": [class_question.to_dict() for class_question in class_questions]}
 
 
+# Fetch archived questions by class_id
+@class_routes.route('/<int:id>/questions/archive')
+def get_resolved_questions(id):
+    archived_questions = Question.query.filter(
+        Question.class_id == id,
+        Question.resolved == True
+    ).all()
+    return {"questions": [archived_question.to_dict() for archived_question in archived_questions]}
 
 
 @class_routes.route('/<int:class_id>/question/<int:question_id>/answer', methods=['GET', 'POST'])
@@ -170,7 +312,6 @@ def postQuestion(class_id, user_id):
 
     # emit question
     return question.to_dict()
-
 
 
 @class_routes.route('/<int:class_id>/user/<int:student_id>/checkin',

@@ -8,6 +8,9 @@ const Theme = createMuiTheme({
     secondary: {
       main: "#2A9D8F",
     },
+    ternary: {
+      main: "#b57740",
+    },
   },
   status: {
     danger: "orange",

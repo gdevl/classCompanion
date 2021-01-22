@@ -13,15 +13,15 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import SocketContext from '../../../socketContext'
+import SocketContext from "../../../socketContext";
 
 export default function AnswerModal({ props }) {
   //   const socket = io.connect("http://localhost:5000");
-  const socket = useContext(SocketContext)
+  const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
-  const currentUser = useSelector((state) => state.store.current_user);
-  const currentClass = useSelector((state) => state.store.current_class);
+  const currentUser = useSelector((state) => state.currentUser);
+  const currentClassId = useSelector((state) => state.currentClassId);
 
   const [answer, setAnswer] = React.useState("");
   const handleAnswerChange = (event) => {
@@ -31,7 +31,7 @@ export default function AnswerModal({ props }) {
   const handleDismiss = async () => {
     //implement question dismiss here
     const response = await fetch(
-      `/api/classes/${currentClass.id}/question/${props.question.id}/dismiss`,
+      `/api/classes/${currentClassId}/question/${props.question.id}/dismiss`,
       {
         method: "POST",
         headers: {
@@ -48,7 +48,7 @@ export default function AnswerModal({ props }) {
       dispatch(setUserClasses(classrooms));
       socket.emit("dismiss", {
         answer: answer,
-        classroom: currentClass.id
+        classroom: currentClassId,
       });
       props.setExpanded(null);
       props.setOpen(null);
@@ -60,7 +60,7 @@ export default function AnswerModal({ props }) {
   const handleSubmit = async () => {
     //implement form submission here
     const response = await fetch(
-      `/api/classes/${currentClass.id}/question/${props.question.id}/answer`,
+      `/api/classes/${currentClassId}/question/${props.question.id}/answer`,
       {
         method: "POST",
         headers: {
@@ -77,7 +77,7 @@ export default function AnswerModal({ props }) {
       console.log(answer);
       socket.emit("answer", {
         answer: answer,
-        classroom: currentClass.id
+        classroom: currentClassId,
       });
       const classrooms = await fetchClassrooms(currentUser.id);
       dispatch(setUserClasses(classrooms));

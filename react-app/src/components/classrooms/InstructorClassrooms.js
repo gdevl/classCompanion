@@ -8,7 +8,9 @@ import {
   InputLabel,
   Input,
   Typography,
-  TextField, DialogContentText, DialogContent
+  TextField,
+  DialogContentText,
+  DialogContent,
 } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -239,7 +241,6 @@ const InstructorClassrooms = () => {
   //   setModalOpen(false);
   // };
 
-
   const handleInputChange = (e) => {
     if (e.target.id === "name-input") {
       setClassName(e.target.value);
@@ -388,9 +389,9 @@ const InstructorClassrooms = () => {
   }
 
   const leftChecked = intersection(checked, left);
-  console.log('left', leftChecked)
+  console.log("left", leftChecked);
   const rightChecked = intersection(checked, right);
-  console.log('right', rightChecked)
+  console.log("right", rightChecked);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -401,7 +402,7 @@ const InstructorClassrooms = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    console.log('rerender')
+    console.log("rerender");
     setChecked(newChecked);
   };
 
@@ -502,9 +503,10 @@ const InstructorClassrooms = () => {
       if (classroom.id === Number(classId)) {
         populateEnrolledStudentIdsArray(classroom.students);
         classroom.students.forEach((student) => {
-          enrolledStudents.push(
-            { description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`, id: student.id }
-          );
+          enrolledStudents.push({
+            description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`,
+            id: student.id,
+          });
         });
       }
     });
@@ -519,13 +521,17 @@ const InstructorClassrooms = () => {
     const unEnrolledStudents = [];
 
     await populateEnrolledStudentsArray(classId);
-    const res = await fetch(`api/classes/${classId}/students`);
+    // const res = await fetch(`api/classes/${classId}/students`);
+    const res = await fetch(`api/students`);
     const allStudentsArr = await res.json();
+    console.log("allStudentsArr:");
+    console.log(allStudentsArr);
     allStudentsArr.forEach((student) => {
       if (!test.includes(student.id)) {
-        unEnrolledStudents.push(
-          { description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`, id: student.id }
-        );
+        unEnrolledStudents.push({
+          description: `${student.first_name} ${student.last_name} - Student id: ${student.id}`,
+          id: student.id,
+        });
       }
     });
     setLeft(unEnrolledStudents);

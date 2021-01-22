@@ -50,13 +50,55 @@ class User(db.Model, UserMixin):
             "avatar_url": self.avatar_url,
             "role": self.role,
         }
-    
+
     def less_to_dict(self):
         return {
             "id": self.id,
             "first_name": self.first_name,
             "last_name": self.last_name,
-            "checkins": [check_in.to_dict() for check_in in self.check_ins]
+        }
+
+    def truncated(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "name": f'{self.first_name} {self.last_name}',
+        }
+
+    def less_to_dict_checkins(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "name": f'{self.first_name} {self.last_name}',
+            "checkins": [check_in.to_dict() for check_in in self.check_ins],
+            "questions": [question.to_dict() for question in self.questions],
+        }
+    
+    def get_name(self):
+        return {
+            "id": self.id,
+            "name": f'{self.first_name} {self.last_name}',
+        }
+
+    def get_transfer_list(self):
+        return {
+            "id": self.id,
+            "name": f'{self.first_name} {self.last_name}',
+            "avatar_url": self.avatar_url,
+        }
+    
+    def removed(self):
+        return {
+            "id": self.id,
+            "name": f'{self.first_name} {self.last_name}',
+            "operation": "removed",
+        }
+
+    def added(self):
+        return {
+            "id": self.id,
+            "name": f'{self.first_name} {self.last_name}',
+            "operation": "added",
         }
 
     def get_user_classrooms(self):

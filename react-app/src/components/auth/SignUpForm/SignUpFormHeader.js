@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 
-const formHeader = "We'll need some info from you to get started.";
+const formHeader = "We'll need some info to get started.";
 const formSubHeader = "Usernames are optional— all other fields are required.";
 
 const SignUpFormHeader = () => {

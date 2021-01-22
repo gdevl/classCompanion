@@ -30,6 +30,7 @@ PyJWT = "==1.7.1"
 sqlalchemy-utils = "*"
 flask-socketio = "*"
 eventlet = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 psycopg2-binary = "==2.8.6"
