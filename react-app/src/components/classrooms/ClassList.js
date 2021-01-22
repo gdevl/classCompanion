@@ -4,7 +4,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import IconButton from '@material-ui/core/IconButton';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
-const ClassList = ({ classMeta }) => {
+const ClassList = ({ classMeta, role }) => {
     return (
         <>
             {classMeta['students'].length > 0 ? (
@@ -17,20 +17,23 @@ const ClassList = ({ classMeta }) => {
                         <div className="student-avatar">
                             <Avatar src={`${student.avatar_url}`} />
                         </div>
-                        <div className="student-ci-qs">
-                            <CheckCircleIcon
-                                fontSize="medium"
-                                color="disabled"
-                                //   style={{ color: 'green' }}
-                                className="student-checked_in"
-                            />
-                            <QuestionAnswerIcon
-                                color="disabled"
-                                //   color="primary"
-                                fontSize="medium"
-                                className="student-question"
-                            />
-                        </div>
+                        {role === 'instructor' ? (
+                            <div className="student-ci-qs">
+                                <CheckCircleIcon
+                                    fontSize="medium"
+                                    color="disabled"
+                                    //   style={{ color: 'green' }}
+                                    className="student-checked_in"
+                                />
+
+                                <QuestionAnswerIcon
+                                    color="disabled"
+                                    //   color="primary"
+                                    fontSize="medium"
+                                    className="student-question"
+                                />
+                            </div>
+                        ) : null}
                     </div>
                 ))
             ) : (

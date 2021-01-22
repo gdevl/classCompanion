@@ -33,7 +33,15 @@ const SingleClassroom = () => {
     }
 
     return (
-        <> {classMeta ? <ClassroomContainer classMeta={classMeta} /> : null}</>
+        <>
+            {' '}
+            {classMeta ? (
+                <ClassroomContainer
+                    classMeta={classMeta}
+                    role={currentUser.role}
+                />
+            ) : null}
+        </>
     );
 
     if (!classMeta.students) {

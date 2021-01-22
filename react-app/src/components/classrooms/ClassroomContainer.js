@@ -7,11 +7,7 @@ import MeetingDetailsBlock from './MeetingDetailsBlock';
 import ClassList from './ClassList';
 import ClassGroups from './ClassGroups';
 
-const ClassroomContainer = ({ classMeta }) => {
-    useEffect(() => {
-        console.log('classMeta:');
-        console.log(classMeta);
-    }, []);
+const ClassroomContainer = ({ classMeta, role }) => {
     return (
         <>
             <Tabs>
@@ -23,24 +19,33 @@ const ClassroomContainer = ({ classMeta }) => {
                 <TabPanel>
                     <div className="classroom__grid-classroom_container">
                         <section className="classroom__grid-item-top">
-                            <InstructorBlock classMeta={classMeta} />
+                            <InstructorBlock
+                                classMeta={classMeta}
+                                role={role}
+                            />
                         </section>
                         <section className="classroom__grid-item-top">
-                            <ClassDetailsBlock classMeta={classMeta} />
+                            <ClassDetailsBlock
+                                classMeta={classMeta}
+                                role={role}
+                            />
                         </section>
                         <section className="classroom__grid-item-top">
-                            <MeetingDetailsBlock classMeta={classMeta} />
+                            <MeetingDetailsBlock
+                                classMeta={classMeta}
+                                role={role}
+                            />
                         </section>
                     </div>
                 </TabPanel>
                 <TabPanel>
                     <div className="classroom_container-classlist">
-                        <ClassList classMeta={classMeta} />
+                        <ClassList classMeta={classMeta} role={role} />
                     </div>
                 </TabPanel>
                 <TabPanel>
                     <div className="classroom_container-classgroups">
-                        <ClassGroups classMeta={classMeta} />
+                        <ClassGroups classMeta={classMeta} role={role} />
                     </div>
                 </TabPanel>
             </Tabs>
