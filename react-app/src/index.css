@@ -77,6 +77,11 @@ h5, h6 {
     text-align: center;
 }
 
+.no-students {
+    grid-column: 1 / 3;
+    text-align: center;
+}
+
 
 .student-ci-qs {
     display: flex;
@@ -173,12 +178,14 @@ h5, h6 {
 }
 
 .react-tabs__tab-list {
-    border-bottom: 1px solid rgba(64, 81, 181, 1) !important;
-    font-family: "Prompt", sans-serif;
+    border-bottom: 1px solid rgba(64, 81, 181, 0.5) !important;
+    font-family: "Mukta", sans-serif;
 }
 
 .react-tabs__tab--selected {
-    border-color: rgba(64, 81, 181, 1) !important;
+    /* background-color: yellow !important; */
+    border-color: rgba(64, 81, 181, 0.5) !important;
+    font-weight: 700;
 }
 
 .classroom__grid {
@@ -563,10 +570,16 @@ h5, h6 {
     .classroom_container-classlist {
         grid-template-columns: repeat(3, 1fr);
     }
+    .no-students {
+        grid-column: 1 / 4;
+    }
 }
 
 @media screen and (min-width: 800px) {
     .classroom_container-classlist {
         grid-template-columns: repeat(4, 1fr);
+    }
+    .no-students {
+        grid-column: 1 / 5;
     }
 }

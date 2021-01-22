@@ -7,33 +7,37 @@ import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 const ClassList = ({ classMeta }) => {
     return (
         <>
-            {classMeta['students']
-                ? classMeta['students'].map((student) => (
-                      <div className="classroom_container_student-deets">
-                          <p className="student-name">
-                              {`${student.first_name} ${student.last_name}`}
-                          </p>
-                          {/* <p className="student-email">{student.email}</p> */}
-                          <div className="student-avatar">
-                              <Avatar src={`${student.avatar_url}`} />
-                          </div>
-                          <div className="student-ci-qs">
-                              <CheckCircleIcon
-                                  fontSize="medium"
-                                  color="disabled"
-                                  //   style={{ color: 'green' }}
-                                  className="student-checked_in"
-                              />
-                              <QuestionAnswerIcon
-                                  color="disabled"
-                                  //   color="primary"
-                                  fontSize="medium"
-                                  className="student-question"
-                              />
-                          </div>
-                      </div>
-                  ))
-                : null}
+            {classMeta['students'].length > 0 ? (
+                classMeta['students'].map((student) => (
+                    <div className="classroom_container_student-deets">
+                        <p className="student-name">
+                            {`${student.first_name} ${student.last_name}`}
+                        </p>
+                        {/* <p className="student-email">{student.email}</p> */}
+                        <div className="student-avatar">
+                            <Avatar src={`${student.avatar_url}`} />
+                        </div>
+                        <div className="student-ci-qs">
+                            <CheckCircleIcon
+                                fontSize="medium"
+                                color="disabled"
+                                //   style={{ color: 'green' }}
+                                className="student-checked_in"
+                            />
+                            <QuestionAnswerIcon
+                                color="disabled"
+                                //   color="primary"
+                                fontSize="medium"
+                                className="student-question"
+                            />
+                        </div>
+                    </div>
+                ))
+            ) : (
+                <p className="no-students">
+                    You haven't added any students to this classroom.
+                </p>
+            )}
         </>
     );
 };
