@@ -6,6 +6,8 @@ import ClassDetailsBlock from './ClassDetailsBlock';
 import MeetingDetailsBlock from './MeetingDetailsBlock';
 import ClassList from './ClassList';
 import ClassGroups from './ClassGroups';
+import GroupDetailsBlock from './GroupDetailsBlock';
+import OverviewBlock from './OverviewBlock';
 
 const ClassroomContainer = ({ classMeta, role }) => {
     return (
@@ -18,12 +20,21 @@ const ClassroomContainer = ({ classMeta, role }) => {
                 </TabList>
                 <TabPanel>
                     <div className="classroom__grid-classroom_container">
-                        <section className="classroom__grid-item-top">
-                            <InstructorBlock
-                                classMeta={classMeta}
-                                role={role}
-                            />
-                        </section>
+                        {role === 'instructor' ? (
+                            <section className="classroom__grid-item-top">
+                                <OverviewBlock
+                                    classMeta={classMeta}
+                                    role={role}
+                                />
+                            </section>
+                        ) : (
+                            <section className="classroom__grid-item-top">
+                                <InstructorBlock
+                                    classMeta={classMeta}
+                                    role={role}
+                                />
+                            </section>
+                        )}
                         <section className="classroom__grid-item-top">
                             <ClassDetailsBlock
                                 classMeta={classMeta}
@@ -32,6 +43,12 @@ const ClassroomContainer = ({ classMeta, role }) => {
                         </section>
                         <section className="classroom__grid-item-top">
                             <MeetingDetailsBlock
+                                classMeta={classMeta}
+                                role={role}
+                            />
+                        </section>
+                        <section className="classroom__grid-item-top">
+                            <GroupDetailsBlock
                                 classMeta={classMeta}
                                 role={role}
                             />

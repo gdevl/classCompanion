@@ -1,9 +1,12 @@
 import React from 'react';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import List from '@material-ui/core/List';
 
-const MeetingDetailsBlock = ({ classMeta }) => {
+const GroupDetailsBlock = ({ classMeta }) => {
     return (
         <>
-            <h3>Meeting Details</h3>
+            <h3>Group Creation</h3>
             {classMeta ? (
                 <>
                     <div className="classroom__details-row">
@@ -32,4 +35,4 @@ const MeetingDetailsBlock = ({ classMeta }) => {
     );
 };
 
-export default MeetingDetailsBlock;
+export default GroupDetailsBlock;
