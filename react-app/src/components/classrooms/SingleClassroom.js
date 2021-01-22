@@ -4,6 +4,7 @@ import {
     getClassroomMeta,
     fetchClassroomData,
 } from '../../store/classroom_meta';
+import ClassroomContainer from './ClassroomContainer';
 import UserCardContainer from '../InstructorClassroomDashboard/UserCard/UserCardContainer';
 import GroupCardContainer from '../InstructorClassroomDashboard/GroupCard/GroupCardContainer';
 
@@ -21,19 +22,19 @@ const SingleClassroom = () => {
             dispatch(getClassroomMeta(query));
         })();
         setLoaded(true);
-    }, []);
+    }, [currentClassroomId, dispatch]);
 
     if (!currentUser) return null;
     if (!currentClassroomId) return null;
     if (!classMeta) return null;
-    console.log('classMeta: ', classMeta);
-    console.log('students: ', students);
-    console.log('loaded:');
-    console.log(loaded);
 
     if (!loaded) {
         return <p>Loading...</p>;
     }
+
+    return (
+        <> {classMeta ? <ClassroomContainer classMeta={classMeta} /> : null}</>
+    );
 
     if (!classMeta.students) {
         return (
@@ -44,31 +45,6 @@ const SingleClassroom = () => {
             </>
         );
     }
-
-    // if (!classMeta.students) {
-    //     console.log('loaded:');
-    //     console.log(loaded);
-    //     console.log('no students');
-    //     return (
-    //         <>
-    //             <div className="enroll-students-instructions-container">
-    //                 <div>
-    //                     <h3 className="enroll-students-instructions-heading">
-    //                         You Have not yet Enrolled any Students
-    //                     </h3>
-    //                 </div>
-    //                 <br></br>
-    //                 <div>
-    //                     <h3>
-    //                         You Can Enroll Students by Clicking "My Classes"
-    //                         Followed by "Enroll Students" on the Desired Class
-    //                         Card
-    //                     </h3>
-    //                 </div>
-    //             </div>
-    //         </>
-    //     );
-    // }
 
     //if there aren't any groups set, render everyone individually
     if (!classMeta.groups.length >= 1) {
@@ -98,15 +74,6 @@ const SingleClassroom = () => {
             </>
         );
     }
-
-    //   return (
-    //     <>
-    //       <div className="classroom__details">
-    //         <h1>{classMeta.name}</h1>
-    //       </div>
-    //       <p>{console.log(currentClassroom)}</p>
-    //     </>
-    //   );
 };
 
 export default SingleClassroom;

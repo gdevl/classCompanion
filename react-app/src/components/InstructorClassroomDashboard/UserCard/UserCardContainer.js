@@ -1,11 +1,11 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import UserCard from "./UserCard";
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import UserCard from './UserCard';
 
 export default function UserCardContainer({ props }) {
-  return (
-    <Grid item>
-      <UserCard props={props} />
-    </Grid>
-  );
+    return (
+        <Grid item className="user_card_container">
+            <UserCard props={props} />
+        </Grid>
+    );
 }
