@@ -1,36 +1,30 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-const useStyles = makeStyles({
-    root: {
-        flexGrow: 1,
-    },
-});
+const ClassroomTabs = () => {
+    const [view, setView] = useState(0);
 
-export default function CenteredTabs() {
-    const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const handleChange = (event, newView) => {
+        setView(newView);
     };
 
     return (
-        <Paper className={classes.root}>
+        <>
             <Tabs
-                value={value}
+                value={view}
                 onChange={handleChange}
                 indicatorColor="primary"
                 textColor="primary"
                 centered
             >
-                <Tab label="Item One" />
-                <Tab label="Item Two" />
-                <Tab label="Item Three" />
+                <Tab label="Classroom Details" />
+                <Tab label="Classroom Roster" />
             </Tabs>
-        </Paper>
+            <TabPanel value={view}>Classroom Details</TabPanel>
+            <TabPanel value={view}>Classroom Roster</TabPanel>
+        </>
     );
-}
+};
+
+export default ClassroomTabs;
