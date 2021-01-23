@@ -87,7 +87,11 @@ const App = ({ socket }) => {
                     title={siteTitle}
                 />
                 <div className="negative-space"></div>
-                {currentClassroomId ? <SingleClassroom /> : <AllClassrooms />}
+                {currentClassroomId ? (
+                    <SingleClassroom userId={currentUser.id} />
+                ) : (
+                    <AllClassrooms />
+                )}
                 <div className="negative-space"></div>
                 <Footer />
             </ProtectedRoute>

@@ -28,6 +28,7 @@ const AllClassrooms = () => {
                             <ClassroomsActions
                                 classroomId={classroom.id}
                                 classroomName={classroom.name}
+                                userId={currentUser.id}
                             />
                         </div>
                     );

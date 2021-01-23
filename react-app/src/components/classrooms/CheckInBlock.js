@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const CheckInBlock = ({ classMeta }) => {
-    const studentId = useSelector((state) => state.currentUser.id);
-    // const checkIns = classMeta['check_ins'];
-    // let checkedIn = checkIns.includes(studentId);
+const CheckInBlock = ({ classMeta, userId }) => {
+    const [checkedIn, setCheckedIn] = useState(false);
+    const checkIn = {
+        student_id: userId,
+        class_id: classMeta['id'],
+    };
 
     return (
         <>
             <h3>Check In</h3>
+            <button>Check-In</button>
         </>
     );
 };

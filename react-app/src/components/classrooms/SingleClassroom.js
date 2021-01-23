@@ -8,13 +8,12 @@ import ClassroomContainer from './ClassroomContainer';
 import UserCardContainer from '../InstructorClassroomDashboard/UserCard/UserCardContainer';
 import GroupCardContainer from '../InstructorClassroomDashboard/GroupCard/GroupCardContainer';
 
-const SingleClassroom = () => {
+const SingleClassroom = ({ userId }) => {
     const [loaded, setLoaded] = useState(false);
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.currentUser);
     const currentClassroomId = useSelector((state) => state.currentClassroomId);
     const classMeta = useSelector((state) => state.currentClassroomMeta);
-    const students = classMeta.students;
 
     useEffect(() => {
         (async () => {
@@ -39,6 +38,7 @@ const SingleClassroom = () => {
                 <ClassroomContainer
                     classMeta={classMeta}
                     role={currentUser.role}
+                    userId={userId}
                 />
             ) : null}
         </>

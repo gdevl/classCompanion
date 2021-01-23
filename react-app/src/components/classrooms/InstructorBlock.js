@@ -7,10 +7,15 @@ const InstructorBlock = ({ classMeta }) => {
             <h3>Instructors</h3>
             {classMeta['instructors']
                 ? classMeta['instructors'].map((instructor) => (
-                      <div className="user_avatar-row">
-                          <Avatar src={`${instructor.avatar_url}`} />
-                          <p>{`${instructor.first_name} ${instructor.last_name}`}</p>
-                      </div>
+                      <>
+                          <div className="user_avatar-row">
+                              <Avatar src={`${instructor.avatar_url}`} />
+                              <p>{`${instructor.first_name} ${instructor.last_name}`}</p>
+                          </div>
+                          <div className="ask_question_row">
+                              <button>Ask A Question</button>
+                          </div>
+                      </>
                   ))
                 : null}
         </>

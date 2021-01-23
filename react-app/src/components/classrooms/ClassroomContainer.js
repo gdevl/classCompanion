@@ -10,7 +10,7 @@ import GroupDetailsBlock from './GroupDetailsBlock';
 import OverviewBlock from './OverviewBlock';
 import CheckInBlock from './CheckInBlock';
 
-const ClassroomContainer = ({ classMeta, role }) => {
+const ClassroomContainer = ({ classMeta, role, userId }) => {
     return (
         <>
             <Tabs>
@@ -60,6 +60,7 @@ const ClassroomContainer = ({ classMeta, role }) => {
                                 <CheckInBlock
                                     classMeta={classMeta}
                                     role={role}
+                                    userId={userId}
                                 />
                             </section>
                         )}
