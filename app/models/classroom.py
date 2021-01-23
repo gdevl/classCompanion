@@ -68,3 +68,10 @@ class Classroom(db.Model):
             "name": self.name,
             "size": len(self.students)
         }
+
+    def get_active_groups(self):
+        return {
+            "groups": [
+                group.less_to_dict() for group in self.groups if group.active
+            ]
+        }

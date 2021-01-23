@@ -33,8 +33,6 @@ class Group(db.Model):
     
     def less_to_dict(self):
         return {
-            "id": self.id,
             "class_id": self.class_id,
-            "active": self.active,
             "members": [member.id for member in self.members]
         }

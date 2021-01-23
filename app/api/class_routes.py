@@ -159,43 +159,148 @@ def update_class(id):
     return jsonify({"Error"})
 
 
-@class_routes.route('/<int:id>/group/<int:size>', methods=['GET', 'POST', 'PUT'])
-def group_class(id, size):
-    if request.method == 'POST':
-        selected_class = Classroom.query.get(id)
-        for group in selected_class.groups:
-            if group.active:
-                group.active = False
-                db.session.add(group)
-                db.session.commit()
-        students = selected_class.students.copy()
-        random.shuffle(students)
-        numGroups = math.ceil(len(students) / size)
-        print('student length: ', len(students))
-        print('size: ', size)
-        print('numGroups: ', numGroups)
-        for i in range(numGroups):
-            members = []
-            for j in range(size):
-                if len(students) > 0:
-                    member = students.pop()
-                    members.append(member)
-            group = Group(
-                class_id=id,
-                members=members,
-            )
+@class_routes.route('/<int:class_id>/description', methods=['PATCH'])
+def update_description(class_id):
+    classroom = Classroom.query.get(class_id)
+    description_data = request.get_json()
+    new_description = description_data['description']
+
+    classroom.description = new_description
+
+    db.session.commit()
+
+    return {
+        "description": new_description,
+        "success": "yes!"
+    }
+
+
+@class_routes.route('/<int:class_id>/daily_objective', methods=['PATCH'])
+def update_daily_objective(class_id):
+    classroom = Classroom.query.get(class_id)
+    daily_objective_data = request.get_json()
+    daily_objective = daily_objective_data['daily_objective']
+
+    classroom.daily_objective = daily_objective
+
+    db.session.commit()
+
+    return {
+        "daily_objective": daily_objective,
+        "success": "yes!"
+    }
+
+
+@class_routes.route('/<int:class_id>/meeting_link', methods=['PATCH'])
+def update_meeting_link(class_id):
+    classroom = Classroom.query.get(class_id)
+    meeting_link_data = request.get_json()
+    meeting_link = meeting_link_data['meeting_link']
+
+    classroom.meeting_link = meeting_link
+
+    db.session.commit()
+
+    return {
+        "meeting_link": meeting_link,
+        "success": "yes!"
+    }
+
+@class_routes.route('/<int:class_id>/meeting_pw', methods=['PATCH'])
+def update_meeting_pw(class_id):
+    classroom = Classroom.query.get(class_id)
+    meeting_pw_data = request.get_json()
+    meeting_pw = meeting_pw_data['meeting_pw']
+
+    classroom.meeting_pw = meeting_pw
+
+    db.session.commit()
+
+    return {
+        "meeting_pw": meeting_pw,
+        "success": "yes!"
+    }
+
+@class_routes.route('/<int:class_id>/ungroup', methods=['PATCH'])
+def ungroup(class_id):
+    selected_class = Classroom.query.get(class_id)
+    for group in selected_class.groups:
+        if group.active:
+            group.active = False
+    db.session.commit()
+    
+    return jsonify(selected_class.get_active_groups())
+            
+
+
+@class_routes.route('/<int:class_id>/groups/<int:size>', methods=['POST'])
+def make_groups(class_id, size):
+    selected_class = Classroom.query.get(class_id)
+    for group in selected_class.groups:
+        if group.active:
+            group.active = False
             db.session.add(group)
             db.session.commit()
-        return jsonify("Test")
+    students = selected_class.students.copy()
+    random.shuffle(students)
+    numGroups = math.ceil(len(students) / size)
+    
+    for i in range(numGroups):
+        members = []
+        for j in range(size):
+            if len(students) > 0:
+                member = students.pop()
+                members.append(member)
+        group = Group(
+            class_id=class_id,
+            members=members,
+        )
+        db.session.add(group)
+        db.session.commit()
+    return jsonify(selected_class.get_active_groups())
 
-    if request.method == 'PUT':
-        selected_class = Classroom.query.get(id)
-        for group in selected_class.groups:
-            if group.active:
-                group.active = False
-                db.session.add(group)
-                db.session.commit()
-        return jsonify("TEST")
+
+
+
+# @class_routes.route('/<int:id>/group/<int:size>', methods=['GET', 'POST', 'PUT'])
+# def group_class(id, size):
+#     if request.method == 'POST':
+#         selected_class = Classroom.query.get(id)
+#         for group in selected_class.groups:
+#             if group.active:
+#                 group.active = False
+#                 db.session.add(group)
+#                 db.session.commit()
+#         students = selected_class.students.copy()
+#         random.shuffle(students)
+#         numGroups = math.ceil(len(students) / size)
+#         print('student length: ', len(students))
+#         print('size: ', size)
+#         print('numGroups: ', numGroups)
+#         for i in range(numGroups):
+#             members = []
+#             for j in range(size):
+#                 if len(students) > 0:
+#                     member = students.pop()
+#                     members.append(member)
+#             group = Group(
+#                 class_id=id,
+#                 members=members,
+#             )
+#             db.session.add(group)
+#             db.session.commit()
+#         return jsonify("Test")
+
+#     if request.method == 'PUT':
+#         selected_class = Classroom.query.get(id)
+#         for group in selected_class.groups:
+#             if group.active:
+#                 group.active = False
+#                 db.session.add(group)
+#                 db.session.commit()
+#         return jsonify("TEST")
+
+
 
 
 # Fetch enrolled students by class_id
@@ -257,6 +362,8 @@ def get_resolved_questions(id):
         Question.resolved == True
     ).all()
     return {"questions": [archived_question.to_dict() for archived_question in archived_questions]}
+
+
 
 
 @class_routes.route('/<int:class_id>/question/<int:question_id>/answer', methods=['GET', 'POST'])
