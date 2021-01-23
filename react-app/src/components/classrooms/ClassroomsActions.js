@@ -45,10 +45,14 @@ const ClassroomsActions = ({ classroomId, classroomName }) => {
                 <button onClick={handleViewClassroom}>View</button>
                 {role === 'instructor' ? (
                     <button onClick={handleEnrollment}>Enrollment</button>
-                ) : null}
+                ) : (
+                    <button className="use-me-for-spacing">Enrollment</button>
+                )}
                 {role === 'instructor' ? (
                     <button onClick={handleDeleteClassroom}>Delete</button>
-                ) : null}
+                ) : (
+                    <button className="use-me-for-spacing">Delete</button>
+                )}
             </div>
             {!hideEnrollment ? (
                 <div className="transfer_list_dialog">

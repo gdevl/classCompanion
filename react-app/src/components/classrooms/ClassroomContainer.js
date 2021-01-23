@@ -8,6 +8,7 @@ import ClassList from './ClassList';
 import ClassGroups from './ClassGroups';
 import GroupDetailsBlock from './GroupDetailsBlock';
 import OverviewBlock from './OverviewBlock';
+import CheckInBlock from './CheckInBlock';
 
 const ClassroomContainer = ({ classMeta, role }) => {
     return (
@@ -21,38 +22,47 @@ const ClassroomContainer = ({ classMeta, role }) => {
                 <TabPanel>
                     <div className="classroom__grid-classroom_container">
                         {role === 'instructor' ? (
-                            <section className="classroom__grid-item-top">
+                            <section className="classroom__grid-item-top bg-green">
                                 <OverviewBlock
                                     classMeta={classMeta}
                                     role={role}
                                 />
                             </section>
                         ) : (
-                            <section className="classroom__grid-item-top">
+                            <section className="classroom__grid-item-top bg-green">
                                 <InstructorBlock
                                     classMeta={classMeta}
                                     role={role}
                                 />
                             </section>
                         )}
-                        <section className="classroom__grid-item-top">
+                        <section className="classroom__grid-item-top bg-blue">
                             <ClassDetailsBlock
                                 classMeta={classMeta}
                                 role={role}
                             />
                         </section>
-                        <section className="classroom__grid-item-top">
+                        <section className="classroom__grid-item-top bg-brown">
                             <MeetingDetailsBlock
                                 classMeta={classMeta}
                                 role={role}
                             />
                         </section>
-                        <section className="classroom__grid-item-top">
-                            <GroupDetailsBlock
-                                classMeta={classMeta}
-                                role={role}
-                            />
-                        </section>
+                        {role === 'instructor' ? (
+                            <section className="classroom__grid-item-top bg-red">
+                                <GroupDetailsBlock
+                                    classMeta={classMeta}
+                                    role={role}
+                                />
+                            </section>
+                        ) : (
+                            <section className="classroom__grid-item-top bg-red">
+                                <CheckInBlock
+                                    classMeta={classMeta}
+                                    role={role}
+                                />
+                            </section>
+                        )}
                     </div>
                 </TabPanel>
                 <TabPanel>
