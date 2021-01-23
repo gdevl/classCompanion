@@ -1,25 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;600&family=Prompt:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@400;600&family=Prompt:wght@400;700&display=swap");
 html,
 body {
-  background-color: #ffffff !important;
-  box-sizing: border-box;
-  /* height: 100%; */
-  font-family: 'Mukta', sans-serif;
-  font-weight: 400;
+    background-color: #ffffff !important;
+    box-sizing: border-box;
+    /* height: 100%; */
+    font-family: "Mukta", sans-serif;
+    font-weight: 400;
 }
 
-button, p, span, form {
-    font-family: 'Mukta', sans-serif;
+button,
+p,
+span,
+form {
+    font-family: "Mukta", sans-serif;
     /* font-weight: 400; */
 }
 
-h1, h2, h3, h4 {
-    font-family: 'Prompt', sans-serif;
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Prompt", sans-serif;
     font-weight: 700;
 }
 
-h5, h6 {
-    font-family: 'Prompt', sans-serif;
+h5,
+h6 {
+    font-family: "Prompt", sans-serif;
     font-weight: 500;
 }
 
@@ -39,7 +46,8 @@ h5, h6 {
 .classroom_container-block {
     background-color: rgba(42, 157, 143, 1);
     border-radius: 10px;
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     box-sizing: border-box;
     flex: 0 1 1;
     padding: 1rem;
@@ -100,7 +108,34 @@ h5, h6 {
 }
 
 .classroom_container-classgroups {
+    /* height: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: 120px 120px 120px; */
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
     padding: 1rem;
+}
+
+.classroom__group {
+    background-color: rgba(64, 81, 181, 0.8);
+    /* border: 1px dotted rgba(64, 81, 181, 1); */
+    border-radius: 10px;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    height: auto;
+    /* width: 200px; */
+    margin: 0.25rem;
+    padding: 1rem;
+    width: auto;
+}
+
+.classroom__group h3 {
+    color: white;
+    margin: 0.25rem 0.75rem 0.75rem;
+    text-align: center;
 }
 
 .no-groups {
@@ -111,7 +146,6 @@ h5, h6 {
     grid-column: 1 / 3;
     text-align: center;
 }
-
 
 .student-ci-qs {
     display: flex;
@@ -127,20 +161,22 @@ h5, h6 {
     /* padding: 1rem; */
 }
 
-
 .classroom_container_student-deets {
-    background-color: rgba(42, 157, 143, 0.2);
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    /* background-color: rgba(42, 157, 143, 0.8) !important; */
+    background-color: white;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     display: grid;
     /* border: 1px solid rgba(64, 81, 181, 1); */
     border-radius: 10px;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
     grid-template-areas:
-    "a n n n"
-    "a . . ."
-    "a . . c"
-    "a . . c";
+        "a n n n"
+        "a . . ."
+        "a . . c"
+        "a . . c";
+    margin: 0.25rem;
     padding: 0.5rem;
 }
 
@@ -149,7 +185,6 @@ h5, h6 {
     flex-flow: column nowrap;
     justify-content: center;
     grid-area: a;
-
 }
 
 .student-name,
@@ -160,7 +195,7 @@ h5, h6 {
 .student-email {
     grid-area: e;
     /* outline: 1px solid orange; */
-    text-align:right;
+    text-align: right;
 }
 
 .student-name {
@@ -236,7 +271,8 @@ h5, h6 {
 .classroom__grid-item-top {
     border-radius: 10px;
     box-sizing: border-box;
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     color: white;
     flex: 1 1 33%;
     margin: 1rem;
@@ -251,13 +287,13 @@ h5, h6 {
     background-color: rgba(42, 157, 143, 1);
     border-radius: 10px;
     box-sizing: border-box;
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     color: white;
     flex: 0 1 1;
     margin: 1rem;
     padding: 1rem;
 }
-
 
 .classroom__details-row {
     align-items: flex-start;
@@ -272,12 +308,12 @@ h5, h6 {
     flex: 1 1 100%;
 }
 .classrooms-container {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .classroom-name {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .classrooms__actions button {
@@ -290,7 +326,7 @@ h5, h6 {
     font-family: "Prompt", sans-serif;
     letter-spacing: 0.03em;
     line-height: 1.75;
-    margin: 0 .25rem 0 0;
+    margin: 0 0.25rem 0 0;
     padding: 3px 8px;
     text-transform: uppercase;
 }
@@ -310,35 +346,35 @@ h5, h6 {
     flex-flow: row nowrap;
 }
 
-.plus-icon{
-  display: flex;
-  align-items: center;
-  /* margin-left: 5px */
+.plus-icon {
+    display: flex;
+    align-items: center;
+    /* margin-left: 5px */
 }
 .outlined {
-  /* height: calc(100vh - 128px); */
-  /* height: 100%; */
-  margin: 10px;
-  outline: 1px solid pink;
+    /* height: calc(100vh - 128px); */
+    /* height: 100%; */
+    margin: 10px;
+    outline: 1px solid pink;
 }
-.appContainer{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+.appContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
-.userCardContainer{
-    width: calc(100% * (1/4) - 10px - 1px)
+.userCardContainer {
+    width: calc(100% * (1 / 4) - 10px - 1px);
 }
 
 .negative-space {
-  height: 64px;
+    height: 64px;
 }
 
 .content__divider {
-  margin: 2em 0 !important;
+    margin: 2em 0 !important;
 }
 
 .landing__container {
@@ -387,19 +423,16 @@ h5, h6 {
 }
 
 .landing h1,
-.landing h2
-{
+.landing h2 {
     color: rgba(240, 240, 240, 1);
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
 }
 
 .landing__callout-featured-icon,
 .landing__callout-featured h3,
-.landing__callout-featured h4
-{
+.landing__callout-featured h4 {
     color: rgba(240, 240, 240, 1);
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
-
 }
 
 .landing__callout-featured-bold {
@@ -407,8 +440,7 @@ h5, h6 {
 }
 
 .landing__callout-featured h3,
-.landing__callout-featured h4
-{
+.landing__callout-featured h4 {
     margin: 0 auto;
 }
 
@@ -445,8 +477,8 @@ h5, h6 {
 }
 
 .account__creation_link:hover {
-    border-bottom: 1px solid #2A9D8F;
-    color: #2A9D8F;
+    border-bottom: 1px solid #2a9d8f;
+    color: #2a9d8f;
 }
 
 .add_classroom_action {
@@ -487,8 +519,7 @@ h5, h6 {
 }
 
 .footer__text,
-.footer__icon
-{
+.footer__icon {
     color: white;
     font-family: "Mukta" !important;
 }
@@ -529,7 +560,6 @@ h5, h6 {
     flex-flow: column nowrap;
     height: 100vh;
     justify-content: center;
-
 }
 
 .splash__footer-negative-space {
@@ -546,9 +576,8 @@ h5, h6 {
 }
 
 .splash__topbar-title,
-.splash__hero-title
-{
-    font-family: 'Prompt', sans-serif !important;
+.splash__hero-title {
+    font-family: "Prompt", sans-serif !important;
     font-weight: 700;
 }
 
@@ -571,7 +600,7 @@ h5, h6 {
 }
 
 .splash__callout-featured-icon {
-    color: #2A9D8F;
+    color: #2a9d8f;
     font-size: 3rem !important;
 }
 
@@ -582,7 +611,7 @@ h5, h6 {
 }
 
 .MuiTextField-root > label {
-    font-family: 'Mukta', sans-serif !important;
+    font-family: "Mukta", sans-serif !important;
 }
 
 .user_card_container {
