@@ -40,15 +40,19 @@ const GroupCreation = ({ classroomId, makeGroups }) => {
     };
 
     useEffect(() => {
+        console.log('make groups');
         makeGroups(classroomId, groupSize);
     }, [groupSize]);
 
+    const fetchClassroomData = () => {};
+
     useEffect(() => {
+        console.log('make groups');
         (async () => {
             const query = await fetchClassroomData(classroomId);
             dispatch(getClassroomMeta(query));
         })();
-    }, [makeGroups]);
+    }, []);
 
     return (
         <>

@@ -12,13 +12,14 @@ const BreakGroups = ({ classroomId, breakGroups }) => {
     };
 
     useEffect(() => {
+        console.log('break groups');
         (async () => {
             const query = await fetchClassroomData(classroomId);
             dispatch(getClassroomMeta(query));
         })();
-    }, [breakGroups]);
+    }, [handleUngroup]);
 
-    return <button onClick={() => handleUngroup()}>Ungroup</button>;
+    return <button onClick={handleUngroup}>Ungroup</button>;
 };
 
 export default BreakGroups;

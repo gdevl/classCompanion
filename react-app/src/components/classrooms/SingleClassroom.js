@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     getClassroomMeta,
     fetchClassroomData,
-} from "../../store/classroom_meta";
-import ClassroomContainer from "./ClassroomContainer";
-import UserCardContainer from "../InstructorClassroomDashboard/UserCard/UserCardContainer";
-import GroupCardContainer from "../InstructorClassroomDashboard/GroupCard/GroupCardContainer";
+} from '../../store/classroom_meta';
+import ClassroomContainer from './ClassroomContainer';
+import UserCardContainer from '../InstructorClassroomDashboard/UserCard/UserCardContainer';
+import GroupCardContainer from '../InstructorClassroomDashboard/GroupCard/GroupCardContainer';
 
 const SingleClassroom = ({ userId }) => {
     const [loaded, setLoaded] = useState(false);
@@ -21,7 +21,7 @@ const SingleClassroom = ({ userId }) => {
             dispatch(getClassroomMeta(query));
         })();
         setLoaded(true);
-    }, [currentClassroomId, dispatch]);
+    }, [currentClassroomId]);
 
     if (!currentUser) return null;
     if (!currentClassroomId) return null;
@@ -33,8 +33,8 @@ const SingleClassroom = ({ userId }) => {
 
     return (
         <>
-            {" "}
-            {classMeta["id"] ? (
+            {' '}
+            {classMeta['id'] ? (
                 <ClassroomContainer
                     classMeta={classMeta}
                     role={currentUser.role}
