@@ -15,10 +15,16 @@ const ClassGroups = ({ classMeta, role }) => {
             {Object.keys(groups).length > 0 ? (
                 Object.values(groups).map((group) => {
                     return (
-                        <div className="classroom__group">
+                        <div
+                            key={`gp-${groupNumber.current}`}
+                            className="classroom__group"
+                        >
                             <h3>{`group ${(groupNumber.current += 1)}`}</h3>
                             {group.members.map((member) => (
-                                <div className="classroom_container_student-deets">
+                                <div
+                                    key={member.id}
+                                    className="classroom_container_student-deets"
+                                >
                                     <p className="student-name">
                                         {member.name}
                                     </p>
