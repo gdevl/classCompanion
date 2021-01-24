@@ -339,11 +339,11 @@ def get_enrollment(class_id):
 
 
 # Fetch groups by class_id
-@class_routes.route('/<int:id>/groups')
-def get_groups(id):
+@class_routes.route('/<int:class_id>/groups')
+def get_groups(class_id):
     class_groups = Group.query.filter(
-        Group.class_id == id, Group.active == True).all()
-    return {"groups": [class_group.less_to_dict() for class_group in class_groups]}
+        Group.class_id == class_id, Group.active == True).all()
+    return jsonify([class_group.get_members() for class_group in class_groups])
 
 
 # Fetch unresolved questions by class_id

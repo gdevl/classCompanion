@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import InstructorBlock from './InstructorBlock';
-import ClassDetailsBlock from './ClassDetailsBlock';
-import MeetingDetailsBlock from './MeetingDetailsBlock';
-import ClassList from './ClassList';
-import ClassGroups from './ClassGroups';
-import GroupDetailsBlock from './GroupDetailsBlock';
-import OverviewBlock from './OverviewBlock';
-import CheckInBlock from './CheckInBlock';
+import React, { useEffect, useState } from "react";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+import InstructorBlock from "./InstructorBlock";
+import ClassDetailsBlock from "./ClassDetailsBlock";
+import MeetingDetailsBlock from "./MeetingDetailsBlock";
+import ClassList from "./ClassList";
+import ClassGroups from "./ClassGroups";
+import GroupDetailsBlock from "./GroupDetailsBlock";
+import OverviewBlock from "./OverviewBlock";
+import CheckInBlock from "./CheckInBlock";
 
-const ClassroomContainer = ({ classMeta, role, userId }) => {
+const ClassroomContainer = ({ classMeta, groups, role, userId }) => {
     return (
         <>
             <Tabs>
@@ -21,7 +21,7 @@ const ClassroomContainer = ({ classMeta, role, userId }) => {
                 </TabList>
                 <TabPanel>
                     <div className="classroom__grid-classroom_container">
-                        {role === 'instructor' ? (
+                        {role === "instructor" ? (
                             <section className="classroom__grid-item-top bg-green">
                                 <OverviewBlock
                                     classMeta={classMeta}
@@ -48,7 +48,7 @@ const ClassroomContainer = ({ classMeta, role, userId }) => {
                                 role={role}
                             />
                         </section>
-                        {role === 'instructor' ? (
+                        {role === "instructor" ? (
                             <section className="classroom__grid-item-top bg-red">
                                 <GroupDetailsBlock
                                     classMeta={classMeta}

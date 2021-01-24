@@ -72,6 +72,6 @@ class Classroom(db.Model):
     def get_active_groups(self):
         return {
             "groups": [
-                group.less_to_dict() for group in self.groups if group.active
+                group.get_members() for group in self.groups if group.active
             ]
         }
