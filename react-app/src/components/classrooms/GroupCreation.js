@@ -29,19 +29,15 @@ const GroupCreation = ({ classroomId, makeGroups }) => {
     const classes = useStyles();
     const [groupSize, setGroupSize] = useState(null);
 
-    const handleGroupSize = (event) => {
-        console.log("Event.target.value");
-        console.log(event.target.value);
-        setGroupSize(event.target.value);
+    const handleGroupSize = async (event) => {
+        await setGroupSize(event.target.value);
     };
 
     useEffect(() => {
         if (groupSize !== null) {
-            console.log("groupSize");
-            console.log(groupSize);
             makeGroups(classroomId, groupSize);
         }
-    }, [setGroupSize]);
+    }, [groupSize]);
 
     //makeGroups(classroomId, groupSize);
     return (
