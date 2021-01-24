@@ -132,6 +132,11 @@ h6 {
     width: auto;
 }
 
+.grouping__menu {
+    color: white;
+    justify-content: flex-start;
+}
+
 .classroom__group h3 {
     color: white;
     margin: 0.25rem 0.75rem 0.75rem;
