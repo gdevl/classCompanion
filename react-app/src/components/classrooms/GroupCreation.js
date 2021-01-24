@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import {
+    getClassroomMeta,
+    fetchClassroomData,
+} from '../../store/classroom_meta';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-evenly",
-        height: "100%",
-        "& > *": {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        height: '100%',
+        '& > *': {
             margin: theme.spacing(1),
-            width: "25ch",
+            width: '25ch',
         },
     },
     formControl: {
@@ -27,19 +32,24 @@ const useStyles = makeStyles((theme) => ({
 
 const GroupCreation = ({ classroomId, makeGroups }) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const [groupSize, setGroupSize] = useState(null);
 
-    const handleGroupSize = async (event) => {
-        await setGroupSize(event.target.value);
+    const handleGroupSize = (event) => {
+        setGroupSize(event.target.value);
     };
 
     useEffect(() => {
-        if (groupSize !== null) {
-            makeGroups(classroomId, groupSize);
-        }
+        makeGroups(classroomId, groupSize);
     }, [groupSize]);
 
-    //makeGroups(classroomId, groupSize);
+    useEffect(() => {
+        (async () => {
+            const query = await fetchClassroomData(classroomId);
+            dispatch(getClassroomMeta(query));
+        })();
+    }, [makeGroups]);
+
     return (
         <>
             <FormControl className={classes.formControl}>
