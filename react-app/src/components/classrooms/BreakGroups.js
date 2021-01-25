@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { clearClassGroups } from "../../store/groups";
-import { setGroupsDefined } from "../../store/define_groups";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { clearClassGroups } from '../../store/groups';
+import { setGroupsDefined } from '../../store/define_groups';
 
 const BreakGroups = ({ classroomId, breakGroups }) => {
     const dispatch = useDispatch();
@@ -12,7 +12,11 @@ const BreakGroups = ({ classroomId, breakGroups }) => {
         dispatch(clearClassGroups());
     };
 
-    return <button onClick={() => handleUngroup()}>Ungroup</button>;
+    return (
+        <div className="classrooms__actions">
+            <button onClick={() => handleUngroup()}>Ungroup</button>
+        </div>
+    );
 };
 
 export default BreakGroups;

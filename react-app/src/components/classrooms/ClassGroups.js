@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Avatar from "@material-ui/core/Avatar";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import IconButton from "@material-ui/core/IconButton";
-import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Avatar from '@material-ui/core/Avatar';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import IconButton from '@material-ui/core/IconButton';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 const ClassGroups = ({ classMeta, role }) => {
     const groups = useSelector((state) => state.groups);
@@ -21,7 +21,7 @@ const ClassGroups = ({ classMeta, role }) => {
                             key={`gp-${groupNumber.current}`}
                             className="classroom__group"
                         >
-                            <h3>{`group ${(groupNumber.current += 1)}`}</h3>
+                            <h3>{`Group ${(groupNumber.current += 1)}`}</h3>
                             {group.members.map((member) => (
                                 <div
                                     key={`student_container-${member.id}`}
@@ -42,7 +42,7 @@ const ClassGroups = ({ classMeta, role }) => {
                                             src={`${member.avatar_url}`}
                                         />
                                     </div>
-                                    {role === "instructor" ? (
+                                    {role === 'instructor' ? (
                                         <div
                                             key={`student_admin-${member.id}`}
                                             className="student-ci-qs"

@@ -10,39 +10,11 @@ const ClassDetailsBlock = ({ classMeta }) => {
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
-        // updateDescription();
     };
-
-    // const autosave = (cb, delay) => {
-    //     let autosaveTimer;
-    //     clearTimeout(autosaveTimer);
-    //     autosaveTimer = setTimeout((cb, delay) => {});
-    // };
-
-    // const postNewDescription = async () => {
-    //     const request = await fetch(`api/classes/${classMeta.id}/description`, {
-    //         method: 'PATCH',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ description }),
-    //     });
-    // };
-
-    // const updateDescription = autosave(function (e) {
-    //     postNewDescription();
-    // }, 5000);
-
-    // useEffect(() => {
-    //     (async () => {
-    //         const query = await fetchClassroomData(classroomId);
-    //         dispatch(getClassroomMeta(query));
-    //     })();
-    // }, [updateDescription]);
 
     return (
         <>
-            <h3>Class Details</h3>
+            <h3>Classroom Details</h3>
             {classMeta['description'] ? (
                 <>
                     <div className="classroom__details-row">

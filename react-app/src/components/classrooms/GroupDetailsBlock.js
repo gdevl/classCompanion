@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import BreakGroups from "./BreakGroups";
-import GroupCreation from "./GroupCreation";
-import { setGroupsDefined } from "../../store/define_groups";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import BreakGroups from './BreakGroups';
+import GroupCreation from './GroupCreation';
+import { setGroupsDefined } from '../../store/define_groups';
 
 const GroupDetailsBlock = ({ classMeta }) => {
     const dispatch = useDispatch();
@@ -19,9 +19,9 @@ const GroupDetailsBlock = ({ classMeta }) => {
 
     const breakGroups = async () => {
         const ungroup = await fetch(`/api/classes/${classMeta.id}/ungroup`, {
-            method: "PATCH",
+            method: 'PATCH',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
         });
     };
@@ -30,8 +30,8 @@ const GroupDetailsBlock = ({ classMeta }) => {
         const groupResponse = await fetch(
             `/api/classes/${classroomId}/groups/${groupSize}`,
             {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
             }
         );
     };
@@ -52,8 +52,8 @@ const GroupDetailsBlock = ({ classMeta }) => {
             ) : (
                 <>
                     <p>
-                        Students divided into groups of
-                        {` ${Object.values(groups[0]["members"]).length}`}
+                        Groups of
+                        {` ${Object.values(groups[0]['members']).length}`}
                     </p>
                     <BreakGroups
                         classroomId={classMeta.id}

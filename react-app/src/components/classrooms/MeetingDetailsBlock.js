@@ -3,7 +3,7 @@ import React from 'react';
 const MeetingDetailsBlock = ({ classMeta }) => {
     return (
         <>
-            <h3>Meeting Details</h3>
+            <h3>Meeting Info</h3>
             {classMeta ? (
                 <>
                     <div className="classroom__details-row">

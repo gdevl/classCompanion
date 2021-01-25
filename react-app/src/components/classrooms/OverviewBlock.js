@@ -3,7 +3,7 @@ import React from 'react';
 const OverviewBlock = ({ classMeta }) => {
     return (
         <>
-            <h3>Class Overview</h3>
+            <h3>Classroom Overview</h3>
             {classMeta['check_ins'] ? (
                 <>
                     <div className="classroom__details-row">
