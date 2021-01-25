@@ -35,23 +35,40 @@ const GroupCreation = ({ classroomId, makeGroups }) => {
     const dispatch = useDispatch();
     const [groupSize, setGroupSize] = useState(0);
 
-    const handleUpdateGroupSize = (event) => {
+    const handleUpdateGroupSize = async (event) => {
+        console.log("event.target.value: ", event.target.value);
         setGroupSize(event.target.value);
+        (async () => {
+            const groupCreationData = makeGroups(
+                classroomId,
+                event.target.value
+            );
+        })();
     };
 
     useEffect(() => {
-        console.log("groupSize: ", groupSize);
-        (async () => {
-            if (groupSize > 0) {
-                const groupCreationData = makeGroups(classroomId, groupSize);
-                if (groupCreationData.ok) {
-                    const groupData = await fetchClassGroups(classroomId);
-                    dispatch(setClassGroups(groupData));
-                    dispatch(setGroupsDefined(true));
-                }
-            }
-        })();
-    }, [groupSize]);
+        if (groupSize > 0) {
+            (async () => {
+                const groupData = await fetchClassGroups(classroomId);
+                dispatch(setClassGroups(groupData));
+                dispatch(setGroupsDefined(true));
+            })();
+        }
+    }, [handleUpdateGroupSize]);
+
+    // useEffect(() => {
+    //     console.log("groupSize: ", groupSize);
+    //     if (groupSize > 0) {
+    //         (async () => {
+    //             const groupCreationData = makeGroups(classroomId, groupSize);
+    //             if (groupCreationData.ok) {
+    //                 const groupData = await fetchClassGroups(classroomId);
+    //                 dispatch(setClassGroups(groupData));
+    //                 dispatch(setGroupsDefined(true));
+    //             }
+    //         })();
+    //     }
+    // }, [groupSize]);
 
     return (
         <>
@@ -74,40 +91,6 @@ const GroupCreation = ({ classroomId, makeGroups }) => {
             </FormControl>
         </>
     );
-
-    // if (!groups_defined) {
-    //     return (
-    //         <>
-    //             <FormControl className={classes.formControl}>
-    //                 <InputLabel id="demo-simple-select-helper-label">
-    //                     Group Size
-    //                 </InputLabel>
-    //                 <Select
-    //                     labelId="demo-simple-select-helper-label"
-    //                     id="demo-simple-select-helper"
-    //                     value={groupSize}
-    //                     onChange={handleGroupSize}
-    //                 >
-    //                     <MenuItem value={1}>1</MenuItem>
-    //                     <MenuItem value={2}>2</MenuItem>
-    //                     <MenuItem value={3}>3</MenuItem>
-    //                     <MenuItem value={4}>4</MenuItem>
-    //                     <MenuItem value={5}>5</MenuItem>
-    //                 </Select>
-    //             </FormControl>
-    //         </>
-    //     );
-    // } else {
-    //     return (
-    //         <>
-    //             <BreakGroups
-    //                 classroomId={classroomId}
-    //                 breakGroups={breakGroups}
-    //                 setGrouped={setGrouped}
-    //             />
-    //         </>
-    //     );
-    // }
 };
 
 export default GroupCreation;

@@ -22,7 +22,7 @@ const GroupDetailsBlock = ({ classMeta }) => {
         } else {
             dispatch(setGroupsDefined(false));
         }
-    }, [groups]);
+    }, [groups, groups_defined]);
 
     const breakGroups = async () => {
         const ungroup = await fetch(`/api/classes/${classMeta.id}/ungroup`, {
@@ -49,12 +49,10 @@ const GroupDetailsBlock = ({ classMeta }) => {
             {!groups_defined ? (
                 <>
                     <div className="grouping__menu">
-                        <p>You haven't defined any groups yet!</p>
+                        <p>Define groups below: </p>
                         <GroupCreation
                             classroomId={classMeta.id}
                             makeGroups={makeGroups}
-                            groups_defined={groups_defined}
-                            breakGroups={breakGroups}
                         />
                     </div>
                 </>
@@ -62,12 +60,11 @@ const GroupDetailsBlock = ({ classMeta }) => {
                 <>
                     <p>
                         Students divided into groups of
-                        {` ${Object.keys(groups).length}`}
+                        {` ${Object.values(groups[0]["members"]).length}`}
                     </p>
                     <BreakGroups
                         classroomId={classMeta.id}
                         breakGroups={breakGroups}
-                        groups_defined={groups_defined}
                     />
                 </>
             )}
