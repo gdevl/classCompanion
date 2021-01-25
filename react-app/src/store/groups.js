@@ -6,7 +6,7 @@ export const setClassGroups = (groups) => {
 };
 
 export const clearClassGroups = () => {
-    return { type: SET_CLASS_GROUPS };
+    return { type: CLEAR_CLASS_GROUPS };
 };
 
 export const fetchClassGroups = async (classId) => {

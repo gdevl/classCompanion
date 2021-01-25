@@ -4,7 +4,12 @@ import {
     getClassroomMeta,
     fetchClassroomData,
 } from "../../store/classroom_meta";
-import { setClassGroups, fetchClassGroups } from "../../store/groups";
+import {
+    setClassGroups,
+    fetchClassGroups,
+    clearClassGroups,
+} from "../../store/groups";
+import { setGroupsDefined } from "../../store/define_groups";
 import ClassroomContainer from "./ClassroomContainer";
 import UserCardContainer from "../InstructorClassroomDashboard/UserCard/UserCardContainer";
 import GroupCardContainer from "../InstructorClassroomDashboard/GroupCard/GroupCardContainer";
@@ -15,7 +20,14 @@ const SingleClassroom = ({ userId }) => {
     const currentUser = useSelector((state) => state.currentUser);
     const currentClassroomId = useSelector((state) => state.currentClassroomId);
     const classMeta = useSelector((state) => state.currentClassroomMeta);
-    const groups = useSelector((state) => state.groups);
+
+    const toggleGroupsOn = (bool) => {
+        dispatch(setGroupsDefined(true));
+    };
+
+    const toggleGroupsOff = (bool) => {
+        dispatch(setGroupsDefined(false));
+    };
 
     useEffect(() => {
         (async () => {
@@ -23,17 +35,17 @@ const SingleClassroom = ({ userId }) => {
             dispatch(getClassroomMeta(query));
         })();
         setLoaded(true);
-    }, []);
+    }, [currentClassroomId]);
 
     useEffect(() => {
         (async () => {
             const groupData = await fetchClassGroups(currentClassroomId);
             dispatch(setClassGroups(groupData));
+            console.log("SingleClassroom => useEffect, groupData: ", groupData);
         })();
-    }, []);
+    }, [currentClassroomId]);
 
     if (!currentUser) return null;
-    if (!currentClassroomId) return null;
     if (!classMeta) return null;
 
     if (!loaded) {
@@ -42,12 +54,11 @@ const SingleClassroom = ({ userId }) => {
 
     return (
         <>
-            {classMeta["id"] ? (
+            {classMeta.id !== null ? (
                 <ClassroomContainer
                     classMeta={classMeta}
                     role={currentUser.role}
                     userId={userId}
-                    groups={groups}
                 />
             ) : null}
         </>

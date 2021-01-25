@@ -1,117 +1,119 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Button, Modal, TextField } from '@material-ui/core';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import LogoutButton from '../auth/LogoutButton';
-import { logout } from '../../services/auth';
-import FaceIcon from '@material-ui/icons/Face';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { clearCurrentClassroom } from '../../store/current_classroom';
-import { clearClassroomMeta } from '../../store/classroom_meta';
-import { clearClassrooms } from '../../store/classrooms';
-import { clearCurrentUser } from '../../store/current_user';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+import { Avatar, Button, Modal, TextField } from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormGroup from "@material-ui/core/FormGroup";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import LogoutButton from "../auth/LogoutButton";
+import { logout } from "../../services/auth";
+import FaceIcon from "@material-ui/icons/Face";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { clearCurrentClassroom } from "../../store/current_classroom";
+import { clearClassroomMeta } from "../../store/classroom_meta";
+import { clearClassrooms } from "../../store/classrooms";
+import { clearCurrentUser } from "../../store/current_user";
+import { clearClassGroups } from "../../store/groups";
+import { setGroupsDefined } from "../../store/define_groups";
 
 const useStyles = makeStyles((theme) => ({
     navigation: {
         flexGrow: 1,
-        width: '100%',
+        width: "100%",
     },
     //   menuButton: {
     //     marginRight: theme.spacing(2),
     //   },
     title: {
         flexGrow: 1,
-        fontFamily: 'Prompt',
+        fontFamily: "Prompt",
     },
     modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
     },
     paper: {
-        backgroundColor: 'white',
-        outline: '0',
-        border: '2px solid white',
-        borderRadius: '5px',
+        backgroundColor: "white",
+        outline: "0",
+        border: "2px solid white",
+        borderRadius: "5px",
         boxShadow: theme.shadows[5],
-        paddingLeft: '5rem',
-        paddingRight: '5rem',
-        paddingTop: '2rem',
-        paddingBottom: '2rem',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        paddingLeft: "5rem",
+        paddingRight: "5rem",
+        paddingTop: "2rem",
+        paddingBottom: "2rem",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
     },
     editHeading: {
-        marginBottom: '1rem',
+        marginBottom: "1rem",
     },
     menuButton: {
-        border: 'none',
-        fontFamily: 'Roboto',
-        fontSize: '16px',
-        marginLeft: '-6px',
-        backgroundColor: 'white',
-        '&:hover': {
-            backgroundColor: '#f5f5f5',
+        border: "none",
+        fontFamily: "Roboto",
+        fontSize: "16px",
+        marginLeft: "-6px",
+        backgroundColor: "white",
+        "&:hover": {
+            backgroundColor: "#f5f5f5",
         },
         margin: theme.spacing(1),
     },
     element: {
-        padding: '1rem',
+        padding: "1rem",
     },
     button: {
-        marginTop: '2rem',
+        marginTop: "2rem",
     },
     btnContainer: {
-        position: 'relative',
-        left: '72%',
-        bottom: '100%',
+        position: "relative",
+        left: "72%",
+        bottom: "100%",
     },
     exitBtn: {
-        position: 'relative',
-        bottom: '1.95rem',
-        left: '8.5rem',
-        border: 'none',
-        paddingRight: '0px',
-        paddingLeft: '0px',
+        position: "relative",
+        bottom: "1.95rem",
+        left: "8.5rem",
+        border: "none",
+        paddingRight: "0px",
+        paddingLeft: "0px",
     },
     backBtn: {
-        backgroundColor: 'white',
-        '&:active': {
-            backgroundColor: 'white',
+        backgroundColor: "white",
+        "&:active": {
+            backgroundColor: "white",
         },
-        '&:hover': {
-            backgroundColor: 'white',
+        "&:hover": {
+            backgroundColor: "white",
         },
     },
     avatar: {
-        marginBottom: '1rem',
+        marginBottom: "1rem",
         width: theme.spacing(7),
         height: theme.spacing(7),
     },
     root: {
-        position: 'relative',
+        position: "relative",
     },
     dropdown: {
-        position: 'absolute',
+        position: "absolute",
         top: 28,
         right: 0,
         left: 0,
         zIndex: 1,
-        border: '1px solid',
+        border: "1px solid",
         padding: theme.spacing(1),
         backgroundColor: theme.palette.background.paper,
     },
@@ -120,10 +122,10 @@ const useStyles = makeStyles((theme) => ({
         height: theme.spacing(5),
     },
     back: {
-        color: 'white',
+        color: "white",
     },
     padMe: {
-        marginLeft: '4rem',
+        marginLeft: "4rem",
     },
 }));
 
@@ -132,7 +134,7 @@ const Navigation = ({ setAuthenticated }) => {
     const currentUser = useSelector((state) => state.currentUser);
     const currentClassroomId = useSelector((state) => state.currentClassroomId);
     const classMeta = useSelector((state) => state.currentClassroomMeta);
-    const displayTitle = classMeta.name ? classMeta.name : 'Class Companion';
+    const displayTitle = classMeta.name ? classMeta.name : "Class Companion";
 
     const classes = useStyles();
     const [auth, setAuth] = React.useState(true);
@@ -149,8 +151,8 @@ const Navigation = ({ setAuthenticated }) => {
 
     const updateProfile = async () => {
         const response = await fetch(`/api/users/${id}/update`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, email, avatarUrl }),
         });
         if (response.ok) {
@@ -162,6 +164,8 @@ const Navigation = ({ setAuthenticated }) => {
         e.preventDefault();
         dispatch(clearCurrentClassroom());
         dispatch(clearClassroomMeta());
+        dispatch(clearClassGroups());
+        dispatch(setGroupsDefined(false));
     };
 
     const handleOpenModal = (e) => {
@@ -205,6 +209,9 @@ const Navigation = ({ setAuthenticated }) => {
         dispatch(clearCurrentClassroom());
         dispatch(clearClassrooms());
         dispatch(clearCurrentUser());
+        dispatch(clearClassGroups());
+        dispatch(clearClassroomMeta());
+        dispatch(setGroupsDefined(false));
         setAuthenticated(false);
     };
 
@@ -249,13 +256,13 @@ const Navigation = ({ setAuthenticated }) => {
                                 id="menu-appbar"
                                 anchorEl={anchorEl}
                                 anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
+                                    vertical: "top",
+                                    horizontal: "right",
                                 }}
                                 keepMounted
                                 transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
+                                    vertical: "top",
+                                    horizontal: "right",
                                 }}
                                 open={open1}
                                 onClose={handleClose}

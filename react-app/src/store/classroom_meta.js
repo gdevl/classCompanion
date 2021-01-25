@@ -1,5 +1,5 @@
-export const GET_CLASSROOM_META = 'GET_CLASSROOM_META';
-export const CLEAR_CLASSROOM_META = 'CLEAR_CLASSROOM_META';
+export const GET_CLASSROOM_META = "GET_CLASSROOM_META";
+export const CLEAR_CLASSROOM_META = "CLEAR_CLASSROOM_META";
 
 export const getClassroomMeta = (classroom) => {
     return {
@@ -17,7 +17,7 @@ export const clearClassroomMeta = () => {
 export const fetchClassroomData = async (classId) => {
     const request = await fetch(`/api/classes/${classId}`, {
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
     });
 
@@ -36,6 +36,7 @@ export default function reducer(state = {}, action) {
         case CLEAR_CLASSROOM_META: {
             return {};
         }
+
         default:
             return state;
     }

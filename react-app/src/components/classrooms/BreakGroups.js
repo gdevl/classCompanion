@@ -1,22 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import {
-    getClassroomMeta,
-    fetchClassroomData,
-} from "../../store/classroom_meta";
 import { clearClassGroups } from "../../store/groups";
+import { setGroupsDefined } from "../../store/define_groups";
 
-const BreakGroups = ({ classroomId, breakGroups, setGrouped, grouped }) => {
+const BreakGroups = ({ classroomId, breakGroups }) => {
     const dispatch = useDispatch();
 
     const handleUngroup = () => {
         breakGroups(classroomId);
-        setGrouped(false);
-    };
-
-    useEffect(() => {
+        dispatch(setGroupsDefined(false));
         dispatch(clearClassGroups());
-    }, [grouped]);
+    };
 
     return <button onClick={() => handleUngroup()}>Ungroup</button>;
 };

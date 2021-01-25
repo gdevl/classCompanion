@@ -6,6 +6,7 @@ import currentClassroomId from "./current_classroom";
 import currentClassroomMeta from "./classroom_meta";
 import groups from "./groups";
 import roster from "./roster";
+import groups_defined from "./define_groups";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -15,6 +16,7 @@ const reducer = combineReducers({
     currentUser,
     currentClassroomId,
     groups,
+    groups_defined,
     roster,
 });
 

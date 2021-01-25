@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import InstructorBlock from "./InstructorBlock";
@@ -10,9 +11,18 @@ import GroupDetailsBlock from "./GroupDetailsBlock";
 import OverviewBlock from "./OverviewBlock";
 import CheckInBlock from "./CheckInBlock";
 
-const ClassroomContainer = ({ classMeta, groups, role, userId }) => {
+const ClassroomContainer = ({ classMeta, role, userId }) => {
+    const groups_defined = useSelector((state) => state.groups_defined);
+    const groups = useSelector((state) => state.groups);
+    console.log("ClassroomContainer, ln 17, groups: ", groups);
+
     return (
         <>
+            {console.log("ClassroomContainer => return, groups: ", groups)}
+            {console.log(
+                "ClassroomContainer => return, groups_defined: ",
+                groups_defined
+            )}
             <Tabs>
                 <TabList>
                     <Tab>Classroom Details</Tab>
@@ -53,6 +63,7 @@ const ClassroomContainer = ({ classMeta, groups, role, userId }) => {
                                 <GroupDetailsBlock
                                     classMeta={classMeta}
                                     role={role}
+                                    // groups={groups}
                                 />
                             </section>
                         ) : (
@@ -73,7 +84,11 @@ const ClassroomContainer = ({ classMeta, groups, role, userId }) => {
                 </TabPanel>
                 <TabPanel>
                     <div className="classroom_container-classgroups">
-                        <ClassGroups classMeta={classMeta} role={role} />
+                        <ClassGroups
+                            classMeta={classMeta}
+                            role={role}
+                            groups={groups}
+                        />
                     </div>
                 </TabPanel>
             </Tabs>

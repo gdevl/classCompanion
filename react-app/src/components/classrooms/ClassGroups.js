@@ -10,6 +10,8 @@ const ClassGroups = ({ classMeta, role }) => {
     const dispatch = useDispatch();
     const groupNumber = useRef(0);
 
+    useEffect(() => {});
+
     return (
         <>
             {Object.keys(groups).length > 0 ? (
@@ -22,17 +24,29 @@ const ClassGroups = ({ classMeta, role }) => {
                             <h3>{`group ${(groupNumber.current += 1)}`}</h3>
                             {group.members.map((member) => (
                                 <div
-                                    key={member.id}
+                                    key={`student_container-${member.id}`}
                                     className="classroom_container_student-deets"
                                 >
-                                    <p className="student-name">
+                                    <p
+                                        key={`student_name-${member.id}`}
+                                        className="student-name"
+                                    >
                                         {member.name}
                                     </p>
-                                    <div className="student-avatar">
-                                        <Avatar src={`${member.avatar_url}`} />
+                                    <div
+                                        key={`student_avatar_container-${member.id}`}
+                                        className="student-avatar"
+                                    >
+                                        <Avatar
+                                            key={`student_avatar-${member.id}`}
+                                            src={`${member.avatar_url}`}
+                                        />
                                     </div>
                                     {role === "instructor" ? (
-                                        <div className="student-ci-qs">
+                                        <div
+                                            key={`student_admin-${member.id}`}
+                                            className="student-ci-qs"
+                                        >
                                             <CheckCircleIcon
                                                 fontSize="medium"
                                                 color="disabled"
