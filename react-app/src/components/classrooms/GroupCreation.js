@@ -5,7 +5,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import BreakGroups from "./BreakGroups";
 
 import { fetchClassGroups, setClassGroups } from "../../store/groups";
 import { setGroupsDefined } from "../../store/define_groups";
@@ -55,20 +54,6 @@ const GroupCreation = ({ classroomId, makeGroups }) => {
             })();
         }
     }, [handleUpdateGroupSize]);
-
-    // useEffect(() => {
-    //     console.log("groupSize: ", groupSize);
-    //     if (groupSize > 0) {
-    //         (async () => {
-    //             const groupCreationData = makeGroups(classroomId, groupSize);
-    //             if (groupCreationData.ok) {
-    //                 const groupData = await fetchClassGroups(classroomId);
-    //                 dispatch(setClassGroups(groupData));
-    //                 dispatch(setGroupsDefined(true));
-    //             }
-    //         })();
-    //     }
-    // }, [groupSize]);
 
     return (
         <>

@@ -4,15 +4,8 @@ import {
     getClassroomMeta,
     fetchClassroomData,
 } from "../../store/classroom_meta";
-import {
-    setClassGroups,
-    fetchClassGroups,
-    clearClassGroups,
-} from "../../store/groups";
-import { setGroupsDefined } from "../../store/define_groups";
+import { setClassGroups, fetchClassGroups } from "../../store/groups";
 import ClassroomContainer from "./ClassroomContainer";
-import UserCardContainer from "../InstructorClassroomDashboard/UserCard/UserCardContainer";
-import GroupCardContainer from "../InstructorClassroomDashboard/GroupCard/GroupCardContainer";
 
 const SingleClassroom = ({ userId }) => {
     const dispatch = useDispatch();
@@ -33,7 +26,6 @@ const SingleClassroom = ({ userId }) => {
         (async () => {
             const groupData = await fetchClassGroups(currentClassroomId);
             dispatch(setClassGroups(groupData));
-            console.log("SingleClassroom => useEffect, groupData: ", groupData);
         })();
     }, [currentClassroomId]);
 

@@ -3,18 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import BreakGroups from "./BreakGroups";
 import GroupCreation from "./GroupCreation";
 import { setGroupsDefined } from "../../store/define_groups";
-import {
-    setClassGroups,
-    fetchClassGroups,
-    clearClassGroups,
-} from "../../store/groups";
 
 const GroupDetailsBlock = ({ classMeta }) => {
     const dispatch = useDispatch();
     const groups_defined = useSelector((state) => state.groups_defined);
     const groups = useSelector((state) => state.groups);
-
-    console.log("GroupDetailsBlock, ln 17, groups: ", groups);
 
     useEffect(() => {
         if (Object.keys(groups).length > 0) {
