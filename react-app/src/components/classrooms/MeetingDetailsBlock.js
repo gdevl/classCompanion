@@ -48,11 +48,12 @@ const MeetingDetailsBlock = ({ classMeta }) => {
                     <div className="classroom__details-row">
                         <h4>Meeting Link</h4>
                         {role === 'instructor' ? (
-                            <EditText
+                            <EditTextarea
                                 onChange={updateMeetingLink}
                                 onSave={handleMeetingLinkPatch}
                                 value={meeting_link}
                                 name="meeting_link"
+                                rows={1}
                                 type="text"
                                 defaultValue={
                                     classMeta['meeting_link']
@@ -77,11 +78,12 @@ const MeetingDetailsBlock = ({ classMeta }) => {
                     <div className="classroom__details-row">
                         <h4>Meeting Password</h4>
                         {role === 'instructor' ? (
-                            <EditText
+                            <EditTextarea
                                 onChange={updateMeetingPw}
                                 onSave={handleMeetingPwPatch}
                                 value={meeting_pw}
                                 name="meeting_pw"
+                                rows={1}
                                 type="text"
                                 defaultValue={
                                     classMeta['meeting_pw']
