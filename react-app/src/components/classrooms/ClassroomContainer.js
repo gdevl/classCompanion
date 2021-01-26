@@ -45,14 +45,14 @@ const ClassroomContainer = ({ classMeta, role, userId }) => {
                                 role={role}
                             />
                         </section>
-                        <section className="classroom__grid-item-top bg-brown">
+                        <section className="classroom__grid-item-top bg-red">
                             <MeetingDetailsBlock
                                 classMeta={classMeta}
                                 role={role}
                             />
                         </section>
                         {role === 'instructor' ? (
-                            <section className="classroom__grid-item-top bg-red">
+                            <section className="classroom__grid-item-top bg-purple">
                                 <GroupDetailsBlock
                                     classMeta={classMeta}
                                     role={role}

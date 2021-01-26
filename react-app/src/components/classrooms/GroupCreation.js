@@ -68,7 +68,10 @@ const GroupCreation = ({ classroomId, makeGroups }) => {
             <FormControl className="group_creation-container">
                 <Select
                     disableUnderline
-                    classes={{ root: minimalSelectClasses.select }}
+                    classes={{
+                        root: minimalSelectClasses.select,
+                    }}
+                    style={{ fontFamily: 'Mukta, sans-serif !important' }}
                     labelId="group_size_label"
                     id="group_size"
                     IconComponent={iconComponent}

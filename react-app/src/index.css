@@ -81,6 +81,12 @@ h6 {
     background-color: rgba(64, 81, 181, 1);
 }
 
+.bg-purple {
+    background-color: #673ab7;
+}
+
+
+
 .user_avatar-row {
     display: flex;
     flex-flow: row nowrap;
@@ -148,8 +154,16 @@ h6 {
     text-align: center;
 }
 
-.group_creation-container {
-    /* width: 30px; */
+.group_creation-container .MinimalSelect-select-18{
+    font-family: 'Mukta', sans-serif !important;
+}
+
+.MinimalSelect-list-21 .MuiListItem-root {
+    font-family: 'Mukta', sans-serif !important;
+}
+
+.MinimalSelect-list-21 .MuiListItem-root .MuiSvgIcon-root {
+    color: #673ab7;
 }
 
 .student-ci-qs {
