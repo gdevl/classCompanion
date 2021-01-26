@@ -2,6 +2,8 @@ export const GET_CLASSROOM_META = 'GET_CLASSROOM_META';
 export const CLEAR_CLASSROOM_META = 'CLEAR_CLASSROOM_META';
 export const ALTER_DESCRIPTION = 'ALTER_DESCRIPTION';
 export const ALTER_OBJECTIVE = 'ALTER_OBJECTIVE';
+export const ALTER_MEETING_LINK = 'ALTER_MEETING_LINK';
+export const ALTER_MEETING_PW = 'ALTER_MEETING_PW';
 
 export const getClassroomMeta = (classroom) => {
     return {
@@ -30,6 +32,20 @@ export const alterObjective = (objective) => {
     };
 };
 
+export const alterMeetingLink = (meetingLink) => {
+    return {
+        type: ALTER_MEETING_LINK,
+        meetingLink,
+    };
+};
+
+export const alterMeetingPw = (meetingPw) => {
+    return {
+        type: ALTER_MEETING_PW,
+        meetingPw,
+    };
+};
+
 export const patchDescription = async (classId, description) => {
     const body = {
         classId,
@@ -53,6 +69,38 @@ export const patchDailyObjective = async (classId, daily_objective) => {
         daily_objective,
     };
     const request = await fetch(`/api/classes/${classId}/daily_objective`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+    const response = await request.json();
+    return response;
+};
+
+export const patchMeetingLink = async (classId, meeting_link) => {
+    const body = {
+        classId,
+        meeting_link,
+    };
+    const request = await fetch(`/api/classes/${classId}/meeting_link`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+    const response = await request.json();
+    return response;
+};
+
+export const patchMeetingPw = async (classId, meeting_pw) => {
+    const body = {
+        classId,
+        meeting_pw,
+    };
+    const request = await fetch(`/api/classes/${classId}/meeting_pw`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -95,6 +143,18 @@ export default function reducer(state = {}, action) {
             return {
                 ...state,
                 daily_objective: action.objective,
+            };
+        }
+        case ALTER_MEETING_LINK: {
+            return {
+                ...state,
+                meeting_link: action.meetingLink,
+            };
+        }
+        case ALTER_MEETING_PW: {
+            return {
+                ...state,
+                meeting_pw: action.meetingPw,
             };
         }
         default:

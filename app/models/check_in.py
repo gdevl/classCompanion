@@ -1,4 +1,5 @@
 from .db import db
+from datetime import date
 
 
 class CheckIn(db.Model):
@@ -23,4 +24,21 @@ class CheckIn(db.Model):
             "student_id": self.student_id,
             "class_id": self.class_id,
             "created_on": self.created_on
+        }
+
+    def date(self):
+        return {
+            "id": self.id,
+            "student_id": self.student_id,
+            "class_id": self.class_id,
+            "year": self.created_on.year,
+            "month": self.created_on.month,
+            "day": self.created_on.day,
+        }
+
+    def get_meta(self):
+        return {
+            "year": self.created_on.year,
+            "month": self.created_on.month,
+            "day": self.created_on.day,
         }

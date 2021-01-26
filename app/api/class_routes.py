@@ -385,8 +385,10 @@ def postQuestion(class_id, user_id):
     return question.to_dict()
 
 
-@class_routes.route('/<int:class_id>/user/<int:student_id>/checkin',
-                    methods=['GET', 'POST'])
+@class_routes.route(
+    '/<int:class_id>/user/<int:student_id>/checkin',
+    methods=['POST']
+)
 def check_in(class_id, student_id):
     checkin = CheckIn(
         student_id=student_id,
@@ -394,7 +396,12 @@ def check_in(class_id, student_id):
     )
     db.session.add(checkin)
     db.session.commit()
-    return jsonify("CHECKINTEST")
+    # return jsonify("CHECKINTEST")
+    return {
+        "userId": student_id,
+        "classId": class_id,
+        "success": "yes",
+    }
 
 
 @class_routes.route('/answer/<int:answer_id>/accept',

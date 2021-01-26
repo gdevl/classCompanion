@@ -45,9 +45,6 @@ const GroupDetailsBlock = ({ classMeta }) => {
                         classroomId={classMeta.id}
                         makeGroups={makeGroups}
                     />
-                    <div className="grouping__menu">
-                        {/* <p>Define groups below: </p> */}
-                    </div>
                 </>
             ) : (
                 <>
