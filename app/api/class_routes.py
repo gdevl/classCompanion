@@ -179,6 +179,8 @@ def update_description(class_id):
 def update_daily_objective(class_id):
     classroom = Classroom.query.get(class_id)
     daily_objective_data = request.get_json()
+    print(f'request.get_json(): {request.get_json()}')
+    print(f'daily_objective_data: {daily_objective_data}')
     daily_objective = daily_objective_data['daily_objective']
 
     classroom.daily_objective = daily_objective
