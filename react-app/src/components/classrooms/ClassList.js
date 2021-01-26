@@ -2,6 +2,7 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 const ClassList = ({ classMeta, role }) => {
@@ -9,31 +10,45 @@ const ClassList = ({ classMeta, role }) => {
         <>
             {classMeta['students'].length > 0 ? (
                 classMeta['students'].map((student) => (
-                    <div className="classroom_container_student-deets">
+                    <div
+                        key={`student-${student.id}`}
+                        className="classroom_container_student-deets"
+                    >
                         <p className="student-name">
                             {`${student.first_name} ${student.last_name}`}
                         </p>
-                        {/* <p className="student-email">{student.email}</p> */}
                         <div className="student-avatar">
                             <Avatar src={`${student.avatar_url}`} />
                         </div>
-                        {role === 'instructor' ? (
-                            <div className="student-ci-qs">
+                        <div className="student-ci-qs">
+                            {classMeta['attendance'].includes(student.id) ? (
+                                <Tooltip
+                                    title={`${student.first_name} has checked in`}
+                                    aria-label="Student has checked in."
+                                >
+                                    <CheckCircleIcon
+                                        fontSize="default"
+                                        color="disabled"
+                                        style={{ color: 'green' }}
+                                        className="student-checked_in"
+                                    />
+                                </Tooltip>
+                            ) : (
                                 <CheckCircleIcon
-                                    fontSize="medium"
+                                    fontSize="default"
                                     color="disabled"
-                                    //   style={{ color: 'green' }}
                                     className="student-checked_in"
                                 />
-
+                            )}
+                            {role === 'instructor' ? (
                                 <QuestionAnswerIcon
                                     color="disabled"
                                     //   color="primary"
-                                    fontSize="medium"
+                                    fontSize="default"
                                     className="student-question"
                                 />
-                            </div>
-                        ) : null}
+                            ) : null}
+                        </div>
                     </div>
                 ))
             ) : (

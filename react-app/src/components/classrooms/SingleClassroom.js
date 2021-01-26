@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     getClassroomMeta,
     fetchClassroomData,
-} from "../../store/classroom_meta";
-import { setClassGroups, fetchClassGroups } from "../../store/groups";
-import ClassroomContainer from "./ClassroomContainer";
+} from '../../store/classroom_meta';
+import { setClassGroups, fetchClassGroups } from '../../store/groups';
+import ClassroomContainer from './ClassroomContainer';
 
 const SingleClassroom = ({ userId }) => {
     const dispatch = useDispatch();
@@ -13,6 +13,7 @@ const SingleClassroom = ({ userId }) => {
     const currentUser = useSelector((state) => state.currentUser);
     const currentClassroomId = useSelector((state) => state.currentClassroomId);
     const classMeta = useSelector((state) => state.currentClassroomMeta);
+    const attendance = useSelector((state) => state.attendance);
 
     useEffect(() => {
         (async () => {
@@ -43,6 +44,7 @@ const SingleClassroom = ({ userId }) => {
                     classMeta={classMeta}
                     role={currentUser.role}
                     userId={userId}
+                    attendance={attendance}
                 />
             ) : null}
         </>

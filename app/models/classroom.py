@@ -60,6 +60,7 @@ class Classroom(db.Model):
             "groups": [
                 group.to_dict() for group in self.groups if group.active],
             "check_ins": [check_in.to_dict() for check_in in self.check_ins],
+            "attendance": [check_in.student_id for check_in in self.check_ins]
         }
 
     def truncated(self):
@@ -75,3 +76,4 @@ class Classroom(db.Model):
                 group.get_members() for group in self.groups if group.active
             ]
         }
+

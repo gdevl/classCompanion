@@ -64,6 +64,7 @@ const MeetingDetailsBlock = ({ classMeta }) => {
                         ) : (
                             <p>
                                 <a
+                                    className="meeting_link"
                                     href={
                                         classMeta['meeting_link']
                                             ? classMeta['meeting_link']
@@ -100,7 +101,12 @@ const MeetingDetailsBlock = ({ classMeta }) => {
                         )}
                     </div>
                 </>
-            ) : null}
+            ) : (
+                <p>
+                    Your instructor hasn't added any video conference
+                    information yet. When they do, it will populate here.
+                </p>
+            )}
         </>
     );
 };

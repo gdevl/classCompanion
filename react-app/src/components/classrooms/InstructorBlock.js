@@ -12,8 +12,10 @@ const InstructorBlock = ({ classMeta }) => {
                               <Avatar src={`${instructor.avatar_url}`} />
                               <p>{`${instructor.first_name} ${instructor.last_name}`}</p>
                           </div>
-                          <div className="ask_question_row">
-                              <button>Ask A Question</button>
+                          <div className="classrooms_actions">
+                              <button className="ask_a_question">
+                                  Ask A Question
+                              </button>
                           </div>
                       </>
                   ))

@@ -4,6 +4,7 @@ export const ALTER_DESCRIPTION = 'ALTER_DESCRIPTION';
 export const ALTER_OBJECTIVE = 'ALTER_OBJECTIVE';
 export const ALTER_MEETING_LINK = 'ALTER_MEETING_LINK';
 export const ALTER_MEETING_PW = 'ALTER_MEETING_PW';
+export const CHECK_IN_STUDENT = 'CHECK_IN_STUDENT';
 
 export const getClassroomMeta = (classroom) => {
     return {
@@ -46,12 +47,38 @@ export const alterMeetingPw = (meetingPw) => {
     };
 };
 
+export const checkInStudent = (studentId) => {
+    return {
+        type: CHECK_IN_STUDENT,
+        studentId,
+    };
+};
+
+export const patchStudentCheckIn = async (classId, studentId) => {
+    const body = {
+        classId,
+        studentId,
+    };
+    const request = await fetch(
+        `/api/classes/${classId}/user/${studentId}/checkin`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }
+    );
+    const response = await request.json();
+    return response;
+};
+
 export const patchDescription = async (classId, description) => {
     const body = {
         classId,
         description,
     };
-    console.log('body: ', body);
+
     const request = await fetch(`/api/classes/${classId}/description`, {
         method: 'PATCH',
         headers: {
@@ -156,6 +183,11 @@ export default function reducer(state = {}, action) {
                 ...state,
                 meeting_pw: action.meetingPw,
             };
+        }
+        case CHECK_IN_STUDENT: {
+            let newState = { ...state };
+            newState['attendance'].push(action.studentId);
+            return newState;
         }
         default:
             return state;

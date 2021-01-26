@@ -11,7 +11,7 @@ import GroupDetailsBlock from './GroupDetailsBlock';
 import OverviewBlock from './OverviewBlock';
 import CheckInBlock from './CheckInBlock';
 
-const ClassroomContainer = ({ classMeta, role, userId }) => {
+const ClassroomContainer = ({ classMeta, role, userId, attendance }) => {
     const groups = useSelector((state) => state.groups);
 
     return (
@@ -59,11 +59,12 @@ const ClassroomContainer = ({ classMeta, role, userId }) => {
                                 />
                             </section>
                         ) : (
-                            <section className="classroom__grid-item-top bg-red">
+                            <section className="classroom__grid-item-top bg-purple">
                                 <CheckInBlock
                                     classMeta={classMeta}
                                     role={role}
                                     userId={userId}
+                                    attendance={attendance}
                                 />
                             </section>
                         )}

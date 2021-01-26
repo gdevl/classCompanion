@@ -85,8 +85,6 @@ h6 {
     background-color: #673ab7;
 }
 
-
-
 .user_avatar-row {
     display: flex;
     flex-flow: row nowrap;
@@ -196,7 +194,7 @@ h6 {
         "a . . c"
         "a . . c";
     margin: 0.25rem;
-    padding: 0.5rem;
+    padding: 0.25rem;
 }
 
 .student-avatar {
@@ -264,7 +262,6 @@ h6 {
 }
 
 .react-tabs__tab--selected {
-    /* background-color: yellow !important; */
     border-color: rgba(64, 81, 181, 0.5) !important;
     font-weight: 700;
 }
@@ -337,7 +334,11 @@ h6 {
     text-decoration: underline;
 }
 
-.classrooms__actions button {
+.classrooms__actions button,
+.ask_a_question,
+.student_check_in,
+.meeting_link
+{
     background-color: rgba(64, 81, 181, 1);
     border-radius: 4px;
     border: none;
@@ -352,7 +353,15 @@ h6 {
     text-transform: uppercase;
 }
 
-.classrooms__actions button:hover {
+.student_check_in {
+    background-color: rgba(42, 157, 143, 1);
+}
+
+.classrooms__actions button:hover,
+.meeting_link:hover,
+.ask_a_question:hover,
+.student_check_in:hover
+{
     background-color: rgba(250, 250, 250, 1);
     color: rgba(64, 81, 181, 1);
     transition: background-color 250ms, color 250ms;
@@ -370,11 +379,8 @@ h6 {
 .plus-icon {
     display: flex;
     align-items: center;
-    /* margin-left: 5px */
 }
 .outlined {
-    /* height: calc(100vh - 128px); */
-    /* height: 100%; */
     margin: 10px;
     outline: 1px solid pink;
 }
@@ -398,6 +404,10 @@ h6 {
     margin: 2em 0 !important;
 }
 
+.meeting_link {
+    text-decoration: none;
+}
+
 .landing__container {
     background-color: rgba(64, 81, 181, 1);
     display: flex;
@@ -413,14 +423,11 @@ h6 {
     margin: auto;
     flex: 1 1 100%;
     height: 50%;
-    /* height: 40vh; */
-    /* z-index: 9999; */
 }
 
 .landing__callout {
     display: flex;
     flex-flow: row wrap;
-    /* justify-items: space-around; */
 }
 
 .landing__callout-featured {
@@ -428,11 +435,9 @@ h6 {
     align-self: center;
     background-color: rgba(64, 81, 181, 0.3);
     border: 1px dotted rgba(42, 157, 143, 0.9);
-    /* border-radius: 10px; */
     border-radius: 50%;
     display: flex;
     flex-flow: column nowrap;
-    /* flex: 1 1 200px; */
     justify-content: center;
     justify-self: center;
     height: 15rem;
@@ -440,7 +445,6 @@ h6 {
     margin: 0 1rem;
     padding: 2rem;
     text-align: center;
-    /* vertical-align: middle; */
 }
 
 .landing h1,
@@ -480,7 +484,6 @@ h6 {
     flex-flow: column nowrap;
     flex: 1 1 100%;
     justify-content: center;
-    /*height: 100%; */
 }
 
 .account__creation_row {
@@ -488,7 +491,6 @@ h6 {
     flex-flow: row nowrap;
     justify-content: space-between;
     padding: 1rem;
-    /* width: 100%; */
 }
 
 .account__creation_link {
@@ -626,7 +628,6 @@ h6 {
 }
 
 .splash__callout-features {
-    /* border: 1px solid red; */
     margin: 2rem;
     padding: 2rem;
 }
@@ -652,9 +653,6 @@ h6 {
     }
     .no-students {
         grid-column: 1 / 4;
-    }
-    .user_avatar-row {
-        /* justify-content: flex-start; */
     }
 }
 

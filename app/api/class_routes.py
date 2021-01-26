@@ -105,6 +105,7 @@ def bulk_enroll(class_id):
 
     return jsonify('Operation complete.')
 
+
 # add student to classroom
 @class_routes.route('/<int:class_id>/enroll', methods=['PATCH'])
 def enroll(class_id):
@@ -396,7 +397,7 @@ def check_in(class_id, student_id):
     )
     db.session.add(checkin)
     db.session.commit()
-    # return jsonify("CHECKINTEST")
+
     return {
         "userId": student_id,
         "classId": class_id,
