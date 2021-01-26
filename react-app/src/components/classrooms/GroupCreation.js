@@ -1,41 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useMinimalSelectStyles } from '@mui-treasury/styles/select/minimal';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { fetchClassGroups, setClassGroups } from "../../store/groups";
-import { setGroupsDefined } from "../../store/define_groups";
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-evenly",
-        height: "100%",
-        "& > *": {
-            margin: theme.spacing(1),
-            width: "25ch",
-        },
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}));
+import { fetchClassGroups, setClassGroups } from '../../store/groups';
+import { setGroupsDefined } from '../../store/define_groups';
 
 const GroupCreation = ({ classroomId, makeGroups }) => {
-    const classes = useStyles();
+    const minimalSelectClasses = useMinimalSelectStyles();
+
+    // moves the menu below the select input
+    const menuProps = {
+        classes: {
+            paper: minimalSelectClasses.paper,
+            list: minimalSelectClasses.list,
+        },
+        anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left',
+        },
+        transformOrigin: {
+            vertical: 'top',
+            horizontal: 'left',
+        },
+        getContentAnchorEl: null,
+    };
+
+    const iconComponent = (props) => {
+        return (
+            <ExpandMoreIcon
+                className={props.className + ' ' + minimalSelectClasses.icon}
+            />
+        );
+    };
+
     const dispatch = useDispatch();
     const [groupSize, setGroupSize] = useState(0);
 
     const handleUpdateGroupSize = async (event) => {
-        console.log("event.target.value: ", event.target.value);
         setGroupSize(event.target.value);
         (async () => {
             const groupCreationData = makeGroups(
@@ -57,16 +63,18 @@ const GroupCreation = ({ classroomId, makeGroups }) => {
 
     return (
         <>
-            <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-helper-label">
-                    Group Size
-                </InputLabel>
+            <FormControl className="group_creation-container">
                 <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
+                    disableUnderline
+                    classes={{ root: minimalSelectClasses.select }}
+                    labelId="group_size_label"
+                    id="group_size"
+                    IconComponent={iconComponent}
+                    MenuProps={menuProps}
                     value={groupSize}
                     onChange={handleUpdateGroupSize}
                 >
+                    <MenuItem value={0}>Group Size</MenuItem>
                     <MenuItem value={1}>1</MenuItem>
                     <MenuItem value={2}>2</MenuItem>
                     <MenuItem value={3}>3</MenuItem>

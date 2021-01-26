@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { EditText, EditTextarea } from 'react-edit-text';
+import { EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import { useDispatch } from 'react-redux';
 import {
-    getClassroomMeta,
-    fetchClassroomData,
     alterDescription,
     alterObjective,
     patchDescription,
@@ -14,15 +12,11 @@ import {
 
 const ClassDetailsBlock = ({ classMeta }) => {
     const dispatch = useDispatch();
+    const role = useSelector((state) => state.currentUser.role);
     const [description, setDescription] = useState(classMeta['description']);
     const [daily_objective, setDailyObjective] = useState(
         classMeta['daily_objective']
     );
-    // const description = useSelector((state) => state.classMeta['description']);
-    // const daily_objective = useSelector(
-    //     (state) => state.classMeta['daily_objective']
-    // );
-    const role = useSelector((state) => state.currentUser.role);
 
     const updateDescription = (event) => {
         setDescription(event.target.value);
@@ -33,7 +27,6 @@ const ClassDetailsBlock = ({ classMeta }) => {
     };
 
     const handleDescriptionPatch = async (description) => {
-        console.log('description: ', description);
         const request = await patchDescription(
             classMeta['id'],
             description.value
@@ -52,11 +45,6 @@ const ClassDetailsBlock = ({ classMeta }) => {
             dispatch(alterObjective(daily_objective));
         }
     };
-
-    useEffect(() => {
-        console.log('description: ', description);
-        console.log('objective: ', daily_objective);
-    }, [description, daily_objective]);
 
     return (
         <>

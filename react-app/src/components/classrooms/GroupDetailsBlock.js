@@ -41,12 +41,12 @@ const GroupDetailsBlock = ({ classMeta }) => {
             <h3>Group Creation</h3>
             {!groups_defined ? (
                 <>
+                    <GroupCreation
+                        classroomId={classMeta.id}
+                        makeGroups={makeGroups}
+                    />
                     <div className="grouping__menu">
-                        <p>Define groups below: </p>
-                        <GroupCreation
-                            classroomId={classMeta.id}
-                            makeGroups={makeGroups}
-                        />
+                        {/* <p>Define groups below: </p> */}
                     </div>
                 </>
             ) : (

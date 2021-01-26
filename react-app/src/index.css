@@ -148,6 +148,10 @@ h6 {
     text-align: center;
 }
 
+.group_creation-container {
+    /* width: 30px; */
+}
+
 .student-ci-qs {
     display: flex;
     flex-flow: row nowrap;

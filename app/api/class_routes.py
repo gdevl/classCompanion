@@ -8,6 +8,7 @@ import random
 
 class_routes = Blueprint('classes', __name__)
 
+
 @class_routes.route('/<int:class_id>')
 def get_class_data(class_id):
     class_data = Classroom.query.get(class_id)
@@ -101,7 +102,7 @@ def bulk_enroll(class_id):
     ]
 
     db.session.commit()
-    
+
     return jsonify('Operation complete.')
 
 # add student to classroom
@@ -120,6 +121,7 @@ def enroll(class_id):
     db.session.commit()
 
     return jsonify(new_student)
+
 
 # remove student from classroom
 @class_routes.route('/<int:class_id>/unenroll', methods=['PATCH'])
@@ -179,8 +181,6 @@ def update_description(class_id):
 def update_daily_objective(class_id):
     classroom = Classroom.query.get(class_id)
     daily_objective_data = request.get_json()
-    print(f'request.get_json(): {request.get_json()}')
-    print(f'daily_objective_data: {daily_objective_data}')
     daily_objective = daily_objective_data['daily_objective']
 
     classroom.daily_objective = daily_objective
@@ -208,6 +208,7 @@ def update_meeting_link(class_id):
         "success": "yes!"
     }
 
+
 @class_routes.route('/<int:class_id>/meeting_pw', methods=['PATCH'])
 def update_meeting_pw(class_id):
     classroom = Classroom.query.get(class_id)
@@ -223,6 +224,7 @@ def update_meeting_pw(class_id):
         "success": "yes!"
     }
 
+
 @class_routes.route('/<int:class_id>/ungroup', methods=['PATCH'])
 def ungroup(class_id):
     selected_class = Classroom.query.get(class_id)
@@ -230,9 +232,7 @@ def ungroup(class_id):
         if group.active:
             group.active = False
     db.session.commit()
-    
     return jsonify(selected_class.get_active_groups())
-            
 
 
 @class_routes.route('/<int:class_id>/groups/<int:size>', methods=['POST'])
@@ -246,7 +246,7 @@ def make_groups(class_id, size):
     students = selected_class.students.copy()
     random.shuffle(students)
     numGroups = math.ceil(len(students) / size)
-    
+
     for i in range(numGroups):
         members = []
         for j in range(size):
@@ -260,49 +260,6 @@ def make_groups(class_id, size):
         db.session.add(group)
         db.session.commit()
     return jsonify(selected_class.get_active_groups())
-
-
-
-
-# @class_routes.route('/<int:id>/group/<int:size>', methods=['GET', 'POST', 'PUT'])
-# def group_class(id, size):
-#     if request.method == 'POST':
-#         selected_class = Classroom.query.get(id)
-#         for group in selected_class.groups:
-#             if group.active:
-#                 group.active = False
-#                 db.session.add(group)
-#                 db.session.commit()
-#         students = selected_class.students.copy()
-#         random.shuffle(students)
-#         numGroups = math.ceil(len(students) / size)
-#         print('student length: ', len(students))
-#         print('size: ', size)
-#         print('numGroups: ', numGroups)
-#         for i in range(numGroups):
-#             members = []
-#             for j in range(size):
-#                 if len(students) > 0:
-#                     member = students.pop()
-#                     members.append(member)
-#             group = Group(
-#                 class_id=id,
-#                 members=members,
-#             )
-#             db.session.add(group)
-#             db.session.commit()
-#         return jsonify("Test")
-
-#     if request.method == 'PUT':
-#         selected_class = Classroom.query.get(id)
-#         for group in selected_class.groups:
-#             if group.active:
-#                 group.active = False
-#                 db.session.add(group)
-#                 db.session.commit()
-#         return jsonify("TEST")
-
-
 
 
 # Fetch enrolled students by class_id
@@ -324,6 +281,7 @@ def get_unenrolled(class_id):
         ]
     )
 
+
 @class_routes.route('/<int:class_id>/roster')
 def get_enrollment(class_id):
     students = User.query.filter(User.role == 'student').all()
@@ -344,7 +302,7 @@ def get_enrollment(class_id):
 @class_routes.route('/<int:class_id>/groups')
 def get_groups(class_id):
     class_groups = Group.query.filter(
-        Group.class_id == class_id, Group.active == True).all()
+        Group.class_id == class_id, Group.active).all()
     return jsonify([class_group.get_members() for class_group in class_groups])
 
 
@@ -352,8 +310,8 @@ def get_groups(class_id):
 @class_routes.route('/<int:id>/questions')
 def get_unresolved_questions(id):
     class_questions = Question.query.filter(
-        Question.class_id == id, Question.resolved == False).all()
-    return {"questions": [class_question.to_dict() for class_question in class_questions]}
+        Question.class_id == id, not Question.resolved).all()
+    return {[class_question.to_dict() for class_question in class_questions]}
 
 
 # Fetch archived questions by class_id
@@ -361,11 +319,15 @@ def get_unresolved_questions(id):
 def get_resolved_questions(id):
     archived_questions = Question.query.filter(
         Question.class_id == id,
-        Question.resolved == True
+        Question.resolved
     ).all()
-    return {"questions": [archived_question.to_dict() for archived_question in archived_questions]}
-
-
+    return {
+        [
+            archived_question.to_dict()
+            for archived_question
+            in archived_questions
+        ]
+    }
 
 
 @class_routes.route('/<int:class_id>/question/<int:question_id>/answer', methods=['GET', 'POST'])
