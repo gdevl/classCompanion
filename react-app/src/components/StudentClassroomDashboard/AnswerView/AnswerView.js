@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Typography, Button, Modal, TextField } from '@material-ui/core';
-import { fetchClassrooms, setUserClasses } from '../../../../src/store/users'
+import {
+    Avatar,
+    Typography,
+    Button,
+    Modal,
+    TextField,
+} from '@material-ui/core';
+import { fetchClassrooms, setUserClasses } from '../../../../src/store/users';
+import {
+    getClassroomMeta,
+    fetchClassroomData,
+} from '../../../store/classroom_meta';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -26,10 +36,9 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         minWidth: '25rem',
-
     },
     editHeading: {
-        marginBottom: '1rem'
+        marginBottom: '1rem',
     },
     element: {
         padding: '1rem',
@@ -53,58 +62,84 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         marginBottom: '1rem',
         width: theme.spacing(7),
-        height: theme.spacing(7)
-    }
+        height: theme.spacing(7),
+    },
 }));
 
-export default function AnswerView({ props }) {
+export default function AnswerView({ open, setOpen, question }) {
     const dispatch = useDispatch();
     const classes = useStyles();
-    const currentState = useSelector(state => state.store)
 
     const acceptAnswer = async () => {
-        const response = await fetch(`/api/classes/answer/${props.answer.id}/accept`)
+        const response = await fetch(
+            `/api/classes/answer/${question.id}/accept`
+        );
         if (response.ok) {
-            const classrooms = await fetchClassrooms(currentState.current_user.id);
-            dispatch(setUserClasses(classrooms))
+            const classroom = await fetchClassroomData(question.class_id);
+            dispatch(getClassroomMeta(classroom));
         }
-        handleClose()
-    }
+        handleClose();
+    };
     const handleClose = () => {
-        props.setOpen(false)
-    }
+        setOpen(false);
+    };
+
+    console.log('question: ', question);
 
     return (
-        <div className='answer__container'>
+        <div className="answer__container">
+            <button onClick={() => setOpen(true)}>View Answer</button>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 className={classes.modal}
-                open={props.open}
-                onClose={handleClose}
+                open={open}
+                onClose={() => setOpen(false)}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
             >
-                <Fade in={props.open}>
-                    <Typography variant='h5'>
-                        <form className={classes.paper} noValidate autoComplete='off' onSubmit={acceptAnswer}>
+                <Fade in={open}>
+                    <Typography variant="h5">
+                        <form
+                            className={classes.paper}
+                            noValidate
+                            autoComplete="off"
+                            onSubmit={acceptAnswer}
+                        >
                             {/* <form className={classes.paper} noValidate autoComplete='off'> */}
-                            <Button size='large' variant='contained' onClick={handleClose} className={classes.exitBtn} variant='outlined'>x</Button>
-                            <Typography variant='h4' className={classes.editHeading}>
-                                {`${props.answer.question}?`}
+                            <Button
+                                size="large"
+                                variant="contained"
+                                onClick={handleClose}
+                                className={classes.exitBtn}
+                                variant="outlined"
+                            >
+                                x
+                            </Button>
+                            <Typography
+                                variant="h4"
+                                className={classes.editHeading}
+                            >
+                                {`${question.content}?`}
                             </Typography>
-                            <Typography variant='h5'>
-                                {`${props.answer.answer}`}
+                            <Typography variant="h5">
+                                {`${question.answers[0]}`}
                             </Typography>
-                            <Button variant='contained' color='primary' className={classes.button} onClick={acceptAnswer} >Accept</Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.button}
+                                onClick={acceptAnswer}
+                            >
+                                Accept
+                            </Button>
                         </form>
                     </Typography>
                 </Fade>
             </Modal>
-
         </div>
-    )
+    );
 }

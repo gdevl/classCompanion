@@ -53,7 +53,10 @@ class Classroom(db.Model):
             "meeting_pw": self.meeting_pw,
             "active": self.active,
             "image_url": self.class_image_url,
-            "questions": [question.to_dict() for question in self.questions],
+            "questions": [
+                question.to_dict()
+                for question in self.questions
+            ],
             "instructors": [
                 instructor.to_dict() for instructor in self.instructors],
             "students": [student.to_dict() for student in self.students],

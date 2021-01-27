@@ -11,6 +11,7 @@ class Question(db.Model):
     instructor_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     class_id = db.Column(db.Integer, db.ForeignKey("classes.id"))
     resolved = db.Column(db.Boolean, default=False)
+    answer = db.Column(db.Text, nullable=True)
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(
         db.DateTime,
@@ -39,5 +40,5 @@ class Question(db.Model):
             "student_id": self.student_id,
             "class_id": self.class_id,
             "resolved": self.resolved,
-            "answers": [answer.to_dict() for answer in self.answers]
+            "answer": self.answer
         }

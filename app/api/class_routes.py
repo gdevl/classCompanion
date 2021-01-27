@@ -331,39 +331,82 @@ def get_resolved_questions(id):
     }
 
 
-@class_routes.route('/<int:class_id>/question/<int:question_id>/answer', methods=['GET', 'POST'])
+# @class_routes.route(
+#     '/<int:class_id>/question/<int:question_id>/answer',
+#     methods=['GET', 'POST']
+# )
+# def answer_question(class_id, question_id):
+#     if request.method == 'POST':
+#         req_data = request.get_json()
+#         selected_question = Question.query.get(question_id)
+#         answer = Answer(
+#             content=req_data['answer'],
+#             instructor_id=req_data['instructor_id'],
+#             question_id=question_id,
+#         )
+#         db.session.add(answer)
+#         selected_question.resolved = True
+#         db.session.add(selected_question)
+#         db.session.commit()
+#         return jsonify("Answer submitted.")
+
+
+@class_routes.route(
+    '/<int:class_id>/question/<int:question_id>/answer',
+    methods=['PATCH']
+)
 def answer_question(class_id, question_id):
     if request.method == 'POST':
         req_data = request.get_json()
+        answer = req_data['answer']
         selected_question = Question.query.get(question_id)
-        answer = Answer(
-            content=req_data['answer'],
-            instructor_id=req_data['instructor_id'],
-            question_id=question_id,
-        )
-        db.session.add(answer)
-        selected_question.resolved = True
-        db.session.add(selected_question)
+        selected_question.answer = answer
+
         db.session.commit()
         return jsonify("Answer submitted.")
 
 
-@class_routes.route('/<int:class_id>/question/<int:question_id>/dismiss', methods=['GET', 'POST'])
+@class_routes.route(
+    '/<int:class_id>/question/<int:question_id>/dismiss',
+    methods=['PATCH']
+)
 def dismiss_question(class_id, question_id):
-    if request.method == 'POST':
-        req_data = request.get_json()
-        selected_question = Question.query.get(question_id)
-        answer = Answer(
-            content=req_data['answer'],
-            instructor_id=req_data['instructor_id'],
-            question_id=question_id,
-            active=False
-        )
-        db.session.add(answer)
-        selected_question.resolved = True
-        db.session.add(selected_question)
-        db.session.commit()
-        return jsonify("Question dismissed.")
+    req_data = request.get_json()
+    selected_question = Question.query.get(question_id)
+    selected_question.resolved = True
+    db.session.commit()
+    return jsonify("Question dismissed.")
+
+
+@class_routes.route('/answer/<int:answer_id>/accept',
+                    methods=['GET', 'POST'])
+def accept_answer(answer_id):
+    answer = Answer.query.get(answer_id)
+    answer.active = False
+    db.session.add(answer)
+    db.session.commit()
+    return jsonify("ACCEPT ANSWER")
+
+    
+# @class_routes.route(
+#     '/<int:class_id>/question/<int:question_id>/dismiss',
+#     methods=['GET', 'POST']
+# )
+# def dismiss_question(class_id, question_id):
+#     if request.method == 'POST':
+#         req_data = request.get_json()
+#         selected_question = Question.query.get(question_id)
+#         answer = Answer(
+#             content=req_data['answer'],
+#             instructor_id=req_data['instructor_id'],
+#             question_id=question_id,
+#             active=False
+#         )
+#         db.session.add(answer)
+#         selected_question.resolved = True
+#         db.session.add(selected_question)
+#         db.session.commit()
+#         return jsonify("Question dismissed.")
 
 
 # post question
@@ -408,11 +451,3 @@ def check_in(class_id, student_id):
     }
 
 
-@class_routes.route('/answer/<int:answer_id>/accept',
-                    methods=['GET', 'POST'])
-def accept_answer(answer_id):
-    answer = Answer.query.get(answer_id)
-    answer.active = False
-    db.session.add(answer)
-    db.session.commit()
-    return jsonify("ACCEPT ANSWER")

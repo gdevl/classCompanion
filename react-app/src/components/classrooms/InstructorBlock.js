@@ -1,26 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { submitQuestion, postQuestion } from '../../store/classroom_meta';
 import Avatar from '@material-ui/core/Avatar';
+import AskQuestion from '../StudentClassroomDashboard/ask-a-question/AskQuestion';
+import AnswerView from '../StudentClassroomDashboard/AnswerView/AnswerView';
 
 const InstructorBlock = ({ classMeta, userId }) => {
     const dispatch = useDispatch();
     const questions = classMeta['questions'];
+    const [question, setQuestion] = useState(undefined);
+    const [open, setOpen] = useState(false);
 
-    const questionPending = (userId) => {
-        for (let question of questions) {
-            if (
-                question.student_id === userId &&
-                question.class_id === classMeta.id
-            ) {
-                return true;
+    const showQuestion = () => {
+        console.log('question: ', question);
+        if (!question) return false;
+        let { answers } = question;
+        console.log('answers: ', answers);
+
+        if (answers && answers[0] && !answers[0].active) {
+            return false;
+        }
+        return true;
+    };
+
+    useEffect(() => {
+        if (!classMeta['questions']) return;
+
+        for (let question of classMeta['questions']) {
+            if (question.student_id === userId) {
+                setQuestion(question);
             }
         }
+    }, [classMeta]);
+
+    const Question = () => {
+        if (question.answers.length) {
+            console.log('question.answers: ', question.answers);
+            console.log('question.answers.length', question.answers.length);
+            return (
+                <AnswerView open={open} setOpen={setOpen} question={question} />
+            );
+        } else {
+            return <p>Question Pending</p>;
+        }
     };
+
+    console.log('question: ', question);
 
     return (
         <>
             <h3>Instructors</h3>
+            <AskQuestion open={open} setOpen={setOpen} />
             {classMeta['instructors']
                 ? classMeta['instructors'].map((instructor) => (
                       <>
@@ -29,14 +58,12 @@ const InstructorBlock = ({ classMeta, userId }) => {
                               <p>{`${instructor.first_name} ${instructor.last_name}`}</p>
                           </div>
                           <div className="classrooms_actions">
-                              {!questionPending(userId) ? (
-                                  <button className="ask_a_question">
+                              {showQuestion() ? (
+                                  <Question />
+                              ) : (
+                                  <button onClick={() => setOpen(true)}>
                                       Ask A Question
                                   </button>
-                              ) : (
-                                  <p className="question_pending">
-                                      Question Pending
-                                  </p>
                               )}
                           </div>
                       </>

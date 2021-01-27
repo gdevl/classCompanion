@@ -1,27 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
+import AnswerModal from '../InstructorClassroomDashboard/AnswerModal/AnswerModal';
 
 const ClassList = ({ classMeta, role }) => {
+    const [open, setOpen] = useState(false);
+    const [question, setQuestion] = useState(null);
     const questions = classMeta['questions'];
 
     const hasQuestion = (userId) => {
         for (let question of questions) {
-            if (question.student_id === userId) {
-                return true;
+            if (question.student_id === userId && question.resolved === false) {
+                return question;
             }
         }
+        return false;
     };
 
-    const handleQuestion = (e) => {
-        for (let question of questions) {
-            if (question.student_id === e.currentTarget.value) {
-                console.log(question.content);
-            }
-        }
+    const handleQuestion = (question) => {
+        setQuestion(question);
+        setOpen(true);
     };
 
     return (
@@ -68,7 +69,14 @@ const ClassList = ({ classMeta, role }) => {
                                             <IconButton
                                                 className="depad_question_button"
                                                 value={student.id}
-                                                onClick={handleQuestion}
+                                                content={hasQuestion(
+                                                    student.id
+                                                )}
+                                                onClick={() =>
+                                                    handleQuestion(
+                                                        hasQuestion(student.id)
+                                                    )
+                                                }
                                             >
                                                 <QuestionAnswerIcon
                                                     style={{ color: 'orange' }}
@@ -95,6 +103,7 @@ const ClassList = ({ classMeta, role }) => {
                     You haven't added any students to this classroom.
                 </p>
             )}
+            <AnswerModal open={open} setOpen={setOpen} question={question} />
         </>
     );
 };
