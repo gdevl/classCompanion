@@ -367,7 +367,10 @@ def dismiss_question(class_id, question_id):
 
 
 # post question
-@class_routes.route("/<int:class_id>/user/<int:user_id>/question", methods=["POST"])
+@class_routes.route(
+    "/<int:class_id>/user/<int:user_id>/question",
+    methods=["POST"]
+)
 # @login_required
 def postQuestion(class_id, user_id):
     req_data = request.get_json()

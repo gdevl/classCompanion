@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import IconButton from '@material-ui/core/IconButton';
@@ -6,6 +6,24 @@ import Tooltip from '@material-ui/core/Tooltip';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 const ClassList = ({ classMeta, role }) => {
+    const questions = classMeta['questions'];
+
+    const hasQuestion = (userId) => {
+        for (let question of questions) {
+            if (question.student_id === userId) {
+                return true;
+            }
+        }
+    };
+
+    const handleQuestion = (e) => {
+        for (let question of questions) {
+            if (question.student_id === e.currentTarget.value) {
+                console.log(question.content);
+            }
+        }
+    };
+
     return (
         <>
             {classMeta['students'].length > 0 ? (
@@ -41,12 +59,33 @@ const ClassList = ({ classMeta, role }) => {
                                 />
                             )}
                             {role === 'instructor' ? (
-                                <QuestionAnswerIcon
-                                    color="disabled"
-                                    //   color="primary"
-                                    fontSize="default"
-                                    className="student-question"
-                                />
+                                <>
+                                    {hasQuestion(student.id) ? (
+                                        <Tooltip
+                                            title={`${student.first_name} has a question`}
+                                            aria-label="student-question"
+                                        >
+                                            <IconButton
+                                                className="depad_question_button"
+                                                value={student.id}
+                                                onClick={handleQuestion}
+                                            >
+                                                <QuestionAnswerIcon
+                                                    style={{ color: 'orange' }}
+                                                    fontSize="default"
+                                                    value={student.id}
+                                                    className="student-question"
+                                                />
+                                            </IconButton>
+                                        </Tooltip>
+                                    ) : (
+                                        <QuestionAnswerIcon
+                                            color="disabled"
+                                            fontSize="default"
+                                            className="student-question"
+                                        />
+                                    )}
+                                </>
                             ) : null}
                         </div>
                     </div>

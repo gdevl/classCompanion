@@ -5,6 +5,7 @@ export const ALTER_OBJECTIVE = 'ALTER_OBJECTIVE';
 export const ALTER_MEETING_LINK = 'ALTER_MEETING_LINK';
 export const ALTER_MEETING_PW = 'ALTER_MEETING_PW';
 export const CHECK_IN_STUDENT = 'CHECK_IN_STUDENT';
+export const SUBMIT_QUESTION = 'SUBMIT_QUESTION';
 
 export const getClassroomMeta = (classroom) => {
     return {
@@ -52,6 +53,34 @@ export const checkInStudent = (studentId) => {
         type: CHECK_IN_STUDENT,
         studentId,
     };
+};
+
+export const submitQuestion = (question) => {
+    return {
+        type: SUBMIT_QUESTION,
+        question,
+    };
+};
+
+export const postQuestion = async (classId, studentId, content) => {
+    const body = {
+        classId,
+        studentId,
+        content,
+    };
+
+    const request = await fetch(
+        `/api/classes/${classId}/user/${studentId}/question`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }
+    );
+    const response = await request.json();
+    return response;
 };
 
 export const patchStudentCheckIn = async (classId, studentId) => {
@@ -187,6 +216,11 @@ export default function reducer(state = {}, action) {
         case CHECK_IN_STUDENT: {
             let newState = { ...state };
             newState['attendance'].push(action.studentId);
+            return newState;
+        }
+        case SUBMIT_QUESTION: {
+            let newState = { ...state };
+            newState['questions'].push(action.question);
             return newState;
         }
         default:

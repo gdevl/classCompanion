@@ -367,6 +367,14 @@ h6 {
     transition: background-color 250ms, color 250ms;
 }
 
+.depad_question_button {
+    padding: 0 !important;
+}
+
+.question_pending {
+    text-transform: uppercase;
+}
+
 .classrooms__actions button:focus {
     outline: none;
 }

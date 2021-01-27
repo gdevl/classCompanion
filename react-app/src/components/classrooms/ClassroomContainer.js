@@ -36,6 +36,7 @@ const ClassroomContainer = ({ classMeta, role, userId, attendance }) => {
                                 <InstructorBlock
                                     classMeta={classMeta}
                                     role={role}
+                                    userId={userId}
                                 />
                             </section>
                         )}
