@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ClassroomContext } from './SingleClassroom';
 import BreakGroups from './BreakGroups';
 import GroupCreation from './GroupCreation';
-// import { setGroupsDefined } from '../../store/define_groups';
 
 const GroupDetailsBlock = () => {
     const dispatch = useDispatch();

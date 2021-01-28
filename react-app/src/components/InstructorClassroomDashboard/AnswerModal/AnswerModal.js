@@ -1,14 +1,7 @@
-import React, { useContext } from 'react';
-import io from 'socket.io-client';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-    getClassroomMeta,
-    fetchClassroomData,
-    answerQuestion,
-    dismissQuestion,
-    patchAnswer,
-    patchQuestionDismissal,
-} from '../../../store/classroom_meta';
+import React, { useContext, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { ClassroomContext } from '../../classrooms/SingleClassroom';
+import { answerQuestion, patchAnswer } from '../../../store/questions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,13 +11,12 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import SocketContext from '../../../socketContext';
 
-export default function AnswerModal({ open, setOpen, question, classroomId }) {
-    const socket = useContext(SocketContext);
+export default function AnswerModal({ open, setOpen, question }) {
     const dispatch = useDispatch();
+    const socket = useContext(SocketContext);
+    const { currentUser, classroomId } = useContext(ClassroomContext);
+    const [answer, setAnswer] = useState('');
 
-    const currentUser = useSelector((state) => state.currentUser);
-
-    const [answer, setAnswer] = React.useState('');
     const handleAnswerChange = (event) => {
         setAnswer(event.target.value);
     };
@@ -41,8 +33,6 @@ export default function AnswerModal({ open, setOpen, question, classroomId }) {
                 answer: answer,
                 classroom: classroomId,
             });
-            // const classroom = await fetchClassroomData(classroomId);
-            // dispatch(getClassroomMeta(classroom));
         }
     };
 
