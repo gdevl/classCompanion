@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ClassroomContext } from './SingleClassroom';
 import { useDispatch, useSelector } from 'react-redux';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
@@ -7,16 +8,14 @@ import {
     getStudentQuestion,
     acceptAnswer,
     patchQuestionAcceptance,
+    postQuestion,
     clearQuestion,
 } from '../../store/question';
 
-import { postQuestion, submitQuestion } from '../../store/classroom_meta';
-
 const StudentQAndA = () => {
     const dispatch = useDispatch();
+    const { currentUser, classroomId } = useContext(ClassroomContext);
     const question = useSelector((state) => state.question);
-    const currentUser = useSelector((state) => state.currentUser);
-    const classroomId = useSelector((state) => state.currentClassroomId);
     const [pending, setPending] = useState(false);
     const [readyToSubmit, setReadyToSubmit] = useState(false);
 
@@ -37,7 +36,7 @@ const StudentQAndA = () => {
     };
 
     const handleNewQuestion = () => {
-        patchQuestionAcceptance(question.class_id, question.id);
+        patchQuestionAcceptance(classroomId, question.id);
         dispatch(acceptAnswer(question));
         setTextarea('');
     };
@@ -54,7 +53,7 @@ const StudentQAndA = () => {
 
     return (
         <section className="classroom__grid-item-top bg-green">
-            {question.content ? (
+            {question.content && !question.resolved ? (
                 <>
                     <h3>You said:</h3>
                     <EditTextarea
@@ -79,6 +78,9 @@ const StudentQAndA = () => {
                                 }
                                 readonly
                             />
+                            <button onClick={() => handleNewQuestion()}>
+                                Ask Another
+                            </button>
                         </>
                     ) : null}
                 </>
@@ -105,7 +107,6 @@ const StudentQAndA = () => {
             {textarea !== '' && textarea !== undefined ? (
                 <button onClick={() => setTextarea('')}>Clear Input</button>
             ) : null}
-            {/* <button onClick={() => handleNewQuestion()}>Ask Another</button> */}
         </section>
     );
 };

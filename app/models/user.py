@@ -80,6 +80,9 @@ class User(db.Model, UserMixin):
             "name": f'{self.first_name} {self.last_name}',
         }
 
+    def get_fullname(self):
+        return f'{self.first_name} {self.last_name}'
+
     def get_transfer_list(self):
         return {
             "id": self.id,

@@ -44,7 +44,7 @@ export default function AnswerModal({ open, setOpen, question }) {
                 onClose={() => setOpen(false)}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">{`Name's Question`}</DialogTitle>
+                <DialogTitle id="form-dialog-title">{`${question.name}'s Question`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>{question.content}</DialogContentText>
                     <TextField

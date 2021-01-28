@@ -36,5 +36,6 @@ class Question(db.Model):
             "student_id": self.student_id,
             "class_id": self.class_id,
             "resolved": self.resolved,
-            "answer": self.answer
+            "answer": self.answer,
+            "name": self.student.get_fullname()
         }

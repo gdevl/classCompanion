@@ -124,6 +124,12 @@ export default function reducer(state = {}, action) {
             newState.resolved = true;
             return newState;
         }
+        case SUBMIT_QUESTION: {
+            return {
+                ...state,
+                ...action.question,
+            };
+        }
 
         default:
             return state;
