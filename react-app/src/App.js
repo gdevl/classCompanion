@@ -88,7 +88,10 @@ const App = ({ socket }) => {
                 />
                 <div className="negative-space"></div>
                 {currentClassroomId ? (
-                    <SingleClassroom userId={currentUser.id} />
+                    <SingleClassroom
+                        userId={currentUser.id}
+                        classroomId={currentClassroomId}
+                    />
                 ) : (
                     <AllClassrooms />
                 )}

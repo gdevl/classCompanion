@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { ClassroomContext } from './SingleClassroom';
 import { useDispatch, useSelector } from 'react-redux';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
@@ -9,9 +10,11 @@ import {
     patchMeetingPw,
 } from '../../store/classroom_meta';
 
-const MeetingDetailsBlock = ({ classMeta }) => {
+const MeetingDetailsBlock = () => {
     const dispatch = useDispatch();
-    const role = useSelector((state) => state.currentUser.role);
+    const { currentUser, classMeta, classroomId } = useContext(
+        ClassroomContext
+    );
     const [meeting_link, setMeetingLink] = useState(classMeta['meeting_link']);
     const [meeting_pw, setMeetingPw] = useState(classMeta['meeting_pw']);
 
@@ -24,30 +27,27 @@ const MeetingDetailsBlock = ({ classMeta }) => {
     };
 
     const handleMeetingLinkPatch = async (meeting_link) => {
-        const request = await patchMeetingLink(
-            classMeta['id'],
-            meeting_link.value
-        );
+        const request = await patchMeetingLink(classroomId, meeting_link.value);
         if (request.ok) {
             dispatch(alterMeetingLink(meeting_link));
         }
     };
 
     const handleMeetingPwPatch = async (meeting_pw) => {
-        const request = await patchMeetingPw(classMeta['id'], meeting_pw.value);
+        const request = await patchMeetingPw(classroomId, meeting_pw.value);
         if (request.ok) {
             dispatch(alterMeetingPw(meeting_pw));
         }
     };
 
     return (
-        <>
+        <section className="classroom__grid-item-top bg-red">
             <h3>Meeting Info</h3>
             {classMeta['meeting_link'] ? (
                 <>
                     <div className="classroom__details-row">
                         <h4>Meeting Link</h4>
-                        {role === 'instructor' ? (
+                        {currentUser.role === 'instructor' ? (
                             <EditTextarea
                                 onChange={updateMeetingLink}
                                 onSave={handleMeetingLinkPatch}
@@ -78,7 +78,7 @@ const MeetingDetailsBlock = ({ classMeta }) => {
                     </div>
                     <div className="classroom__details-row">
                         <h4>Meeting Password</h4>
-                        {role === 'instructor' ? (
+                        {currentUser.role === 'instructor' ? (
                             <EditTextarea
                                 onChange={updateMeetingPw}
                                 onSave={handleMeetingPwPatch}
@@ -107,7 +107,7 @@ const MeetingDetailsBlock = ({ classMeta }) => {
                     information yet. When they do, it will populate here.
                 </p>
             )}
-        </>
+        </section>
     );
 };
 

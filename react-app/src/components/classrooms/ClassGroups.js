@@ -13,7 +13,7 @@ const ClassGroups = ({ classMeta, role }) => {
     useEffect(() => {});
 
     return (
-        <>
+        <div className="classroom_container-classgroups">
             {Object.keys(groups).length > 0 ? (
                 Object.values(groups).map((group) => {
                     return (
@@ -72,7 +72,7 @@ const ClassGroups = ({ classMeta, role }) => {
                     There aren't any groups defined for this classroom.
                 </p>
             )}
-        </>
+        </div>
     );
 };
 

@@ -2,86 +2,111 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
-import { fetchStudentQuestion, getStudentQuestion } from '../../store/question';
+import {
+    fetchStudentQuestion,
+    getStudentQuestion,
+    acceptAnswer,
+    patchQuestionAcceptance,
+    clearQuestion,
+} from '../../store/question';
 
-// const Answer = ({ answer }) => {
-//     return <p>{answer}</p>;
-// };
-
-// const Question = () => {
-//     const handleSubmit = () => {
-//         console.log('submitted');
-//     };
-
-//     return (
-{
-    /* <EditTextarea
-    onChange={(e) => setQuestion(e.currentTarget.value)}
-    onSave={handleSubmit}
-    value={question}
-    name="question"
-    rows={1}
-    type="text"
-    defaultValue={question.content ? question.content : ''}
-/>; */
-}
-//     );
-// };
+import { postQuestion, submitQuestion } from '../../store/classroom_meta';
 
 const StudentQAndA = () => {
     const dispatch = useDispatch();
     const question = useSelector((state) => state.question);
-    const studentId = useSelector((state) => state.currentUser.id);
+    const currentUser = useSelector((state) => state.currentUser);
     const classroomId = useSelector((state) => state.currentClassroomId);
     const [pending, setPending] = useState(false);
+    const [readyToSubmit, setReadyToSubmit] = useState(false);
 
     const [textarea, setTextarea] = useState(question.content);
 
     const handleSave = ({ name, value }) => {
-        // alert(name + ' saved as: ' + value);
-        dispatch(getStudentQuestion());
+        setTextarea(value);
+        setReadyToSubmit(true);
+    };
+
+    // On save, the submit button should appear.
+
+    const handleSubmit = () => {
+        setPending(true);
+        postQuestion(classroomId, currentUser.id, textarea);
+        const data = fetchStudentQuestion(classroomId, currentUser.id);
+        dispatch(getStudentQuestion(data));
     };
 
     const handleNewQuestion = () => {
+        patchQuestionAcceptance(question.class_id, question.id);
+        dispatch(acceptAnswer(question));
         setTextarea('');
     };
 
     useEffect(() => {
         (async () => {
-            const data = await fetchStudentQuestion(classroomId, studentId);
+            const data = await fetchStudentQuestion(
+                classroomId,
+                currentUser.id
+            );
             dispatch(getStudentQuestion(data));
         })();
     }, []);
 
     return (
-        <>
-            {question ? (
-                <EditTextarea
-                name="textarea"
-                style={{ fontSize: '16px', border: '1px solid #ccc' }}
-                defaultValue={question.content}
-                readonly
-                />
+        <section className="classroom__grid-item-top bg-green">
+            {question.content ? (
+                <>
+                    <h3>You said:</h3>
+                    <EditTextarea
+                        name="textarea"
+                        style={{ fontSize: '16px', border: '1px solid #ccc' }}
+                        defaultValue={question.content ? question.content : ''}
+                        value={question.content}
+                        readonly
+                    />
+                    {question.answer !== null ? (
+                        <>
+                            <h3>Your instructor replied:</h3>
+                            <EditTextarea
+                                name="textarea"
+                                style={{
+                                    fontSize: '16px',
+                                    border: '1px solid #ccc',
+                                }}
+                                value={question.answer}
+                                defaultValue={
+                                    question.answer ? question.answer : ''
+                                }
+                                readonly
+                            />
+                        </>
+                    ) : null}
+                </>
             ) : (
-
+                <>
+                    <h3>Ask A Question</h3>
+                    <EditTextarea
+                        name="textarea"
+                        style={{ fontSize: '16px', border: '1px solid #ccc' }}
+                        value={textarea}
+                        onChange={setTextarea}
+                        onSave={handleSave}
+                    />
+                </>
             )}
-            <h3>Ask A Question</h3>
-            <EditTextarea
-                name="textarea"
-                style={{ fontSize: '16px', border: '1px solid #ccc' }}
-                value={textarea}
-                onChange={setTextarea}
-                onSave={handleSave}
-            />
 
-            <p style={{ paddingLeft: '5px', marginBottom: '5px' }}>
+            {/* <p style={{ paddingLeft: '5px', marginBottom: '5px' }}>
                 <b>Value:</b> {textarea}
-            </p>
+            </p> */}
 
-            <button onClick={() => setTextarea('')}>Clear Input</button>
-            <button onClick={() => setTextarea('')}>Submit</button>
-            <button onClick={() => handleNewQuestion()}>Ask Another</button>
-        </>
+            {readyToSubmit && textarea !== '' ? (
+                <button onClick={() => handleSubmit()}>Submit</button>
+            ) : null}
+            {textarea !== '' && textarea !== undefined ? (
+                <button onClick={() => setTextarea('')}>Clear Input</button>
+            ) : null}
+            {/* <button onClick={() => handleNewQuestion()}>Ask Another</button> */}
+        </section>
     );
 };
 

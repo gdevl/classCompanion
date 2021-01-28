@@ -334,7 +334,6 @@ export default function reducer(state = {}, action) {
         }
 
         case ACCEPT_ANSWER: {
-            debugger;
             return {
                 ...state,
             };

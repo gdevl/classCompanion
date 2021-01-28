@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ClassroomContext } from './SingleClassroom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMinimalSelectStyles } from '@mui-treasury/styles/select/minimal';
 import Select from '@material-ui/core/Select';
@@ -12,7 +13,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { fetchClassGroups, setClassGroups } from '../../store/groups';
 import { setGroupsDefined } from '../../store/define_groups';
 
-const GroupCreation = ({ classroomId, makeGroups }) => {
+const GroupCreation = ({ makeGroups }) => {
+    const { classroomId } = useContext(ClassroomContext);
     const minimalSelectClasses = useMinimalSelectStyles();
 
     // moves the menu below the select input

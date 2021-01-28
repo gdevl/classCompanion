@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ClassroomContext } from './SingleClassroom';
 import BreakGroups from './BreakGroups';
 import GroupCreation from './GroupCreation';
-import { setGroupsDefined } from '../../store/define_groups';
+// import { setGroupsDefined } from '../../store/define_groups';
 
-const GroupDetailsBlock = ({ classMeta }) => {
+const GroupDetailsBlock = () => {
     const dispatch = useDispatch();
-    const groups_defined = useSelector((state) => state.groups_defined);
-    const groups = useSelector((state) => state.groups);
-
-    useEffect(() => {
-        if (Object.keys(groups).length > 0) {
-            dispatch(setGroupsDefined(true));
-        } else {
-            dispatch(setGroupsDefined(false));
-        }
-    }, [groups, groups_defined]);
+    const { classroomId, groups, students } = useContext(ClassroomContext);
 
     const breakGroups = async () => {
-        const ungroup = await fetch(`/api/classes/${classMeta.id}/ungroup`, {
+        const ungroup = await fetch(`/api/classes/${classroomId}/ungroup`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,28 +29,20 @@ const GroupDetailsBlock = ({ classMeta }) => {
     };
 
     return (
-        <>
+        <section className="classroom__grid-item-top bg-purple">
             <h3>Group Creation</h3>
-            {!groups_defined ? (
-                <>
-                    <GroupCreation
-                        classroomId={classMeta.id}
-                        makeGroups={makeGroups}
-                    />
-                </>
+            {!Object.keys(groups).length ? (
+                <GroupCreation makeGroups={makeGroups} />
             ) : (
                 <>
                     <p>
-                        Groups of
-                        {` ${Object.values(groups[0]['members']).length}`}
+                        Groups of{' '}
+                        {`${Object.values(groups['0'].members).length}`}
                     </p>
-                    <BreakGroups
-                        classroomId={classMeta.id}
-                        breakGroups={breakGroups}
-                    />
+                    <BreakGroups breakGroups={breakGroups} />
                 </>
             )}
-        </>
+        </section>
     );
 };
 

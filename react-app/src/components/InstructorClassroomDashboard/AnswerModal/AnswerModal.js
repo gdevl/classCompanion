@@ -29,33 +29,6 @@ export default function AnswerModal({ open, setOpen, question, classroomId }) {
         setAnswer(event.target.value);
     };
 
-    const handleDismiss = async () => {
-        //implement question dismiss here
-        const response = await fetch(
-            `/api/classes/${classroomId}/question/${question.id}/dismiss`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    instructor_id: currentUser.id,
-                    answer: 'dismissed',
-                }),
-            }
-        );
-        if (response.ok) {
-            const classroom = await fetchClassroomData(classroomId);
-            dispatch(getClassroomMeta(classroom));
-            socket.emit('dismiss', {
-                answer: answer,
-                classroom: classroomId,
-            });
-            // setExpanded(null);
-            setOpen(false);
-        }
-    };
-
     const handleSubmit = async () => {
         const request = await patchAnswer(classroomId, question.id, answer);
         console.log('request: ', request);
@@ -71,7 +44,6 @@ export default function AnswerModal({ open, setOpen, question, classroomId }) {
             // const classroom = await fetchClassroomData(classroomId);
             // dispatch(getClassroomMeta(classroom));
         }
-
     };
 
     if (!question) return null;
@@ -99,9 +71,6 @@ export default function AnswerModal({ open, setOpen, question, classroomId }) {
                 <DialogActions>
                     <Button onClick={() => setOpen(false)} color="primary">
                         Cancel
-                    </Button>
-                    <Button onClick={handleDismiss} color="primary">
-                        Dismiss
                     </Button>
                     <Button onClick={handleSubmit} color="primary">
                         Submit

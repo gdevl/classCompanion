@@ -1,53 +1,79 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-    getClassroomMeta,
-    fetchClassroomData,
-} from '../../store/classroom_meta';
-import { setClassGroups, fetchClassGroups } from '../../store/groups';
+import React, { createContext } from 'react';
 import ClassroomContainer from './ClassroomContainer';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import ClassDetailsBlock from './ClassDetailsBlock';
+import MeetingDetailsBlock from './MeetingDetailsBlock';
+import ClassList from './ClassList';
+import ClassGroups from './ClassGroups';
+import GroupDetailsBlock from './GroupDetailsBlock';
+import OverviewBlock from './OverviewBlock';
+import CheckInBlock from './CheckInBlock';
+import StudentQAndA from './StudentQAndA';
+import useFetchClassroomAsInstructor from './useFetchClassroomDataAsInstructor';
 
-const SingleClassroom = ({ userId }) => {
-    const dispatch = useDispatch();
-    const [loaded, setLoaded] = useState(false);
-    const currentUser = useSelector((state) => state.currentUser);
-    const currentClassroomId = useSelector((state) => state.currentClassroomId);
-    const classMeta = useSelector((state) => state.currentClassroomMeta);
-    const attendance = useSelector((state) => state.attendance);
+export const ClassroomContext = createContext(undefined);
 
-    useEffect(() => {
-        (async () => {
-            const query = await fetchClassroomData(currentClassroomId);
-            dispatch(getClassroomMeta(query));
-        })();
-        setLoaded(true);
-    }, [currentClassroomId]);
-
-    useEffect(() => {
-        (async () => {
-            const groupData = await fetchClassGroups(currentClassroomId);
-            dispatch(setClassGroups(groupData));
-        })();
-    }, [currentClassroomId]);
+const SingleClassroom = ({ userId, classroomId }) => {
+    const {
+        status,
+        currentUser,
+        classMeta,
+        attendance,
+        questions,
+        groups,
+        students,
+    } = useFetchClassroomAsInstructor(classroomId);
 
     if (!currentUser) return null;
     if (!classMeta) return null;
 
-    if (!loaded) {
+    if (status === 'loading') {
         return <p>Loading...</p>;
     }
 
     return (
-        <>
-            {classMeta.id !== null ? (
-                <ClassroomContainer
-                    classMeta={classMeta}
-                    role={currentUser.role}
-                    userId={userId}
-                    attendance={attendance}
-                />
-            ) : null}
-        </>
+        <ClassroomContext.Provider
+            value={{
+                currentUser,
+                classMeta,
+                attendance,
+                questions,
+                classroomId,
+                groups,
+                students,
+            }}
+        >
+            <Tabs>
+                <TabList>
+                    <Tab>Classroom Details</Tab>
+                    <Tab>Classroom Roster</Tab>
+                    <Tab>Classroom Groups</Tab>
+                </TabList>
+                <TabPanel>
+                    <div className="classroom__grid-classroom_container">
+                        {currentUser.role === 'instructor' ? (
+                            <OverviewBlock />
+                        ) : (
+                            <StudentQAndA />
+                        )}
+                        <ClassDetailsBlock />
+                        <MeetingDetailsBlock />
+                        {currentUser.role === 'instructor' ? (
+                            <GroupDetailsBlock />
+                        ) : (
+                            <CheckInBlock />
+                        )}
+                    </div>
+                </TabPanel>
+                <TabPanel>
+                    <ClassList />
+                </TabPanel>
+                <TabPanel>
+                    <ClassGroups />
+                </TabPanel>
+            </Tabs>
+        </ClassroomContext.Provider>
     );
 };
 

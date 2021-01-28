@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ClassroomContext } from './SingleClassroom';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkInStudent, postStudentCheckIn } from '../../store/classroom_meta';
 
-const CheckInBlock = ({ classMeta, userId }) => {
+const CheckInBlock = () => {
+    const { classroomId, attendance, currentUser } = useContext(
+        ClassroomContext
+    );
     const dispatch = useDispatch();
 
     const handleCheckIn = async () => {
-        const request = await postStudentCheckIn(classMeta['id'], userId);
-        dispatch(checkInStudent(userId));
+        const request = await postStudentCheckIn(classroomId, currentUser.id);
+        dispatch(checkInStudent(currentUser.id));
     };
 
     return (
-        <>
+        <section className="classroom__grid-item-top bg-purple">
             <h3>Check In</h3>
-            {classMeta['attendance'] ? (
+            {attendance ? (
                 <>
-                    {classMeta['attendance'].includes(userId) ? (
+                    {attendance.includes(currentUser.id) ? (
                         <p>You're all checked in. Hooray!</p>
                     ) : (
                         <>
@@ -30,7 +34,7 @@ const CheckInBlock = ({ classMeta, userId }) => {
                     )}
                 </>
             ) : null}
-        </>
+        </section>
     );
 };
 

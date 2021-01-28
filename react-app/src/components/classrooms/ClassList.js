@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ClassroomContext } from './SingleClassroom';
 import Avatar from '@material-ui/core/Avatar';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import IconButton from '@material-ui/core/IconButton';
@@ -6,14 +7,17 @@ import Tooltip from '@material-ui/core/Tooltip';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import AnswerModal from '../InstructorClassroomDashboard/AnswerModal/AnswerModal';
 
-const ClassList = ({ classMeta, role }) => {
+const ClassList = () => {
+    const { attendance, currentUser, questions, classMeta } = useContext(
+        ClassroomContext
+    );
     const [open, setOpen] = useState(false);
     const [question, setQuestion] = useState(null);
-    const questions = classMeta['questions'];
+    const [name, setName] = useState('');
 
     const hasQuestion = (userId) => {
         for (let question of questions) {
-            if (question.student_id === userId && question.resolved === false) {
+            if (question.student_id === userId && !question.answer) {
                 return question;
             }
         }
@@ -25,10 +29,8 @@ const ClassList = ({ classMeta, role }) => {
         setOpen(true);
     };
 
-    console.log('classMeta["students"]: ', classMeta['students']);
-
     return (
-        <> 
+        <div className="classroom_container-classlist">
             {classMeta['students'].length > 0 ? (
                 classMeta['students'].map((student) => (
                     <div
@@ -42,7 +44,7 @@ const ClassList = ({ classMeta, role }) => {
                             <Avatar src={`${student.avatar_url}`} />
                         </div>
                         <div className="student-ci-qs">
-                            {classMeta['attendance'].includes(student.id) ? (
+                            {attendance.includes(student.id) ? (
                                 <Tooltip
                                     title={`${student.first_name} has checked in`}
                                     aria-label="Student has checked in."
@@ -61,7 +63,7 @@ const ClassList = ({ classMeta, role }) => {
                                     className="student-checked_in"
                                 />
                             )}
-                            {role === 'instructor' ? (
+                            {currentUser.role === 'instructor' ? (
                                 <>
                                     {hasQuestion(student.id) ? (
                                         <Tooltip
@@ -70,6 +72,7 @@ const ClassList = ({ classMeta, role }) => {
                                         >
                                             <IconButton
                                                 className="depad_question_button"
+                                                name={student.first_name}
                                                 value={student.id}
                                                 content={hasQuestion(
                                                     student.id
@@ -105,13 +108,8 @@ const ClassList = ({ classMeta, role }) => {
                     You haven't added any students to this classroom.
                 </p>
             )}
-            <AnswerModal
-                open={open}
-                setOpen={setOpen}
-                question={question}
-                classroomId={classMeta['id']}
-            />
-        </>
+            <AnswerModal open={open} setOpen={setOpen} question={question} />
+        </div>
     );
 };
 
