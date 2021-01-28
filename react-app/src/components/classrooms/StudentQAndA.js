@@ -28,16 +28,18 @@ const StudentQAndA = () => {
 
     // On save, the submit button should appear.
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setPending(true);
-        postQuestion(classroomId, currentUser.id, textarea);
-        const data = fetchStudentQuestion(classroomId, currentUser.id);
+        await postQuestion(classroomId, currentUser.id, textarea);
+        const data = await fetchStudentQuestion(classroomId, currentUser.id);
         dispatch(getStudentQuestion(data));
+        setPending(true);
     };
 
     const handleNewQuestion = () => {
         patchQuestionAcceptance(classroomId, question.id);
         dispatch(acceptAnswer(question));
+        dispatch(clearQuestion());
         setTextarea('');
     };
 
@@ -101,10 +103,10 @@ const StudentQAndA = () => {
                 <b>Value:</b> {textarea}
             </p> */}
 
-            {readyToSubmit && textarea !== '' ? (
+            {!pending && readyToSubmit && textarea !== '' ? (
                 <button onClick={() => handleSubmit()}>Submit</button>
             ) : null}
-            {textarea !== '' && textarea !== undefined ? (
+            {!pending && textarea !== '' && textarea !== undefined ? (
                 <button onClick={() => setTextarea('')}>Clear Input</button>
             ) : null}
         </section>
