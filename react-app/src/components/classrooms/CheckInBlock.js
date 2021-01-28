@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    checkInStudent,
-    patchStudentCheckIn,
-} from '../../store/classroom_meta';
+import { checkInStudent, postStudentCheckIn } from '../../store/classroom_meta';
 
 const CheckInBlock = ({ classMeta, userId }) => {
     const dispatch = useDispatch();
 
     const handleCheckIn = async () => {
-        const request = await patchStudentCheckIn(classMeta['id'], userId);
+        const request = await postStudentCheckIn(classMeta['id'], userId);
         dispatch(checkInStudent(userId));
     };
 

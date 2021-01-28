@@ -33,9 +33,9 @@ const InstructorBlock = ({ classMeta, userId }) => {
     }, [classMeta]);
 
     const Question = () => {
-        if (question.answers.length) {
-            console.log('question.answers: ', question.answers);
-            console.log('question.answers.length', question.answers.length);
+        console.log('question.answer: ', question.answer);
+        if (question.answer) {
+            console.log('question.answer: ', question.answer);
             return (
                 <AnswerView open={open} setOpen={setOpen} question={question} />
             );

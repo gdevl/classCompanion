@@ -6,6 +6,9 @@ export const ALTER_MEETING_LINK = 'ALTER_MEETING_LINK';
 export const ALTER_MEETING_PW = 'ALTER_MEETING_PW';
 export const CHECK_IN_STUDENT = 'CHECK_IN_STUDENT';
 export const SUBMIT_QUESTION = 'SUBMIT_QUESTION';
+export const ANSWER_QUESTION = 'ANSWER_QUESTION';
+export const DISMISS_QUESTION = 'DISMISS_QUESTION';
+export const ACCEPT_ANSWER = 'ACCEPT_ANSWER';
 
 export const getClassroomMeta = (classroom) => {
     return {
@@ -62,11 +65,100 @@ export const submitQuestion = (question) => {
     };
 };
 
-export const postQuestion = async (classId, studentId, content) => {
+export const answerQuestion = (answer, question) => {
+    const newQuestionWithAnswer = {
+        ...question,
+        answer,
+    };
+    return {
+        type: ANSWER_QUESTION,
+        newQuestionWithAnswer,
+    };
+};
+
+export const dismissQuestion = (question) => {
+    return {
+        type: DISMISS_QUESTION,
+        question,
+    };
+};
+
+export const acceptAnswer = (answer) => {
+    return {
+        type: ACCEPT_ANSWER,
+        answer,
+    };
+};
+
+export const patchAnswer = async (classId, questionId, answer) => {
+    const body = {
+        classId,
+        questionId,
+        answer,
+    };
+
+    const request = await fetch(
+        `/api/classes/${classId}/question/${questionId}/answer`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }
+    );
+    const response = await request.json();
+    return response;
+};
+
+export const patchQuestionDismissal = async (classId, questionId) => {
+    const body = {
+        classId,
+        questionId,
+    };
+
+    const request = await fetch(
+        `/api/classes/${classId}/question/${questionId}/dismiss`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }
+    );
+    const response = await request.json();
+    return response;
+};
+
+export const patchQuestionAcceptance = async (classId, questionId) => {
+    console.log('classId', classId);
+    console.log('questionId', questionId);
+    const body = {
+        classId,
+        questionId,
+    };
+
+    const request = await fetch(
+        `/api/classes/${classId}/question/${questionId}/accept`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }
+    );
+    const response = await request.json();
+    return response;
+};
+
+export const postQuestion = async (classId, studentId, question) => {
+    console.log('question: ', question);
     const body = {
         classId,
         studentId,
-        content,
+        question,
     };
 
     const request = await fetch(
@@ -83,7 +175,7 @@ export const postQuestion = async (classId, studentId, content) => {
     return response;
 };
 
-export const patchStudentCheckIn = async (classId, studentId) => {
+export const postStudentCheckIn = async (classId, studentId) => {
     const body = {
         classId,
         studentId,
@@ -222,6 +314,30 @@ export default function reducer(state = {}, action) {
             let newState = { ...state };
             newState['questions'].push(action.question);
             return newState;
+        }
+        case ANSWER_QUESTION: {
+            let newState = { ...state };
+            let newQuestions = [];
+            for (let question of newState['questions']) {
+                if (question.id === action.newQuestionWithAnswer.id) {
+                    newQuestions.push(action.newQuestionWithAnswer);
+                } else {
+                    newQuestions.push(question);
+                }
+            }
+            return newState;
+        }
+        case DISMISS_QUESTION: {
+            return {
+                ...state,
+            };
+        }
+
+        case ACCEPT_ANSWER: {
+            debugger;
+            return {
+                ...state,
+            };
         }
         default:
             return state;

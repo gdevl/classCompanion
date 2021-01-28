@@ -25,8 +25,10 @@ const ClassList = ({ classMeta, role }) => {
         setOpen(true);
     };
 
+    console.log('classMeta["students"]: ', classMeta['students']);
+
     return (
-        <>
+        <> 
             {classMeta['students'].length > 0 ? (
                 classMeta['students'].map((student) => (
                     <div
@@ -103,7 +105,12 @@ const ClassList = ({ classMeta, role }) => {
                     You haven't added any students to this classroom.
                 </p>
             )}
-            <AnswerModal open={open} setOpen={setOpen} question={question} />
+            <AnswerModal
+                open={open}
+                setOpen={setOpen}
+                question={question}
+                classroomId={classMeta['id']}
+            />
         </>
     );
 };

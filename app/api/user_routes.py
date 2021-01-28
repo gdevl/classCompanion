@@ -74,6 +74,7 @@ def updateUser(id):
         db.session.commit()
         return user.to_dict()
 
+
 # @user_routes.route("/<int:id>/update", methods=["GET", "PUT"])
 # # @login_required
 # def updateUser(id):

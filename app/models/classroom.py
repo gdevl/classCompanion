@@ -55,7 +55,7 @@ class Classroom(db.Model):
             "image_url": self.class_image_url,
             "questions": [
                 question.to_dict()
-                for question in self.questions
+                for question in self.questions if question.resolved is False
             ],
             "instructors": [
                 instructor.to_dict() for instructor in self.instructors],

@@ -14,6 +14,8 @@ import { fetchClassrooms, setUserClasses } from '../../../../src/store/users';
 import {
     getClassroomMeta,
     fetchClassroomData,
+    patchQuestionAcceptance,
+    acceptAnswer,
 } from '../../../store/classroom_meta';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,15 +72,26 @@ export default function AnswerView({ open, setOpen, question }) {
     const dispatch = useDispatch();
     const classes = useStyles();
 
-    const acceptAnswer = async () => {
-        const response = await fetch(
-            `/api/classes/answer/${question.id}/accept`
-        );
-        if (response.ok) {
-            const classroom = await fetchClassroomData(question.class_id);
-            dispatch(getClassroomMeta(classroom));
-        }
+    const handleAnswer = async () => {
+        // const response = await fetch(
+        //     `/api/classes/${question.class_id}/question/${question.id}/accept`,
+        //     {
+        //         method: 'PATCH',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify(body)
+        //     }
+        // );
+
+        const response = await patchQuestionAcceptance(question.class_id, question.id);
+        console.log('response: ', response);
+        dispatch(acceptAnswer(question));
         handleClose();
+        if (response.ok) {
+            // const classroom = await fetchClassroomData(question.class_id);
+            // dispatch(getClassroomMeta(classroom));
+        }
     };
     const handleClose = () => {
         setOpen(false);
@@ -107,7 +120,7 @@ export default function AnswerView({ open, setOpen, question }) {
                             className={classes.paper}
                             noValidate
                             autoComplete="off"
-                            onSubmit={acceptAnswer}
+                            onSubmit={handleAnswer}
                         >
                             {/* <form className={classes.paper} noValidate autoComplete='off'> */}
                             <Button
@@ -126,13 +139,14 @@ export default function AnswerView({ open, setOpen, question }) {
                                 {`${question.content}?`}
                             </Typography>
                             <Typography variant="h5">
-                                {`${question.answers[0]}`}
+                                {`${question.answer}`}
                             </Typography>
                             <Button
                                 variant="contained"
                                 color="primary"
                                 className={classes.button}
-                                onClick={acceptAnswer}
+                                type="submit"
+                                onClick={handleAnswer}
                             >
                                 Accept
                             </Button>

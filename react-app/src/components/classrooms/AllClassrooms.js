@@ -10,6 +10,8 @@ const AllClassrooms = () => {
     if (!classrooms) return null;
     if (!currentUser) return null;
 
+    console.log('rerender in AllClassrooms');
+
     return (
         <>
             <h1 className="classroom__grid-title">My Classrooms</h1>

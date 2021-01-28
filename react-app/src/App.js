@@ -42,14 +42,14 @@ const App = ({ socket }) => {
         socket.emit('join', currentClassroomId);
     }, [currentClassroomId]);
 
-    useEffect(() => {
-        socket.on('response', async () => {
-            if (currentUser) {
-                const classrooms = await fetchClassDisplay(currentUser.id);
-                dispatch(getUserClassrooms(classrooms));
-            }
-        });
-    });
+    // useEffect(() => {
+    //     socket.on('response', async () => {
+    //         if (currentUser) {
+    //             const classrooms = await fetchClassDisplay(currentUser.id);
+    //             dispatch(getUserClassrooms(classrooms));
+    //         }
+    //     });
+    // }, []);
 
     if (!currentUser) {
         return null;

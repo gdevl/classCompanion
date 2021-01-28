@@ -8,7 +8,6 @@ import {
     Modal,
     TextField,
 } from '@material-ui/core';
-import { fetchClassrooms, setUserClasses } from '../../../../src/store/users';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -19,6 +18,8 @@ import SocketContext from '../../../socketContext';
 import {
     fetchClassroomData,
     getClassroomMeta,
+    postQuestion,
+    submitQuestion
 } from '../../../store/classroom_meta';
 
 const useStyles = makeStyles((theme) => ({
@@ -71,11 +72,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AskQuestion = ({ open, setOpen }) => {
-    // const socket = io.connect("http://localhost:5000");
     const dispatch = useDispatch();
     const socket = useContext(SocketContext);
-    // const currentUser = useSelector((state) => state.store.current_user)
-    // const idd = currentUser.id
     const classes = useStyles();
     const [question, setQuestion] = useState('');
 
@@ -88,35 +86,45 @@ const AskQuestion = ({ open, setOpen }) => {
     const currentUser = useSelector((state) => state.currentUser);
     const currentClassroomId = useSelector((state) => state.currentClassroomId);
 
-    const postQuestion = async () => {
-        const response = await fetch(
-            `/api/classes/${currentClassroomId}/user/${currentUser.id}/question`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question }),
-            }
-        );
-        if (response.ok) {
-            console.log('question:');
-            console.log(question);
+    const submitQuestion = async () => {
+        console.log('question: ', question)
+        const request = await postQuestion(currentClassroomId, currentUser.id, question);
+        dispatch(submitQuestion(question));
+        handleClose();
+        if (request.ok) {
             socket.emit('question', {
                 question: question,
                 classroom: currentClassroomId,
             });
-            const classroom = await fetchClassroomData(currentClassroomId);
-            dispatch(getClassroomMeta(classroom));
         }
-        handleClose();
-    };
+    }
+
+    // const postQuestion = async () => {
+    //     const response = await fetch(
+    //         `/api/classes/${currentClassroomId}/user/${currentUser.id}/question`,
+    //         {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({ question }),
+    //         }
+    //     );
+    //     if (response.ok) {
+    //         console.log('question:');
+    //         console.log(question);
+    //         socket.emit('question', {
+    //             question: question,
+    //             classroom: currentClassroomId,
+    //         });
+    //         const classroom = await fetchClassroomData(currentClassroomId);
+    //         dispatch(getClassroomMeta(classroom));
+    //     }
+    //     handleClose();
+    // };
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    const updateQuestion = (e) => {
-        setQuestion(e.target.value);
-    };
 
     return (
         <div className="question__container">
@@ -138,7 +146,7 @@ const AskQuestion = ({ open, setOpen }) => {
                             className={classes.paper}
                             noValidate
                             autoComplete="off"
-                            onSubmit={postQuestion}
+                            onSubmit={submitQuestion}
                         >
                             <Button
                                 size="large"
@@ -163,13 +171,13 @@ const AskQuestion = ({ open, setOpen }) => {
                                 rows={4}
                                 // defaultValue="Default Value"
                                 // variant="filled"
-                                onChange={updateQuestion}
+                                onChange={e => setQuestion(e.target.value)}
                             />
                             <Button
                                 variant="contained"
                                 color="primary"
+                                type="submit"
                                 className={classes.button}
-                                onClick={postQuestion}
                             >
                                 Submit
                             </Button>

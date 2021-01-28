@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from ..models import db
-from app.models import User, Classroom, Group, Question, Answer, CheckIn
+from app.models import User, Classroom, Group, Question, CheckIn, Student
 import math
 import random
 
@@ -52,17 +52,11 @@ def update_enrollment(id):
         classroom = Classroom.query.get(id)
         classroom.students.clear()
         req_data = request.get_json()
-        # print('REQUEST DATA:')
-        # print(req_data)
         for user_id in req_data:
             int(user_id)
         enrolled_users = User.query.filter(User.id.in_(req_data))
         for user in enrolled_users:
             student = user.to_dict()
-            # print('STUDENT')
-            # print(student)
-            # print('USER')
-            # print(user)
             classroom.students.append(user)
         db.session.add(classroom)
         db.session.commit()
@@ -307,15 +301,123 @@ def get_groups(class_id):
     return jsonify([class_group.get_members() for class_group in class_groups])
 
 
+# Answer Question
+@class_routes.route(
+    '/<int:class_id>/question/<int:question_id>/answer',
+    methods=['PATCH'])
+def answer_question(class_id, question_id):
+    selected_question = Question.query.get(question_id)
+    req_data = request.get_json()
+    answer = req_data['answer']
+    selected_question.answer = answer
+
+    db.session.commit()
+    return jsonify("Answer submitted.")
+
+
+# Dismiss Question
+@class_routes.route(
+    '/<int:class_id>/question/<int:question_id>/dismiss',
+    methods=['PATCH'])
+def dismiss_question(class_id, question_id):
+    selected_question = Question.query.get(question_id)
+    selected_question.resolved = True
+    db.session.commit()
+    return jsonify("Question dismissed.")
+
+
+# Accept Answer
+@class_routes.route(
+    '/<int:class_id>/question/<int:question_id>/accept',
+    methods=['PATCH'])
+def accept_answer(class_id, question_id):
+    selected_question = Question.query.get(question_id)
+    selected_question.resolved = True
+    db.session.commit()
+    return jsonify("Answer accepted.")
+
+
+# Post Question
+@class_routes.route(
+    "/<int:class_id>/user/<int:user_id>/question",
+    methods=["POST"])
+# @login_required
+def postQuestion(class_id, user_id):
+    req_data = request.get_json()
+    question = Question(
+        content=req_data['question'],
+        student_id=user_id,
+        class_id=class_id
+    )
+
+    db.session.add(question)
+    db.session.commit()
+
+    # emit question
+    return question.to_dict()
+
+
+# Post CheckIn
+@class_routes.route(
+    '/<int:class_id>/user/<int:student_id>/checkin',
+    methods=['POST'])
+def check_in(class_id, student_id):
+    checkin = CheckIn(
+        student_id=student_id,
+        class_id=class_id,
+    )
+    db.session.add(checkin)
+    db.session.commit()
+
+    return {
+        "userId": student_id,
+        "classId": class_id,
+        "success": "yes",
+    }
+
+
+# fetch unresolved questions by user and classroom
+@class_routes.route('/<int:c_id>/student/<int:s_id>/question')
+def get_student_question(c_id, s_id):
+    classroom = Classroom.query.get(c_id)
+    student = Student.query.get(s_id)
+
+    question = Question.query.filter(
+        Question.resolved == False,
+        Question.student_id == student.id,
+        Question.class_id == classroom.id
+    ).first()
+
+    if question:
+        return question.to_dict()
+    else:
+        return {}
+
+
 # Fetch unresolved questions by class_id
-@class_routes.route('/<int:id>/questions')
-def get_unresolved_questions(id):
-    class_questions = Question.query.filter(
-        Question.class_id == id, not Question.resolved).all()
-    return {[class_question.to_dict() for class_question in class_questions]}
+# @class_routes.route('/<int:id>/questions')
+# def get_unresolved_questions(id):
+#     class_questions = Question.query.filter(
+#         Question.class_id == id, Question.resolved is False).all()
+#     return jsonify(
+#         [class_question.to_dict() for class_question in class_questions]
+#     )
+
+@class_routes.route('/<int:class_id>/questions')
+def get_unresolved_questions(class_id):
+    classroom = Classroom.query.get(class_id)
+    unresolved = [
+        question.to_dict()
+        for question in classroom.questions
+        if not question.resolved
+    ]
+    return jsonify(unresolved)
+
+
 
 
 # Fetch archived questions by class_id
+
 @class_routes.route('/<int:id>/questions/archive')
 def get_resolved_questions(id):
     archived_questions = Question.query.filter(
@@ -331,61 +433,14 @@ def get_resolved_questions(id):
     }
 
 
-# @class_routes.route(
-#     '/<int:class_id>/question/<int:question_id>/answer',
-#     methods=['GET', 'POST']
-# )
-# def answer_question(class_id, question_id):
-#     if request.method == 'POST':
-#         req_data = request.get_json()
-#         selected_question = Question.query.get(question_id)
-#         answer = Answer(
-#             content=req_data['answer'],
-#             instructor_id=req_data['instructor_id'],
-#             question_id=question_id,
-#         )
-#         db.session.add(answer)
-#         selected_question.resolved = True
-#         db.session.add(selected_question)
-#         db.session.commit()
-#         return jsonify("Answer submitted.")
-
-
-@class_routes.route(
-    '/<int:class_id>/question/<int:question_id>/answer',
-    methods=['PATCH']
-)
-def answer_question(class_id, question_id):
-    if request.method == 'POST':
-        req_data = request.get_json()
-        answer = req_data['answer']
-        selected_question = Question.query.get(question_id)
-        selected_question.answer = answer
-
-        db.session.commit()
-        return jsonify("Answer submitted.")
-
-
-@class_routes.route(
-    '/<int:class_id>/question/<int:question_id>/dismiss',
-    methods=['PATCH']
-)
-def dismiss_question(class_id, question_id):
-    req_data = request.get_json()
-    selected_question = Question.query.get(question_id)
-    selected_question.resolved = True
-    db.session.commit()
-    return jsonify("Question dismissed.")
-
-
-@class_routes.route('/answer/<int:answer_id>/accept',
-                    methods=['GET', 'POST'])
-def accept_answer(answer_id):
-    answer = Answer.query.get(answer_id)
-    answer.active = False
-    db.session.add(answer)
-    db.session.commit()
-    return jsonify("ACCEPT ANSWER")
+# @class_routes.route('/answer/<int:answer_id>/accept',
+#                     methods=['GET', 'POST'])
+# def accept_answer(answer_id):
+#     answer = Answer.query.get(answer_id)
+#     answer.active = False
+#     db.session.add(answer)
+#     db.session.commit()
+#     return jsonify("ACCEPT ANSWER")
 
     
 # @class_routes.route(
@@ -408,46 +463,24 @@ def accept_answer(answer_id):
 #         db.session.commit()
 #         return jsonify("Question dismissed.")
 
+# @class_routes.route(
+#     '/<int:class_id>/question/<int:question_id>/answer',
+#     methods=['GET', 'POST']
+# )
+# def answer_question(class_id, question_id):
+#     if request.method == 'POST':
+#         req_data = request.get_json()
+#         selected_question = Question.query.get(question_id)
+#         answer = Answer(
+#             content=req_data['answer'],
+#             instructor_id=req_data['instructor_id'],
+#             question_id=question_id,
+#         )
+#         db.session.add(answer)
+#         selected_question.resolved = True
+#         db.session.add(selected_question)
+#         db.session.commit()
+#         return jsonify("Answer submitted.")
 
-# post question
-@class_routes.route(
-    "/<int:class_id>/user/<int:user_id>/question",
-    methods=["POST"]
-)
-# @login_required
-def postQuestion(class_id, user_id):
-    req_data = request.get_json()
-    question = Question(
-        content=req_data['question'],
-        image_url=None,
-        student_id=user_id,
-        instructor_id=None,
-        class_id=class_id
-    )
-
-    db.session.add(question)
-    db.session.commit()
-
-    # emit question
-    return question.to_dict()
-
-
-@class_routes.route(
-    '/<int:class_id>/user/<int:student_id>/checkin',
-    methods=['POST']
-)
-def check_in(class_id, student_id):
-    checkin = CheckIn(
-        student_id=student_id,
-        class_id=class_id,
-    )
-    db.session.add(checkin)
-    db.session.commit()
-
-    return {
-        "userId": student_id,
-        "classId": class_id,
-        "success": "yes",
-    }
 
 

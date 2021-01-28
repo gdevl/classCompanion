@@ -107,9 +107,13 @@ class User(db.Model, UserMixin):
                 classroom.to_dict() for classroom in self.classrooms],
         }
 
+    def get_user_questions(self):
+        return {
+            "questions": [question.to_dict() for question in self.questions]
+        }
+
 
 class Instructor(User):
-    answers = db.relationship('Answer', back_populates='instructor')
     classrooms = db.relationship(
         'Classroom',
         secondary=classroom_user,

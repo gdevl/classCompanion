@@ -2,13 +2,12 @@ import React, { useContext } from 'react';
 import io from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    fetchClassrooms,
-    setUserClasses,
-    setCurrentClassRoom,
-} from '../../../../src/store/users';
-import {
     getClassroomMeta,
     fetchClassroomData,
+    answerQuestion,
+    dismissQuestion,
+    patchAnswer,
+    patchQuestionDismissal,
 } from '../../../store/classroom_meta';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -19,13 +18,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import SocketContext from '../../../socketContext';
 
-export default function AnswerModal({ open, setOpen, question }) {
-    //   const socket = io.connect("http://localhost:5000");
+export default function AnswerModal({ open, setOpen, question, classroomId }) {
     const socket = useContext(SocketContext);
     const dispatch = useDispatch();
 
     const currentUser = useSelector((state) => state.currentUser);
-    const currentClassroomId = useSelector((state) => state.currentClassroomId);
 
     const [answer, setAnswer] = React.useState('');
     const handleAnswerChange = (event) => {
@@ -35,7 +32,7 @@ export default function AnswerModal({ open, setOpen, question }) {
     const handleDismiss = async () => {
         //implement question dismiss here
         const response = await fetch(
-            `/api/classes/${currentClassroomId}/question/${question.id}/dismiss`,
+            `/api/classes/${classroomId}/question/${question.id}/dismiss`,
             {
                 method: 'POST',
                 headers: {
@@ -48,45 +45,33 @@ export default function AnswerModal({ open, setOpen, question }) {
             }
         );
         if (response.ok) {
-            const classroom = await fetchClassroomData(currentClassroomId);
+            const classroom = await fetchClassroomData(classroomId);
             dispatch(getClassroomMeta(classroom));
             socket.emit('dismiss', {
                 answer: answer,
-                classroom: currentClassroomId,
+                classroom: classroomId,
             });
             // setExpanded(null);
-            setOpen(null);
+            setOpen(false);
         }
     };
 
     const handleSubmit = async () => {
-        //implement form submission here
-        const response = await fetch(
-            `/api/classes/${currentClassroomId}/question/${question.id}/answer`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    instructor_id: currentUser.id,
-                    answer: answer,
-                }),
-            }
-        );
-        if (response.ok) {
+        const request = await patchAnswer(classroomId, question.id, answer);
+        console.log('request: ', request);
+        dispatch(answerQuestion(answer, question));
+        setOpen(false);
+        if (request.ok) {
             console.log('answer:');
             console.log(answer);
             socket.emit('answer', {
                 answer: answer,
-                classroom: currentClassroomId,
+                classroom: classroomId,
             });
-            const classroom = await fetchClassroomData(currentClassroomId);
-            dispatch(getClassroomMeta(classroom));
-            setOpen(null);
+            // const classroom = await fetchClassroomData(classroomId);
+            // dispatch(getClassroomMeta(classroom));
         }
 
-        // props.setOpen(null)
     };
 
     if (!question) return null;
@@ -94,7 +79,7 @@ export default function AnswerModal({ open, setOpen, question }) {
         <>
             <Dialog
                 open={open}
-                onClose={() => setOpen(null)}
+                onClose={() => setOpen(false)}
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title">{`Name's Question`}</DialogTitle>
@@ -112,7 +97,7 @@ export default function AnswerModal({ open, setOpen, question }) {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(null)} color="primary">
+                    <Button onClick={() => setOpen(false)} color="primary">
                         Cancel
                     </Button>
                     <Button onClick={handleDismiss} color="primary">

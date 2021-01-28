@@ -28,11 +28,7 @@ class Question(db.Model):
         "Classroom",
         back_populates="questions"
     )
-    answers = db.relationship(
-        "Answer",
-        back_populates="question"
-    )
-
+    
     def to_dict(self):
         return {
             "id": self.id,
