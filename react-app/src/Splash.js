@@ -130,7 +130,7 @@ const Splash = ({ authenticated, setAuthenticated }) => {
                 </div>
                 {/* End hero unit */}
                 <div className="splash__callout-features">
-                    <Grid container spacing={4}>
+                    <Grid container spacing={4} justify="center">
                         <Grid item xs={12} sm={6} md={4}>
                             <Card className={classes.card}>
                                 <CardContent className={classes.cardContent}>
@@ -203,15 +203,12 @@ const Splash = ({ authenticated, setAuthenticated }) => {
                     <a href="https://www.linkedin.com/in/ranson-knorr-b132391b7/">
                         Ranson Knorr
                     </a>
-                    <span>|</span>
                     <a href="https://www.linkedin.com/in/gabriel-lane-4120651bb/">
                         Gabriel Lane
                     </a>
-                    <span>|</span>
                     <a href="https://www.linkedin.com/in/ryan-matuszak-962440147/">
                         Ryan Matuszak
                     </a>
-                    <span>|</span>
                     <a href="https://www.linkedin.com/in/warren-tamagri-5648a71ba/">
                         Warren Tamagri
                     </a>

@@ -554,9 +554,10 @@ h6 {
 }
 
 .footer__devs {
+    align-items: center;
     color: white;
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: column nowrap;
     justify-content: center;
 }
 
@@ -659,6 +660,9 @@ h6 {
     }
     .no-students {
         grid-column: 1 / 4;
+    }
+    .footer__devs {
+        flex-flow: row wrap;
     }
 }
 
