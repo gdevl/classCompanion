@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { ClassroomContext } from './SingleClassroom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { checkInStudent, postStudentCheckIn } from '../../store/classroom_meta';
 
 const CheckInBlock = () => {
@@ -10,7 +10,7 @@ const CheckInBlock = () => {
     const dispatch = useDispatch();
 
     const handleCheckIn = async () => {
-        const request = await postStudentCheckIn(classroomId, currentUser.id);
+        await postStudentCheckIn(classroomId, currentUser.id);
         dispatch(checkInStudent(currentUser.id));
     };
 

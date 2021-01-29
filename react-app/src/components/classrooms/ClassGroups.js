@@ -1,13 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import IconButton from '@material-ui/core/IconButton';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 const ClassGroups = ({ classMeta, role }) => {
     const groups = useSelector((state) => state.groups);
-    const dispatch = useDispatch();
     const groupNumber = useRef(0);
 
     useEffect(() => {});

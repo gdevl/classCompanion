@@ -55,17 +55,21 @@ export default function useFetchClassroomDataAsInstuctor(classroomId) {
             const groupData = await fetchClassGroups(classroomId);
             dispatch(setClassGroups(groupData));
         })();
-        (async () => {
-            const questionData = await fetchClassroomQuestions(classroomId);
-            dispatch(getClassroomQuestions(questionData));
-        })();
-        (async () => {
-            const singleQuestionData = await fetchStudentQuestion(
-                classroomId,
-                currentUser.id
-            );
-            dispatch(getStudentQuestion(singleQuestionData));
-        })();
+        if (currentUser.role === 'instructor') {
+            (async () => {
+                const questionData = await fetchClassroomQuestions(classroomId);
+                dispatch(getClassroomQuestions(questionData));
+            })();
+        }
+        if (currentUser.role === 'student') {
+            (async () => {
+                const singleQuestionData = await fetchStudentQuestion(
+                    classroomId,
+                    currentUser.id
+                );
+                dispatch(getStudentQuestion(singleQuestionData));
+            })();
+        }
         setStatus('success');
     }, [classroomId]);
 

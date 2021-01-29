@@ -14,11 +14,9 @@ const ClassroomsActions = ({ classroomId, classroomName }) => {
     const dispatch = useDispatch();
     const role = useSelector((state) => state.currentUser.role);
     const [open, setOpen] = useState(false);
-    const [activeClassroom, setActiveClassroom] = useState(null);
     const [hideEnrollment, setHideEnrollment] = useState(true);
 
     const handleClose = () => {
-        setActiveClassroom(null);
         setOpen(false);
         dispatch(clearEnrolledStudents());
         dispatch(clearUnenrolledStudents());
@@ -36,7 +34,6 @@ const ClassroomsActions = ({ classroomId, classroomName }) => {
     const handleEnrollment = () => {
         setHideEnrollment(false);
         setOpen(true);
-        setActiveClassroom(classroomId);
     };
 
     return (

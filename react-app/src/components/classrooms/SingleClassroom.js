@@ -1,6 +1,5 @@
 import React, { createContext, useContext } from 'react';
 import { SocketContext } from '../../index';
-import ClassroomContainer from './ClassroomContainer';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import ClassDetailsBlock from './ClassDetailsBlock';

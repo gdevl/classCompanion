@@ -1,44 +1,41 @@
-import React, { useState } from "react";
-import { useHistory, Redirect } from "react-router-dom";
-import { signUp } from "../../../services/auth";
-import SignUpFormHeader from "./SignUpFormHeader";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Button from "@material-ui/core/Button";
-import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { signUp } from '../../../services/auth';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 
 const useStyles = makeStyles((theme) => ({
     signupform: {
-        "& > *": {
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+        '& > *': {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
             margin: theme.spacing(1),
-            width: "40ch",
+            width: '40ch',
         },
     },
     inputs: {
-        width: "100%",
+        width: '100%',
     },
 }));
 
 const SignUpForm = ({ authenticated, setAuthenticated }) => {
-    const history = useHistory();
     const classes = useStyles();
     const [errors, setErrors] = useState([]);
-    const [username, setUsername] = useState("");
-    const [first_name, setFirstName] = useState("");
-    const [last_name, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [repeatPassword, setRepeatPassword] = useState("");
-    const [role, setRole] = useState("");
+    const [username, setUsername] = useState('');
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [role, setRole] = useState('');
     const [signedUp, setSignedUp] = useState(false);
 
     const onSignUp = async (e) => {
@@ -88,10 +85,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
 
     const updateRole = (e) => {
         setRole(e.target.value);
-    };
-
-    const handleGoBack = () => {
-        history.push("/login");
     };
 
     if (authenticated) {
@@ -199,8 +192,8 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
                             value={role}
                             onChange={(e) => updateRole(e)}
                         >
-                            <MenuItem value={"student"}>Student</MenuItem>
-                            <MenuItem value={"instructor"}>Instructor</MenuItem>
+                            <MenuItem value={'student'}>Student</MenuItem>
+                            <MenuItem value={'instructor'}>Instructor</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>

@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import InstructorBlock from './InstructorBlock';
 import ClassDetailsBlock from './ClassDetailsBlock';
 import MeetingDetailsBlock from './MeetingDetailsBlock';
 import ClassList from './ClassList';

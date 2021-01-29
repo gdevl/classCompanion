@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useContext } from 'react';
 import { ClassroomContext } from './SingleClassroom';
 import BreakGroups from './BreakGroups';
 import GroupCreation from './GroupCreation';
 
 const GroupDetailsBlock = () => {
-    const dispatch = useDispatch();
-    const { classroomId, groups, students } = useContext(ClassroomContext);
+    const { classroomId, groups } = useContext(ClassroomContext);
 
     const breakGroups = async () => {
-        const ungroup = await fetch(`/api/classes/${classroomId}/ungroup`, {
+        await fetch(`/api/classes/${classroomId}/ungroup`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,13 +16,10 @@ const GroupDetailsBlock = () => {
     };
 
     const makeGroups = async (classroomId, groupSize) => {
-        const groupResponse = await fetch(
-            `/api/classes/${classroomId}/groups/${groupSize}`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-            }
-        );
+        await fetch(`/api/classes/${classroomId}/groups/${groupSize}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
     };
 
     return (

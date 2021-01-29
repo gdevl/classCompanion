@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ClassroomContext } from './SingleClassroom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useMinimalSelectStyles } from '@mui-treasury/styles/select/minimal';
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import GroupIcon from '@material-ui/icons/Group';
 import PersonIcon from '@material-ui/icons/Person';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -48,10 +46,7 @@ const GroupCreation = ({ makeGroups }) => {
     const handleUpdateGroupSize = async (event) => {
         setGroupSize(event.target.value);
         (async () => {
-            const groupCreationData = makeGroups(
-                classroomId,
-                event.target.value
-            );
+            await makeGroups(classroomId, event.target.value);
         })();
     };
 

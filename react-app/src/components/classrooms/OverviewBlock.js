@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { ClassroomContext } from './SingleClassroom';
-import { useDispatch, useSelector } from 'react-redux';
 
 const OverviewBlock = () => {
     const { questions, classMeta } = useContext(ClassroomContext);

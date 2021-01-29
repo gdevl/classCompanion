@@ -1,40 +1,36 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import CameraIcon from "@material-ui/icons/PhotoCamera";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
-import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
-import GroupWorkIcon from "@material-ui/icons/GroupWork";
-import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import IconButton from "@material-ui/core/IconButton";
-import LoginDialog from "./components/auth/LoginDialog";
-import SignUpDialog from "./components/auth/SignUpDialog";
+import React, { useState } from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
+import GitHubIcon from '@material-ui/icons/GitHub';
+import IconButton from '@material-ui/core/IconButton';
+import LoginDialog from './components/auth/LoginDialog';
+import SignUpDialog from './components/auth/SignUpDialog';
 
 function Copyright() {
     return (
         <Typography variant="body2" className="footer__text" align="center">
-            {"Copyright © "}
+            {'Copyright © '}
             <Link
                 className="footer__copyright-link"
                 color="inherit"
                 href="https://github.com/gdevl/classCorral.git"
             >
                 Class Companion
-            </Link>{" "}
+            </Link>{' '}
             {new Date().getFullYear()}
-            {"."}
+            {'.'}
         </Typography>
     );
 }
@@ -55,14 +51,10 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(8),
     },
     card: {
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        textAlign: "center",
-    },
-    cardMedia: {
-        // paddingTop: "56.25%", // 16:9
-        // paddingTop: "100%", // 16:9
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        textAlign: 'center',
     },
     cardContent: {
         flexGrow: 1,
@@ -71,12 +63,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Splash = ({ authenticated, setAuthenticated }) => {
     const [open, setOpen] = useState(false);
-    const [showLogin, setShowLogin] = useState(false);
     const [showSignUp, setShowSignUp] = useState(false);
-    // const [authenticated, setAuthenticated] = useState(false);
     const classes = useStyles();
     const handleGitHubClick = () => {
-        window.location.href = "https://github.com/gdevl/classCorral.git";
+        window.location.href = 'https://github.com/gdevl/classCorral.git';
     };
 
     return (
@@ -138,7 +128,6 @@ const Splash = ({ authenticated, setAuthenticated }) => {
                         </div>
                     </Container>
                 </div>
-                {/* <Container className={classes.cardGrid} maxWidth="md"> */}
                 {/* End hero unit */}
                 <div className="splash__callout-features">
                     <Grid container spacing={4}>

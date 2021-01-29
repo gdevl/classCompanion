@@ -25,7 +25,7 @@ const TransferList = ({ classroomId }) => {
             dispatch(getRoster(request));
             setLoaded(true);
         })();
-    }, []);
+    }, [classroomId, dispatch]);
 
     const unenrollStudent = async (userId) => {
         const removedStudent = await removeStudentFromClassroom({

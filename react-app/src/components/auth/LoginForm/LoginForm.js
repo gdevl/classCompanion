@@ -1,45 +1,40 @@
-import React, { useState } from "react";
-// import { useDispatch } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import { login } from "../../../services/auth";
-import { setCurrentUser } from "../../../store/users";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-import SchoolIcon from "@material-ui/icons/School";
-import LoginFormHeader from "./LoginFormHeader";
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { login } from '../../../services/auth';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import SchoolIcon from '@material-ui/icons/School';
 
-const accountCreationText = "Create an account to get started.";
-const demoStudentLoginEmail = "jwinger@greendale.edu";
-const demoInstructorLoginEmail = "bchang@greendale.edu";
+const demoStudentLoginEmail = 'jwinger@greendale.edu';
+const demoInstructorLoginEmail = 'bchang@greendale.edu';
 
 const useStyles = makeStyles((theme) => ({
     loginform: {
-        "& > *": {
-            display: "flex",
-            flexDirection: "column",
-            fontFamily: "Mukta !important",
-            justifyContent: "center",
+        '& > *': {
+            display: 'flex',
+            flexDirection: 'column',
+            fontFamily: 'Mukta !important',
+            justifyContent: 'center',
             margin: theme.spacing(1),
-            width: "40ch",
+            width: '40ch',
         },
     },
     inputs: {
-        fontFamily: "Mukta !important",
-        width: "100%",
+        fontFamily: 'Mukta !important',
+        width: '100%',
     },
     instructor: {
-        backgroundColor: "purple",
+        backgroundColor: 'purple',
     },
     login: {
-        backgroundColor: "#ad40b5",
+        backgroundColor: '#ad40b5',
         // backgroundColor: "#7340b5",
-        "&:hover": {
-            backgroundColor: "#7340b5",
+        '&:hover': {
+            backgroundColor: '#7340b5',
             //   backgroundColor: "#ad40b5",
         },
     },
@@ -48,31 +43,28 @@ const useStyles = makeStyles((theme) => ({
 const LoginForm = ({ authenticated, setAuthenticated }) => {
     const classes = useStyles();
     const [errors, setErrors] = useState([]);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [needsSignUp, setNeedsSignUp] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const onLogin = async (e) => {
         e.preventDefault();
         const user = await login(email, password);
         if (!user.errors) {
             setAuthenticated(true);
-            // dispatch(setCurrentUser(user));
         } else {
             console.log(user.errors);
             setErrors(user.errors);
         }
-        // console.log("user: ", user);
     };
 
     const handleStudentDemo = async (e) => {
         e.preventDefault();
-        const user = await login(demoStudentLoginEmail, "password");
+        const user = await login(demoStudentLoginEmail, 'password');
         if (!user.errors) {
-            console.log("authenticated:");
+            console.log('authenticated:');
             console.log(authenticated);
             setAuthenticated(true);
-            console.log("authenticated:");
+            console.log('authenticated:');
             console.log(authenticated);
         } else {
             console.log(user.errors);
@@ -82,7 +74,7 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
 
     const handleInstructorDemo = async (e) => {
         e.preventDefault();
-        const user = await login(demoInstructorLoginEmail, "password");
+        const user = await login(demoInstructorLoginEmail, 'password');
         if (!user.errors) {
             setAuthenticated(true);
         } else {
@@ -98,15 +90,6 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
     const updatePassword = (e) => {
         setPassword(e.target.value);
     };
-
-    const handleSignUp = (e) => {
-        e.preventDefault();
-        setNeedsSignUp(true);
-    };
-
-    if (needsSignUp) {
-        return <Redirect to="/signup" />;
-    }
 
     if (authenticated) {
         return <Redirect to="/" />;

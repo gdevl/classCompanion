@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../services/auth';
+import { clearCurrentClassroom } from '../../store/current_classroom';
+import { clearClassroomMeta } from '../../store/classroom_meta';
+import { clearClassrooms } from '../../store/classrooms';
+import { clearCurrentUser } from '../../store/current_user';
+import { clearClassGroups } from '../../store/groups';
+import { setGroupsDefined } from '../../store/define_groups';
+import { clearQuestion } from '../../store/question';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Button, Modal, TextField } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -8,33 +16,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import LogoutButton from '../auth/LogoutButton';
-import { logout } from '../../services/auth';
 import FaceIcon from '@material-ui/icons/Face';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { clearCurrentClassroom } from '../../store/current_classroom';
-import { clearClassroomMeta } from '../../store/classroom_meta';
-import { clearClassrooms } from '../../store/classrooms';
-import { clearCurrentUser } from '../../store/current_user';
-import { clearClassGroups } from '../../store/groups';
-import { setGroupsDefined } from '../../store/define_groups';
-import { clearQuestion } from '../../store/question';
 
 const useStyles = makeStyles((theme) => ({
     navigation: {
         flexGrow: 1,
         width: '100%',
     },
-    //   menuButton: {
-    //     marginRight: theme.spacing(2),
-    //   },
     title: {
         flexGrow: 1,
         fontFamily: 'Prompt',
@@ -138,10 +129,9 @@ const Navigation = ({ setAuthenticated }) => {
     const displayTitle = classMeta.name ? classMeta.name : 'Class Companion';
 
     const classes = useStyles();
-    const [auth, setAuth] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
     const open1 = Boolean(anchorEl);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const [username, setUsername] = useState(currentUser.username);
     const [email, setEmail] = useState(currentUser.email);
@@ -236,141 +226,123 @@ const Navigation = ({ setAuthenticated }) => {
                     >
                         {displayTitle}
                     </Typography>
-                    {auth && (
-                        <div>
-                            <IconButton
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="secondary"
-                            >
-                                {currentUser.avatar_url ? (
-                                    <Avatar
-                                        alt=""
-                                        src={currentUser.avatar_url}
-                                        className={classes.medium}
-                                    ></Avatar>
-                                ) : (
-                                    <FaceIcon />
-                                )}
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={open1}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleOpenModal}>
-                                    <Modal
-                                        aria-labelledby="transition-modal-title"
-                                        aria-describedby="transition-modal-description"
-                                        className={classes.modal}
-                                        open={open}
-                                        onClose={handleCloseModal}
-                                        closeAfterTransition
-                                        BackdropComponent={Backdrop}
-                                        BackdropProps={{
-                                            timeout: 500,
-                                        }}
-                                    >
-                                        <Fade in={open}>
-                                            <Typography variant="h5">
-                                                <form
-                                                    className={classes.paper}
-                                                    noValidate
-                                                    autoComplete="off"
-                                                    onSubmit={updateProfile}
+                    <div>
+                        <IconButton
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleMenu}
+                            color="secondary"
+                        >
+                            {currentUser.avatar_url ? (
+                                <Avatar
+                                    alt=""
+                                    src={currentUser.avatar_url}
+                                    className={classes.medium}
+                                ></Avatar>
+                            ) : (
+                                <FaceIcon />
+                            )}
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={open1}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleOpenModal}>
+                                <Modal
+                                    aria-labelledby="transition-modal-title"
+                                    aria-describedby="transition-modal-description"
+                                    className={classes.modal}
+                                    open={open}
+                                    onClose={handleCloseModal}
+                                    closeAfterTransition
+                                    BackdropComponent={Backdrop}
+                                    BackdropProps={{
+                                        timeout: 500,
+                                    }}
+                                >
+                                    <Fade in={open}>
+                                        <Typography variant="h5">
+                                            <form
+                                                className={classes.paper}
+                                                noValidate
+                                                autoComplete="off"
+                                                onSubmit={updateProfile}
+                                            >
+                                                <Button
+                                                    size="large"
+                                                    variant="contained"
+                                                    onClick={handleCloseModal}
+                                                    className={classes.exitBtn}
                                                 >
-                                                    {/* <form className={classes.paper} noValidate autoComplete='off'> */}
-                                                    <Button
-                                                        size="large"
-                                                        variant="contained"
-                                                        onClick={
-                                                            handleCloseModal
-                                                        }
-                                                        className={
-                                                            classes.exitBtn
-                                                        }
-                                                        variant="outlined"
-                                                    >
-                                                        x
-                                                    </Button>
-                                                    {/* <Button size='large' variant='contained' onClick={() => handleCloseModal()} className={classes.exitBtn}>x</Button> */}
-                                                    <Avatar
-                                                        alt=""
-                                                        src={avatarUrl}
-                                                        className={
-                                                            classes.avatar
-                                                        }
-                                                        size="large"
-                                                    ></Avatar>
-                                                    <Typography
-                                                        variant="h4"
-                                                        className={
-                                                            classes.editHeading
-                                                        }
-                                                    >
-                                                        Edit Profile
-                                                    </Typography>
-                                                    <TextField
-                                                        id="standard-basic"
-                                                        value={username}
-                                                        onChange={
-                                                            updateUsername
-                                                        }
-                                                        label="Username"
-                                                        autoFocus
-                                                    />
-                                                    <TextField
-                                                        id="standard-basic"
-                                                        value={email}
-                                                        onChange={updateEmail}
-                                                        placeholder={
-                                                            currentUser.email
-                                                        }
-                                                        label="Email"
-                                                    />
-                                                    {/* <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' /> */}
-                                                    <TextField
-                                                        id="standard-basic"
-                                                        value={avatarUrl}
-                                                        onChange={
-                                                            updateAvatarUrl
-                                                        }
-                                                        label="Avatar URL"
-                                                    />
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        className={
-                                                            classes.button
-                                                        }
-                                                        type="submit"
-                                                    >
-                                                        Submit
-                                                    </Button>
-                                                </form>
-                                            </Typography>
-                                        </Fade>
-                                    </Modal>
-                                    Edit Profile
-                                </MenuItem>
-                                <MenuItem onClick={handleLogout}>
-                                    Logout
-                                </MenuItem>
-                            </Menu>
-                        </div>
-                    )}
+                                                    x
+                                                </Button>
+                                                {/* <Button size='large' variant='contained' onClick={() => handleCloseModal()} className={classes.exitBtn}>x</Button> */}
+                                                <Avatar
+                                                    alt=""
+                                                    src={avatarUrl}
+                                                    className={classes.avatar}
+                                                    size="large"
+                                                ></Avatar>
+                                                <Typography
+                                                    variant="h4"
+                                                    className={
+                                                        classes.editHeading
+                                                    }
+                                                >
+                                                    Edit Profile
+                                                </Typography>
+                                                <TextField
+                                                    id="standard-basic"
+                                                    value={username}
+                                                    onChange={updateUsername}
+                                                    label="Username"
+                                                    autoFocus
+                                                />
+                                                <TextField
+                                                    id="standard-basic"
+                                                    value={email}
+                                                    onChange={updateEmail}
+                                                    placeholder={
+                                                        currentUser.email
+                                                    }
+                                                    label="Email"
+                                                />
+                                                {/* <TextField id='standard-basic' value={password} onChange={updatePassword} label='Password' /> */}
+                                                <TextField
+                                                    id="standard-basic"
+                                                    value={avatarUrl}
+                                                    onChange={updateAvatarUrl}
+                                                    label="Avatar URL"
+                                                />
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    className={classes.button}
+                                                    type="submit"
+                                                >
+                                                    Submit
+                                                </Button>
+                                            </form>
+                                        </Typography>
+                                    </Fade>
+                                </Modal>
+                                Edit Profile
+                            </MenuItem>
+                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        </Menu>
+                    </div>
                 </Toolbar>
             </AppBar>
         </div>

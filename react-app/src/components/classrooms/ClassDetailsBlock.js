@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { ClassroomContext } from './SingleClassroom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import {

@@ -14,7 +14,9 @@ const BreakGroups = ({ classroomId, breakGroups }) => {
 
     return (
         <div className="classrooms__actions">
-            <button onClick={() => handleUngroup()}>Ungroup</button>
+            <button className="ungroup" onClick={() => handleUngroup()}>
+                Ungroup
+            </button>
         </div>
     );
 };

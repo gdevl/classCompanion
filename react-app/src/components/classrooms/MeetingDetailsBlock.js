@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { ClassroomContext } from './SingleClassroom';
-import { useDispatch, useSelector } from 'react-redux';
-import { EditText, EditTextarea } from 'react-edit-text';
+import { useDispatch } from 'react-redux';
+import { EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import {
     alterMeetingLink,

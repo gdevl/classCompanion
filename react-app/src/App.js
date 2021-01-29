@@ -6,7 +6,7 @@ import { getUserClassrooms, fetchClassDisplay } from '../src/store/classrooms';
 import { BrowserRouter, Route } from 'react-router-dom';
 import LoginForm from './components/auth/LoginForm/LoginForm';
 import SignUpForm from './components/auth/SignUpForm/SignUpForm';
-import Navigation from './components/NavBar/Navigation';
+import Navigation from './components/navbar/Navigation';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { authenticate } from './services/auth';
 import Footer from './components/footer/Footer';

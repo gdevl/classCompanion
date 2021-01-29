@@ -107,7 +107,7 @@ def on_join(id):
 
 @socketio.on('leave')
 def on_leave(data):
-    username = data['username']
+    # username = data['username']
     classroom = data['classroom']
     room = f'classroom{id}'
     leave_room(room)

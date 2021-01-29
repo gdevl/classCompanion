@@ -354,14 +354,11 @@ h6 {
     text-transform: uppercase;
 }
 
-.student_check_in {
-    background-color: rgba(42, 157, 143, 1);
-}
-
 .classrooms__actions button:hover,
 .meeting_link:hover,
 .ask_a_question:hover,
-.student_check_in:hover
+.student_check_in:hover,
+.qa_buttons:hover
 {
     background-color: rgba(250, 250, 250, 1);
     color: rgba(64, 81, 181, 1);
