@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { SocketContext } from './index';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '../src/store/current_user';
 import { getUserClassrooms, fetchClassDisplay } from '../src/store/classrooms';
@@ -15,8 +16,9 @@ import Splash from './Splash';
 
 const siteTitle = 'Class Companion';
 
-const App = ({ socket }) => {
+const App = () => {
     const dispatch = useDispatch();
+    const socket = useContext(SocketContext);
     const [authenticated, setAuthenticated] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
@@ -41,15 +43,6 @@ const App = ({ socket }) => {
         socket.emit('leave', currentClassroomId);
         socket.emit('join', currentClassroomId);
     }, [currentClassroomId]);
-
-    // useEffect(() => {
-    //     socket.on('response', async () => {
-    //         if (currentUser) {
-    //             const classrooms = await fetchClassDisplay(currentUser.id);
-    //             dispatch(getUserClassrooms(classrooms));
-    //         }
-    //     });
-    // }, []);
 
     if (!currentUser) {
         return null;

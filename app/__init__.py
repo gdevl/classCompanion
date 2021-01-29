@@ -80,13 +80,16 @@ socketio = SocketIO(
     async_mode='eventlet'
 )
 
+
 @socketio.on('connect')
 def test_connect():
     print('Client connected')
 
+
 @socketio.on('disconnect')
 def test_disconnect():
     print('Client disconnected')
+
 
 @socketio.on('join')
 def on_join(id):
@@ -99,11 +102,7 @@ def on_join(id):
 
     print(f'client joined classroom {id}')
     send('has entered the room.', room=room)
-    # except:
-    #     print(f'a classroom with that id does not exist')
 
-    # username = data['username']
-    # classroom = data['classroom']
 
 @socketio.on('leave')
 def on_leave(data):
@@ -114,28 +113,33 @@ def on_leave(data):
     print(f'leaving room {room}')
     # emit(username + ' has left the room.', room=classroom)
 
+
 @socketio.event
 def question(data):
+    print(f'data: {data}')
     print("asked a question")
-    print(data['question'])
-    print(data['classroom'])
-    question = data['question']
-    classroom = data['classroom']
-    emit('response', room=f'classroom{classroom}')
+    classroomId = data['class_id']
+    emit('question_response', data, room=f'classroom{classroomId}')
+
 
 @socketio.event
 def answer(data):
+    print(f'data: {data}')
     print("answered a question")
-    print(data['answer'])
-    answer = data['answer']
-    classroom = data['classroom']
-    emit('response', room=f'classroom{classroom}')
+    classroomId = data['class_id']
+    # print(data['answer'])
+    # answer = data['answer']
+    # classroom = data['classroom']
+    emit('answer_response', data, room=f'classroom{classroomId}')
+    # emit('response', room=f'classroom{data}')
+
 
 @socketio.event
 def dismiss(data):
     print("dismissed a question")
     classroom = data['classroom']
     emit('response', room=f'classroom{classroom}')
+
 
 @socketio.event
 def checkin(data):

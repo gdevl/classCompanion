@@ -1,4 +1,5 @@
-import React, { createContext } from 'react';
+import React, { createContext, useContext } from 'react';
+import { SocketContext } from '../../index';
 import ClassroomContainer from './ClassroomContainer';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -10,20 +11,22 @@ import GroupDetailsBlock from './GroupDetailsBlock';
 import OverviewBlock from './OverviewBlock';
 import CheckInBlock from './CheckInBlock';
 import StudentQAndA from './StudentQAndA';
-import useFetchClassroomAsInstructor from './useFetchClassroomDataAsInstructor';
+import useFetchClassroomData from './useFetchClassroomData';
 
 export const ClassroomContext = createContext(undefined);
 
 const SingleClassroom = ({ userId, classroomId }) => {
+    const socket = useContext(SocketContext);
     const {
         status,
         currentUser,
         classMeta,
         attendance,
         questions,
+        question,
         groups,
         students,
-    } = useFetchClassroomAsInstructor(classroomId);
+    } = useFetchClassroomData(classroomId);
 
     if (!currentUser) return null;
     if (!classMeta) return null;
@@ -42,6 +45,7 @@ const SingleClassroom = ({ userId, classroomId }) => {
                 classroomId,
                 groups,
                 students,
+                question,
             }}
         >
             <Tabs>

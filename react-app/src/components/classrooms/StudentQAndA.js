@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ClassroomContext } from './SingleClassroom';
+import { SocketContext } from '../../index';
 import { useDispatch, useSelector } from 'react-redux';
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
@@ -14,8 +15,8 @@ import {
 
 const StudentQAndA = () => {
     const dispatch = useDispatch();
-    const { currentUser, classroomId } = useContext(ClassroomContext);
-    const question = useSelector((state) => state.question);
+    const socket = useContext(SocketContext);
+    const { currentUser, classroomId, question } = useContext(ClassroomContext);
     const [pending, setPending] = useState(false);
     const [readyToSubmit, setReadyToSubmit] = useState(false);
 
@@ -33,7 +34,9 @@ const StudentQAndA = () => {
         await postQuestion(classroomId, currentUser.id, textarea);
         const data = await fetchStudentQuestion(classroomId, currentUser.id);
         dispatch(getStudentQuestion(data));
-        setPending(true);
+        socket.emit('question', data, (response) => {
+            console.log(response);
+        });
     };
 
     const handleNewQuestion = () => {
@@ -42,16 +45,6 @@ const StudentQAndA = () => {
         dispatch(clearQuestion());
         setTextarea('');
     };
-
-    useEffect(() => {
-        (async () => {
-            const data = await fetchStudentQuestion(
-                classroomId,
-                currentUser.id
-            );
-            dispatch(getStudentQuestion(data));
-        })();
-    }, []);
 
     return (
         <section className="classroom__grid-item-top bg-green">

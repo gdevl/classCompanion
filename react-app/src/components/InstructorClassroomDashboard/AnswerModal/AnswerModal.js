@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import SocketContext from '../../../socketContext';
+import { SocketContext } from '../../../index';
 
 export default function AnswerModal({ open, setOpen, question }) {
     const dispatch = useDispatch();
@@ -26,13 +26,14 @@ export default function AnswerModal({ open, setOpen, question }) {
         console.log('request: ', request);
         dispatch(answerQuestion(answer, question));
         setOpen(false);
+        const data = {
+            ...question,
+            answer,
+        };
+        socket.emit('answer', data);
         if (request.ok) {
             console.log('answer:');
             console.log(answer);
-            socket.emit('answer', {
-                answer: answer,
-                classroom: classroomId,
-            });
         }
     };
 
