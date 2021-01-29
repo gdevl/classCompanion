@@ -39,10 +39,16 @@ const StudentQAndA = () => {
         });
     };
 
+    // const handleChange = ({ value }) => {
+    //     setTextarea(value);
+    //     setReadyToSubmit(true);
+    // };
+
     const handleNewQuestion = () => {
         patchQuestionAcceptance(classroomId, question.id);
         dispatch(acceptAnswer(question));
         dispatch(clearQuestion());
+        setPending(false);
         setTextarea('');
     };
 
@@ -73,11 +79,16 @@ const StudentQAndA = () => {
                                 }
                                 readonly
                             />
-                            <button onClick={() => handleNewQuestion()}>
+                            <button
+                                className="qa_buttons"
+                                onClick={() => handleNewQuestion()}
+                            >
                                 Ask Another
                             </button>
                         </>
-                    ) : null}
+                    ) : (
+                        <p>Awaiting instructor response...</p>
+                    )}
                 </>
             ) : (
                 <>
@@ -89,19 +100,30 @@ const StudentQAndA = () => {
                         onChange={setTextarea}
                         onSave={handleSave}
                     />
+                    {!pending && readyToSubmit && textarea !== '' ? (
+                        <button
+                            className="qa_buttons"
+                            onClick={() => handleSubmit()}
+                        >
+                            Submit
+                        </button>
+                    ) : null}
                 </>
             )}
 
-            {/* <p style={{ paddingLeft: '5px', marginBottom: '5px' }}>
-                <b>Value:</b> {textarea}
-            </p> */}
+            {/* {question}
 
-            {!pending && readyToSubmit && textarea !== '' ? (
-                <button onClick={() => handleSubmit()}>Submit</button>
-            ) : null}
-            {!pending && textarea !== '' && textarea !== undefined ? (
-                <button onClick={() => setTextarea('')}>Clear Input</button>
-            ) : null}
+            {textarea !== '' || readyToSubmit ? (
+                <button className="qa_buttons" onClick={() => handleSubmit()}>
+                    Submit
+                </button>
+            ) : null} */}
+
+            {/* {!pending && readyToSubmit && textarea !== '' ? (
+                <button className="qa_buttons" onClick={() => handleSubmit()}>
+                    Submit
+                </button>
+            ) : null} */}
         </section>
     );
 };

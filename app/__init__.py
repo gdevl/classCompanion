@@ -70,6 +70,7 @@ def react_root(path):
         return app.send_static_file('favicon.ico')
     return app.send_static_file('index.html')
 
+
 # socket code
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(
@@ -111,7 +112,6 @@ def on_leave(data):
     room = f'classroom{id}'
     leave_room(room)
     print(f'leaving room {room}')
-    # emit(username + ' has left the room.', room=classroom)
 
 
 @socketio.event
@@ -127,11 +127,7 @@ def answer(data):
     print(f'data: {data}')
     print("answered a question")
     classroomId = data['class_id']
-    # print(data['answer'])
-    # answer = data['answer']
-    # classroom = data['classroom']
     emit('answer_response', data, room=f'classroom{classroomId}')
-    # emit('response', room=f'classroom{data}')
 
 
 @socketio.event

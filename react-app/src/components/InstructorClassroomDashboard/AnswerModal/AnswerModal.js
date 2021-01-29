@@ -31,10 +31,6 @@ export default function AnswerModal({ open, setOpen, question }) {
             answer,
         };
         socket.emit('answer', data);
-        if (request.ok) {
-            console.log('answer:');
-            console.log(answer);
-        }
     };
 
     if (!question) return null;

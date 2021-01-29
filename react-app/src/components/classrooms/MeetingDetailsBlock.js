@@ -28,85 +28,75 @@ const MeetingDetailsBlock = () => {
 
     const handleMeetingLinkPatch = async (meeting_link) => {
         const request = await patchMeetingLink(classroomId, meeting_link.value);
-        if (request.ok) {
-            dispatch(alterMeetingLink(meeting_link));
-        }
+        dispatch(alterMeetingLink(request.meeting_link));
     };
 
     const handleMeetingPwPatch = async (meeting_pw) => {
         const request = await patchMeetingPw(classroomId, meeting_pw.value);
-        if (request.ok) {
-            dispatch(alterMeetingPw(meeting_pw));
-        }
+        dispatch(alterMeetingPw(request.meeting_pw));
     };
 
     return (
         <section className="classroom__grid-item-top bg-red">
             <h3>Meeting Info</h3>
-            {classMeta['meeting_link'] ? (
-                <>
-                    <div className="classroom__details-row">
-                        <h4>Meeting Link</h4>
-                        {currentUser.role === 'instructor' ? (
-                            <EditTextarea
-                                onChange={updateMeetingLink}
-                                onSave={handleMeetingLinkPatch}
-                                value={meeting_link}
-                                name="meeting_link"
-                                rows={1}
-                                type="text"
-                                defaultValue={
+
+            <>
+                <div className="classroom__details-row">
+                    <h4>Meeting Link</h4>
+                    {currentUser.role === 'instructor' ? (
+                        <EditTextarea
+                            onChange={updateMeetingLink}
+                            onSave={handleMeetingLinkPatch}
+                            value={meeting_link}
+                            name="meeting_link"
+                            rows={1}
+                            type="text"
+                            defaultValue={
+                                classMeta['meeting_link']
+                                    ? classMeta['meeting_link']
+                                    : 'Click to edit'
+                            }
+                        />
+                    ) : (
+                        <p>
+                            <a
+                                className="meeting_link"
+                                href={
                                     classMeta['meeting_link']
                                         ? classMeta['meeting_link']
-                                        : 'Click to edit'
+                                        : '#'
                                 }
-                            />
-                        ) : (
-                            <p>
-                                <a
-                                    className="meeting_link"
-                                    href={
-                                        classMeta['meeting_link']
-                                            ? classMeta['meeting_link']
-                                            : '#'
-                                    }
-                                >
-                                    Launch Meeting
-                                </a>
-                            </p>
-                        )}
-                    </div>
-                    <div className="classroom__details-row">
-                        <h4>Meeting Password</h4>
-                        {currentUser.role === 'instructor' ? (
-                            <EditTextarea
-                                onChange={updateMeetingPw}
-                                onSave={handleMeetingPwPatch}
-                                value={meeting_pw}
-                                name="meeting_pw"
-                                rows={1}
-                                type="text"
-                                defaultValue={
-                                    classMeta['meeting_pw']
-                                        ? classMeta['meeting_pw']
-                                        : 'Click to edit'
-                                }
-                            />
-                        ) : (
-                            <p>
-                                {classMeta['meeting_pw']
+                            >
+                                Launch Meeting
+                            </a>
+                        </p>
+                    )}
+                </div>
+                <div className="classroom__details-row">
+                    <h4>Meeting Password</h4>
+                    {currentUser.role === 'instructor' ? (
+                        <EditTextarea
+                            onChange={updateMeetingPw}
+                            onSave={handleMeetingPwPatch}
+                            value={meeting_pw}
+                            name="meeting_pw"
+                            rows={1}
+                            type="text"
+                            defaultValue={
+                                classMeta['meeting_pw']
                                     ? classMeta['meeting_pw']
-                                    : 'Ask Instructor'}
-                            </p>
-                        )}
-                    </div>
-                </>
-            ) : (
-                <p>
-                    Your instructor hasn't added any video conference
-                    information yet. When they do, it will populate here.
-                </p>
-            )}
+                                    : 'Click to edit'
+                            }
+                        />
+                    ) : (
+                        <p>
+                            {classMeta['meeting_pw']
+                                ? classMeta['meeting_pw']
+                                : 'Ask Instructor'}
+                        </p>
+                    )}
+                </div>
+            </>
         </section>
     );
 };
