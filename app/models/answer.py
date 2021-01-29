@@ -16,7 +16,6 @@ class Answer(db.Model):
         server_onupdate=db.func.now()
     )
 
-    question = db.relationship("Question", back_populates="answers")
     instructor = db.relationship("Instructor", back_populates="answers")
 
     def to_dict(self):

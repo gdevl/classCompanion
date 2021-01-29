@@ -1,34 +1,67 @@
-export const GET_CLASS_QUESTIONS = "GET_CLASS_QUESTIONS";
+export const GET_CLASSROOM_QUESTIONS = 'GET_CLASSROOM_QUESTIONS';
+export const ANSWER_QUESTION = 'ANSWER_QUESTION';
 
-export const getClassQuestions = (classroomId) => {
-  return { type: SET_CURRENT_USER, user };
+export const getClassroomQuestions = (questions) => {
+    return { type: GET_CLASSROOM_QUESTIONS, questions };
 };
 
-export const fetchQuestions = async (classId) => {
-  const response = await fetch(`/api/questions/${classId}/classrooms`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const result = await response.json();
-  const classrooms = {};
-  result.classes.classrooms.forEach((classroom) => {
-    if (classroom.active !== false) {
-      classrooms[classroom.id] = classroom;
-    }
-  });
-  return classrooms;
+export const answerQuestion = (answer, question) => {
+    const newQuestionWithAnswer = {
+        ...question,
+        answer,
+    };
+    return {
+        type: ANSWER_QUESTION,
+        newQuestionWithAnswer,
+    };
 };
 
-export default function reducer(state = {}, action) {
-  switch (action.type) {
-    case GET_CLASS_QUESTIONS: {
-      return {
-        ...state,
-        questions: action.questions,
-      };
+export const patchAnswer = async (classId, questionId, answer) => {
+    const body = {
+        classId,
+        questionId,
+        answer,
+    };
+
+    const request = await fetch(
+        `/api/classes/${classId}/question/${questionId}/answer`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }
+    );
+    const response = await request.json();
+    return response;
+};
+
+export const fetchClassroomQuestions = async (classId) => {
+    const request = await fetch(`/api/classes/${classId}/questions`, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const questions = await request.json();
+    return questions;
+};
+
+export default function reducer(state = [], action) {
+    switch (action.type) {
+        case GET_CLASSROOM_QUESTIONS: {
+            return [...action.questions];
+        }
+        case ANSWER_QUESTION: {
+            let newState = [...state];
+            for (let question of newState) {
+                if (question.id === action.newQuestionWithAnswer.id) {
+                    question.answer = action.newQuestionWithAnswer.answer;
+                }
+            }
+            return newState;
+        }
+        default:
+            return state;
     }
-    default:
-      return state;
-  }
 }

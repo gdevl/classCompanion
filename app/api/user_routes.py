@@ -29,26 +29,27 @@ def classes(id):
 
     return {"classes": classrooms}
 
+@user_routes.route('/<int:user_id>/rooms')
+def get_classes(user_id):
+    user = User.query.get(user_id)
+    return jsonify([classroom.truncated() for classroom in user.classrooms if classroom.active])
 
-@user_routes.route('/<int:id>/classes/create', methods=['GET', 'POST'])
-def create_class(id):
+
+@user_routes.route('/<int:user_id>/classes/create', methods=['POST'])
+def create_class(user_id):
     if request.method == 'POST':
         req_data = request.get_json()
+        print(f'req_data {req_data}')
         classroom = Classroom(
             name=req_data['className'],
-            class_image_url=None,
             description=req_data['classDescription'],
-            daily_objective=None,
-            meeting_link=None,
-            meeting_pw=None,
-            active=True
         )
 
-        user = User.query.get(id)
+        instructor = User.query.get(user_id)
         db.session.add(classroom)
-        classroom.instructors.append(user)
+        classroom.instructors.append(instructor)
         db.session.commit()
-        return jsonify('hello')
+        return jsonify(classroom.truncated())
 
 
 @user_routes.route('/me')
@@ -58,19 +59,21 @@ def defaultView():
 
 
 # update user info route example
-@user_routes.route("/<int:id>/update", methods=["GET", "PUT"])
+@user_routes.route("/<int:id>/update", methods=["PUT"])
 # @login_required
 def updateUser(id):
-    user = User.query.get(id)
-    req_data = request.get_json()
-    # return f"{req_data}"
-    user.username = req_data['username']
-    user.email = req_data['email']
-    user.avatar_url = req_data['avatarUrl']
-    # user.hashed_password = generate_password_hash(req_data['password'])
-    db.session.add(user)
-    db.session.commit()
-    return user.to_dict()
+    if request.method == 'PUT':
+        user = User.query.get(id)
+        req_data = request.get_json()
+        # return f"{req_data}"
+        user.username = req_data['username']
+        user.email = req_data['email']
+        user.avatar_url = req_data['avatarUrl']
+        # user.hashed_password = generate_password_hash(req_data['password'])
+        db.session.add(user)
+        db.session.commit()
+        return user.to_dict()
+
 
 # @user_routes.route("/<int:id>/update", methods=["GET", "PUT"])
 # # @login_required

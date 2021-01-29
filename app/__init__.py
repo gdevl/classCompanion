@@ -70,6 +70,7 @@ def react_root(path):
         return app.send_static_file('favicon.ico')
     return app.send_static_file('index.html')
 
+
 # socket code
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(
@@ -80,13 +81,16 @@ socketio = SocketIO(
     async_mode='eventlet'
 )
 
+
 @socketio.on('connect')
 def test_connect():
     print('Client connected')
 
+
 @socketio.on('disconnect')
 def test_disconnect():
     print('Client disconnected')
+
 
 @socketio.on('join')
 def on_join(id):
@@ -99,37 +103,32 @@ def on_join(id):
 
     print(f'client joined classroom {id}')
     send('has entered the room.', room=room)
-    # except:
-    #     print(f'a classroom with that id does not exist')
 
-    # username = data['username']
-    # classroom = data['classroom']
 
 @socketio.on('leave')
 def on_leave(data):
-    username = data['username']
+    # username = data['username']
     classroom = data['classroom']
     room = f'classroom{id}'
     leave_room(room)
     print(f'leaving room {room}')
-    # emit(username + ' has left the room.', room=classroom)
+
 
 @socketio.event
 def question(data):
+    print(f'data: {data}')
     print("asked a question")
-    print(data['question'])
-    print(data['classroom'])
-    question = data['question']
-    classroom = data['classroom']
-    emit('response', room=f'classroom{classroom}')
+    classroomId = data['class_id']
+    emit('question_response', data, room=f'classroom{classroomId}')
+
 
 @socketio.event
 def answer(data):
+    print(f'data: {data}')
     print("answered a question")
-    print(data['answer'])
-    answer = data['answer']
-    classroom = data['classroom']
-    emit('response', room=f'classroom{classroom}')
+    classroomId = data['class_id']
+    emit('answer_response', data, room=f'classroom{classroomId}')
+
 
 @socketio.event
 def dismiss(data):
@@ -137,8 +136,64 @@ def dismiss(data):
     classroom = data['classroom']
     emit('response', room=f'classroom{classroom}')
 
+
 @socketio.event
 def checkin(data):
     print("checked in")
-    classroom = data['classroom']
-    emit('response', room=f'classroom{classroom}')
+    classroom = data['classroomId']
+    emit('checkin_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def meeting_link_update(data):
+    print("meeting link changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('meeting_link_update_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def meeting_pw_update(data):
+    print("meeting link password changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('meeting_link_pw_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def daily_objective_update(data):
+    print("daily objective changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('daily_objective_update_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def description_update(data):
+    print("class description changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('description_update_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def group_status_changed(data):
+    print("group status changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('group_status_changed_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def ungroup_students(data):
+    print("students ungrouped")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('ungroup_response', data, room=f'classroom{classroom}')
+
