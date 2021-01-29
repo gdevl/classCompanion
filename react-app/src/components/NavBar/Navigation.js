@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '../../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../services/auth';
 import { clearCurrentClassroom } from '../../store/current_classroom';
@@ -9,7 +10,9 @@ import { clearClassGroups } from '../../store/groups';
 import { setGroupsDefined } from '../../store/define_groups';
 import { clearQuestion } from '../../store/question';
 import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Button, Modal, TextField } from '@material-ui/core';
+import { Avatar, Button, TextField } from '@material-ui/core';
+import CancelIcon from '@material-ui/icons/Cancel';
+import Dialog from '@material-ui/core/Dialog';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import AppBar from '@material-ui/core/AppBar';
@@ -121,9 +124,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Navigation = ({ setAuthenticated }) => {
+export default function Navigation({ setAuthenticated }) {
     const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.currentUser);
+    const currentUser = useContext(UserContext);
     const currentClassroomId = useSelector((state) => state.currentClassroomId);
     const classMeta = useSelector((state) => state.currentClassroomMeta);
     const displayTitle = classMeta.name ? classMeta.name : 'Class Companion';
@@ -132,6 +135,8 @@ const Navigation = ({ setAuthenticated }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open1 = Boolean(anchorEl);
     const [open, setOpen] = useState(false);
+
+    console.log(currentUser);
 
     const [username, setUsername] = useState(currentUser.username);
     const [email, setEmail] = useState(currentUser.email);
@@ -260,10 +265,9 @@ const Navigation = ({ setAuthenticated }) => {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleOpenModal}>
-                                <Modal
+                                <Dialog
                                     aria-labelledby="transition-modal-title"
                                     aria-describedby="transition-modal-description"
-                                    className={classes.modal}
                                     open={open}
                                     onClose={handleCloseModal}
                                     closeAfterTransition
@@ -280,19 +284,20 @@ const Navigation = ({ setAuthenticated }) => {
                                                 autoComplete="off"
                                                 onSubmit={updateProfile}
                                             >
-                                                <Button
+                                                <IconButton
                                                     size="large"
                                                     variant="contained"
                                                     onClick={handleCloseModal}
                                                     className={classes.exitBtn}
                                                 >
-                                                    x
-                                                </Button>
+                                                    <CancelIcon />
+                                                </IconButton>
                                                 {/* <Button size='large' variant='contained' onClick={() => handleCloseModal()} className={classes.exitBtn}>x</Button> */}
                                                 <Avatar
                                                     alt=""
                                                     src={avatarUrl}
                                                     className={classes.avatar}
+                                                    onChange={setAvatarUrl}
                                                     size="large"
                                                 ></Avatar>
                                                 <Typography
@@ -337,7 +342,7 @@ const Navigation = ({ setAuthenticated }) => {
                                             </form>
                                         </Typography>
                                     </Fade>
-                                </Modal>
+                                </Dialog>
                                 Edit Profile
                             </MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -347,6 +352,4 @@ const Navigation = ({ setAuthenticated }) => {
             </AppBar>
         </div>
     );
-};
-
-export default Navigation;
+}

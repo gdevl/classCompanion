@@ -1,9 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { ClassroomContext } from './SingleClassroom';
+import { UserContext } from '../../App';
 import { SocketContext } from '../../index';
 import { useDispatch } from 'react-redux';
 import { EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
+import Avatar from '@material-ui/core/Avatar';
 import {
     fetchStudentQuestion,
     getStudentQuestion,
@@ -16,7 +18,8 @@ import {
 const StudentQAndA = () => {
     const dispatch = useDispatch();
     const socket = useContext(SocketContext);
-    const { currentUser, classroomId, question } = useContext(ClassroomContext);
+    const currentUser = useContext(UserContext);
+    const { classroomId, question, classMeta } = useContext(ClassroomContext);
     const [pending, setPending] = useState(false);
     const [readyToSubmit, setReadyToSubmit] = useState(false);
 
@@ -49,6 +52,15 @@ const StudentQAndA = () => {
 
     return (
         <section className="classroom__grid-item-top bg-green">
+            <h3>Instructors</h3>
+            {classMeta['instructors']
+                ? classMeta['instructors'].map((instructor) => (
+                      <div className="user_avatar_row">
+                          <Avatar src={`${instructor.avatar_url}`} />
+                          <p>{`${instructor.first_name} ${instructor.last_name}`}</p>
+                      </div>
+                  ))
+                : null}
             {question.content && !question.resolved ? (
                 <>
                     <h3>You said:</h3>

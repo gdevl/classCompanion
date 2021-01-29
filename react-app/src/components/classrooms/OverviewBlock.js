@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { ClassroomContext } from './SingleClassroom';
 
 const OverviewBlock = () => {
-    const { questions, classMeta } = useContext(ClassroomContext);
+    const { questions, classMeta, attendance } = useContext(ClassroomContext);
 
     function checkForUnansweredQuestions() {
         for (let question of questions) {
@@ -27,7 +27,13 @@ const OverviewBlock = () => {
                     <div className="classroom__details-row">
                         <h4>Student Questions</h4>
                         {checkForUnansweredQuestions() ? (
-                            <p>You have unanswered questions!</p>
+                            <p>
+                                You have {`${questions.length}`} unanswered
+                                {questions.length > 1
+                                    ? ' questions'
+                                    : ' question'}
+                                .
+                            </p>
                         ) : (
                             <p>Your question queue is empty.</p>
                         )}

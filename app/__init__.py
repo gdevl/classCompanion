@@ -140,5 +140,60 @@ def dismiss(data):
 @socketio.event
 def checkin(data):
     print("checked in")
-    classroom = data['classroom']
-    emit('response', room=f'classroom{classroom}')
+    classroom = data['classroomId']
+    emit('checkin_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def meeting_link_update(data):
+    print("meeting link changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('meeting_link_update_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def meeting_pw_update(data):
+    print("meeting link password changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('meeting_link_pw_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def daily_objective_update(data):
+    print("daily objective changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('daily_objective_update_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def description_update(data):
+    print("class description changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('description_update_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def group_status_changed(data):
+    print("group status changed")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('group_status_changed_response', data, room=f'classroom{classroom}')
+
+
+@socketio.event
+def ungroup_students(data):
+    print("students ungrouped")
+    print("data:")
+    print(data)
+    classroom = data['classroomId']
+    emit('ungroup_response', data, room=f'classroom{classroom}')
+

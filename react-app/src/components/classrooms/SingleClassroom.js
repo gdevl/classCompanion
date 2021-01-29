@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { SocketContext } from '../../index';
+import { UserContext } from '../../App';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import ClassDetailsBlock from './ClassDetailsBlock';
@@ -14,11 +15,11 @@ import useFetchClassroomData from './useFetchClassroomData';
 
 export const ClassroomContext = createContext(undefined);
 
-const SingleClassroom = ({ userId, classroomId }) => {
+const SingleClassroom = ({ classroomId }) => {
+    const currentUser = useContext(UserContext);
     const socket = useContext(SocketContext);
     const {
         status,
-        currentUser,
         classMeta,
         attendance,
         questions,
@@ -37,7 +38,6 @@ const SingleClassroom = ({ userId, classroomId }) => {
     return (
         <ClassroomContext.Provider
             value={{
-                currentUser,
                 classMeta,
                 attendance,
                 questions,

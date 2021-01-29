@@ -369,11 +369,7 @@ def check_in(class_id, student_id):
     db.session.add(checkin)
     db.session.commit()
 
-    return {
-        "userId": student_id,
-        "classId": class_id,
-        "success": "yes",
-    }
+    return checkin.to_dict()
 
 
 # fetch unresolved questions by user and classroom

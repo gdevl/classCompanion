@@ -1,8 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SocketContext } from './index';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '../src/store/current_user';
-import { getUserClassrooms, fetchClassDisplay } from '../src/store/classrooms';
 import { BrowserRouter, Route } from 'react-router-dom';
 import LoginForm from './components/auth/LoginForm/LoginForm';
 import SignUpForm from './components/auth/SignUpForm/SignUpForm';
@@ -15,6 +14,8 @@ import SingleClassroom from './components/classrooms/SingleClassroom';
 import Splash from './Splash';
 
 const siteTitle = 'Class Companion';
+
+export const UserContext = createContext();
 
 const App = () => {
     const dispatch = useDispatch();
@@ -33,8 +34,6 @@ const App = () => {
             }
             setLoaded(true);
             dispatch(setCurrentUser(user));
-            const classrooms = await fetchClassDisplay(user.id);
-            dispatch(getUserClassrooms(classrooms));
         })();
     }, [authenticated]);
 
@@ -44,12 +43,6 @@ const App = () => {
         socket.emit('join', currentClassroomId);
     }, [currentClassroomId]);
 
-    if (!currentUser) {
-        return null;
-    }
-    if (!loaded) {
-        return null;
-    }
     return (
         <BrowserRouter>
             <Route exact path="/landing">
@@ -73,22 +66,24 @@ const App = () => {
             <Route exact path="/jerry">
                 <h1>Hello Jerry</h1>
             </Route>
-
             <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-                <Navigation
-                    setAuthenticated={setAuthenticated}
-                    title={siteTitle}
-                />
-                <div className="negative-space"></div>
-                {currentClassroomId ? (
-                    <SingleClassroom
-                        userId={currentUser.id}
-                        classroomId={currentClassroomId}
-                    />
+                {loaded && currentUser.id ? (
+                    <UserContext.Provider value={currentUser}>
+                        <Navigation
+                            setAuthenticated={setAuthenticated}
+                            title={siteTitle}
+                        />
+                        <div className="negative-space"></div>
+                        {currentClassroomId ? (
+                            <SingleClassroom classroomId={currentClassroomId} />
+                        ) : (
+                            <AllClassrooms />
+                        )}
+                        <div className="negative-space"></div>
+                    </UserContext.Provider>
                 ) : (
-                    <AllClassrooms />
+                    <p>Loading... </p>
                 )}
-                <div className="negative-space"></div>
                 <Footer />
             </ProtectedRoute>
         </BrowserRouter>

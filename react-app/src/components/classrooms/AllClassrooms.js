@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { UserContext } from '../../App';
+import {
+    getUserClassrooms,
+    fetchClassDisplay,
+} from '../../../src/store/classrooms';
 import ClassroomsActions from './ClassroomsActions';
 import AddClassroom from './AddClassroom';
 import { useSelector } from 'react-redux';
 
 const AllClassrooms = () => {
+    const dispatch = useDispatch();
+    const currentUser = useContext(UserContext);
     const classrooms = useSelector((state) => state.classrooms);
-    const currentUser = useSelector((state) => state.currentUser);
+
+    useEffect(() => {
+        (async () => {
+            const classrooms = await fetchClassDisplay(currentUser.id);
+            dispatch(getUserClassrooms(classrooms));
+        })();
+    }, [currentUser]);
 
     if (!classrooms) return null;
     if (!currentUser) return null;
-
     return (
         <>
             <h1 className="classroom__grid-title">My Classrooms</h1>

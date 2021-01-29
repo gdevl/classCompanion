@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { ClassroomContext } from './SingleClassroom';
+import { SocketContext } from '../../index';
+import { UserContext } from '../../App';
 import { useDispatch } from 'react-redux';
 import { EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
@@ -12,9 +14,9 @@ import {
 
 const ClassDetailsBlock = () => {
     const dispatch = useDispatch();
-    const { currentUser, classMeta, classroomId } = useContext(
-        ClassroomContext
-    );
+    const currentUser = useContext(UserContext);
+    const socket = useContext(SocketContext);
+    const { classMeta, classroomId } = useContext(ClassroomContext);
     const [description, setDescription] = useState(classMeta['description']);
     const [daily_objective, setDailyObjective] = useState(
         classMeta['daily_objective']
@@ -30,9 +32,14 @@ const ClassDetailsBlock = () => {
 
     const handleDescriptionPatch = async (description) => {
         const request = await patchDescription(classroomId, description.value);
-        if (request.ok) {
-            dispatch(alterDescription(description));
-        }
+        dispatch(alterDescription(description));
+        const data = {
+            classroomId,
+            studentId: currentUser.id,
+        };
+        socket.emit('description_update', data, (response) => {
+            console.log(response);
+        });
     };
 
     const handleDailyObjectivePatch = async (daily_objective) => {
@@ -40,9 +47,14 @@ const ClassDetailsBlock = () => {
             classroomId,
             daily_objective.value
         );
-        if (request.ok) {
-            dispatch(alterObjective(daily_objective));
-        }
+        dispatch(alterObjective(daily_objective));
+        const data = {
+            classroomId,
+            studentId: currentUser.id,
+        };
+        socket.emit('daily_objective_update', data, (response) => {
+            console.log(response);
+        });
     };
 
     return (

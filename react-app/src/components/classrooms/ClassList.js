@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { ClassroomContext } from './SingleClassroom';
+import { UserContext } from '../../App';
 import Avatar from '@material-ui/core/Avatar';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,9 +9,8 @@ import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import AnswerModal from './AnswerModal';
 
 const ClassList = () => {
-    const { attendance, currentUser, questions, classMeta } = useContext(
-        ClassroomContext
-    );
+    const currentUser = useContext(UserContext);
+    const { attendance, questions, classMeta } = useContext(ClassroomContext);
     const [open, setOpen] = useState(false);
     const [question, setQuestion] = useState(null);
 

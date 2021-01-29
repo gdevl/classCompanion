@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ClassroomContext } from './SingleClassroom';
+import { SocketContext } from '../../index';
 import { useDispatch } from 'react-redux';
 import { useMinimalSelectStyles } from '@mui-treasury/styles/select/minimal';
 import Select from '@material-ui/core/Select';
@@ -9,10 +10,10 @@ import FormControl from '@material-ui/core/FormControl';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { fetchClassGroups, setClassGroups } from '../../store/groups';
-import { setGroupsDefined } from '../../store/define_groups';
 
 const GroupCreation = ({ makeGroups }) => {
     const { classroomId } = useContext(ClassroomContext);
+    const socket = useContext(SocketContext);
     const minimalSelectClasses = useMinimalSelectStyles();
 
     // moves the menu below the select input
@@ -48,6 +49,12 @@ const GroupCreation = ({ makeGroups }) => {
         (async () => {
             await makeGroups(classroomId, event.target.value);
         })();
+        const data = {
+            classroomId,
+        };
+        socket.emit('group_status_changed', data, (response) => {
+            console.log(response);
+        });
     };
 
     useEffect(() => {
@@ -55,7 +62,6 @@ const GroupCreation = ({ makeGroups }) => {
             (async () => {
                 const groupData = await fetchClassGroups(classroomId);
                 dispatch(setClassGroups(groupData));
-                dispatch(setGroupsDefined(true));
             })();
         }
     }, [handleUpdateGroupSize]);

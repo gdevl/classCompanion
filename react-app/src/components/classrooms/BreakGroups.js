@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useDispatch } from 'react-redux';
+import { ClassroomContext } from './SingleClassroom';
+import { SocketContext } from '../../index';
 import { clearClassGroups } from '../../store/groups';
-import { setGroupsDefined } from '../../store/define_groups';
 
-const BreakGroups = ({ classroomId, breakGroups }) => {
+const BreakGroups = ({ breakGroups }) => {
+    const { classroomId } = useContext(ClassroomContext);
     const dispatch = useDispatch();
+    const socket = useContext(SocketContext);
 
     const handleUngroup = () => {
         breakGroups(classroomId);
-        dispatch(setGroupsDefined(false));
         dispatch(clearClassGroups());
+        const data = {
+            classroomId,
+        };
+        socket.emit('ungroup_students', data, (response) => {
+            console.log(response);
+        });
     };
 
     return (
