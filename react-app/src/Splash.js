@@ -25,7 +25,7 @@ function Copyright() {
             <Link
                 className="footer__copyright-link"
                 color="inherit"
-                href="https://github.com/gdevl/classCorral.git"
+                href="https://github.com/gdevl/classCompanion"
             >
                 Class Companion
             </Link>{' '}
