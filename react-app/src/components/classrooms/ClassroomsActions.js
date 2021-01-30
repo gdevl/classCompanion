@@ -10,9 +10,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-const ClassroomsActions = ({ classroomId, classroomName }) => {
+const ClassroomsActions = ({ classroomId, classroomName, userId, role }) => {
     const dispatch = useDispatch();
-    const role = useSelector((state) => state.currentUser.role);
     const [open, setOpen] = useState(false);
     const [hideEnrollment, setHideEnrollment] = useState(true);
 
@@ -39,14 +38,41 @@ const ClassroomsActions = ({ classroomId, classroomName }) => {
     return (
         <>
             <div className="classrooms__actions">
-                <button onClick={handleViewClassroom}>View</button>
+                <button
+                    className={
+                        role === 'instructor'
+                            ? 'instructor_theme'
+                            : 'student_theme'
+                    }
+                    onClick={handleViewClassroom}
+                >
+                    View
+                </button>
                 {role === 'instructor' ? (
-                    <button onClick={handleEnrollment}>Enrollment</button>
+                    <button
+                        className={
+                            role === 'instructor'
+                                ? 'instructor_theme'
+                                : 'student_theme'
+                        }
+                        onClick={handleEnrollment}
+                    >
+                        Enrollment
+                    </button>
                 ) : (
                     <button className="use-me-for-spacing">Enrollment</button>
                 )}
                 {role === 'instructor' ? (
-                    <button onClick={handleDeleteClassroom}>Delete</button>
+                    <button
+                        className={
+                            role === 'instructor'
+                                ? 'instructor_theme'
+                                : 'student_theme'
+                        }
+                        onClick={handleDeleteClassroom}
+                    >
+                        Delete
+                    </button>
                 ) : (
                     <button className="use-me-for-spacing">Delete</button>
                 )}

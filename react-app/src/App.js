@@ -80,11 +80,11 @@ const App = () => {
                             <AllClassrooms />
                         )}
                         <div className="negative-space"></div>
+                        <Footer />
                     </UserContext.Provider>
                 ) : (
                     <p>Loading... </p>
                 )}
-                <Footer />
             </ProtectedRoute>
         </BrowserRouter>
     );

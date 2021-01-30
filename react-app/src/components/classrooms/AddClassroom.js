@@ -46,7 +46,7 @@ const AddClassroom = ({ userId }) => {
         <div className="add_classroom_action">
             <Button
                 variant="contained"
-                color="secondary"
+                color="primary"
                 onClick={handleClickOpen}
             >
                 Add Classroom

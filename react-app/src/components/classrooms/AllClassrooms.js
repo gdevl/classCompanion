@@ -34,7 +34,12 @@ const AllClassrooms = () => {
                     return (
                         <div
                             key={`cs-${classroom.id}`}
-                            className="classroom__grid-item"
+                            // className="classroom__grid-item"
+                            className={
+                                currentUser.role === 'instructor'
+                                    ? 'classroom__grid-item bg-blue'
+                                    : 'classroom__grid-item bg-green'
+                            }
                         >
                             <h3>{classroom.name}</h3>
                             <p>Size: {classroom.size}</p>
@@ -42,6 +47,7 @@ const AllClassrooms = () => {
                                 classroomId={classroom.id}
                                 classroomName={classroom.name}
                                 userId={currentUser.id}
+                                role={currentUser.role}
                             />
                         </div>
                     );

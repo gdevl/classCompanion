@@ -136,8 +136,6 @@ export default function Navigation({ setAuthenticated }) {
     const open1 = Boolean(anchorEl);
     const [open, setOpen] = useState(false);
 
-    console.log(currentUser);
-
     const [username, setUsername] = useState(currentUser.username);
     const [email, setEmail] = useState(currentUser.email);
     const [avatarUrl, setAvatarUrl] = useState(currentUser.avatar_url);
@@ -215,7 +213,12 @@ export default function Navigation({ setAuthenticated }) {
 
     return (
         <div className={classes.navigation}>
-            <AppBar position="static">
+            <AppBar
+                position="static"
+                color={
+                    currentUser.role === 'instructor' ? 'secondary' : 'primary'
+                }
+            >
                 <Toolbar>
                     {currentClassroomId ? (
                         <IconButton size="medium" onClick={displayAllClasses}>
