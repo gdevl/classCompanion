@@ -78,7 +78,7 @@ const ClassDetailsBlock = () => {
                                 name="description"
                                 type="text"
                                 rows={2}
-                                style={{ width: 'auto' }}
+                                // style={{ width: 'auto' }}
                                 defaultValue={classMeta['description']}
                             />
                         )}
@@ -97,7 +97,7 @@ const ClassDetailsBlock = () => {
                                 name="daily_objective"
                                 rows={2}
                                 type="text"
-                                style={{ width: 'atuo' }}
+                                // style={{ width: 'atuo' }}
                                 defaultValue={
                                     classMeta['daily_objective']
                                         ? classMeta['daily_objective']

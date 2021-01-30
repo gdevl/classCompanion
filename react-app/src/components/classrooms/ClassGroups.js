@@ -1,25 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { ClassroomContext } from './SingleClassroom';
 import Avatar from '@material-ui/core/Avatar';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 const ClassGroups = ({ classMeta, role }) => {
-    const groups = useSelector((state) => state.groups);
-    const groupNumber = useRef(0);
+    const { groups } = useContext(ClassroomContext);
 
     useEffect(() => {});
 
     return (
         <div className="classroom_container-classgroups">
             {Object.keys(groups).length > 0 ? (
-                Object.values(groups).map((group) => {
+                Object.values(groups).map((group, index) => {
                     return (
                         <div
-                            key={`gp-${groupNumber.current}`}
+                            key={`gp-${index + 1}`}
                             className="classroom__group"
                         >
-                            <h3>{`Group ${(groupNumber.current += 1)}`}</h3>
+                            <h3>{`Group ${index + 1}`}</h3>
                             {group.members.map((member) => (
                                 <div
                                     key={`student_container-${member.id}`}
