@@ -196,4 +196,3 @@ def ungroup_students(data):
     print(data)
     classroom = data['classroomId']
     emit('ungroup_response', data, room=f'classroom{classroom}')
-

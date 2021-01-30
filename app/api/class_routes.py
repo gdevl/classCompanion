@@ -390,15 +390,6 @@ def get_student_question(c_id, s_id):
         return {}
 
 
-# Fetch unresolved questions by class_id
-# @class_routes.route('/<int:id>/questions')
-# def get_unresolved_questions(id):
-#     class_questions = Question.query.filter(
-#         Question.class_id == id, Question.resolved is False).all()
-#     return jsonify(
-#         [class_question.to_dict() for class_question in class_questions]
-#     )
-
 @class_routes.route('/<int:class_id>/questions')
 def get_unresolved_questions(class_id):
     classroom = Classroom.query.get(class_id)
@@ -408,8 +399,6 @@ def get_unresolved_questions(class_id):
         if not question.resolved
     ]
     return jsonify(unresolved)
-
-
 
 
 # Fetch archived questions by class_id
@@ -427,56 +416,3 @@ def get_resolved_questions(id):
             in archived_questions
         ]
     }
-
-
-# @class_routes.route('/answer/<int:answer_id>/accept',
-#                     methods=['GET', 'POST'])
-# def accept_answer(answer_id):
-#     answer = Answer.query.get(answer_id)
-#     answer.active = False
-#     db.session.add(answer)
-#     db.session.commit()
-#     return jsonify("ACCEPT ANSWER")
-
-    
-# @class_routes.route(
-#     '/<int:class_id>/question/<int:question_id>/dismiss',
-#     methods=['GET', 'POST']
-# )
-# def dismiss_question(class_id, question_id):
-#     if request.method == 'POST':
-#         req_data = request.get_json()
-#         selected_question = Question.query.get(question_id)
-#         answer = Answer(
-#             content=req_data['answer'],
-#             instructor_id=req_data['instructor_id'],
-#             question_id=question_id,
-#             active=False
-#         )
-#         db.session.add(answer)
-#         selected_question.resolved = True
-#         db.session.add(selected_question)
-#         db.session.commit()
-#         return jsonify("Question dismissed.")
-
-# @class_routes.route(
-#     '/<int:class_id>/question/<int:question_id>/answer',
-#     methods=['GET', 'POST']
-# )
-# def answer_question(class_id, question_id):
-#     if request.method == 'POST':
-#         req_data = request.get_json()
-#         selected_question = Question.query.get(question_id)
-#         answer = Answer(
-#             content=req_data['answer'],
-#             instructor_id=req_data['instructor_id'],
-#             question_id=question_id,
-#         )
-#         db.session.add(answer)
-#         selected_question.resolved = True
-#         db.session.add(selected_question)
-#         db.session.commit()
-#         return jsonify("Answer submitted.")
-
-
-
