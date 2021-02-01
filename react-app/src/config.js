@@ -1,5 +1,5 @@
 export const baseUrl =
-  process.env.REACT_APP_BASEURL || `https://classCorral.herokuapp.com/api`;
+    process.env.REACT_APP_BASEURL || `https://classcompanion.herokuapp.com/api`;
 export const socketUrl =
-  process.env.REACT_APP_SOCKET_URL || `http://localhost:5000`;
-  // process.env.REACT_APP_SOCKET_URL || `https://classCorral.herokuapp.com`;
+    process.env.REACT_APP_SOCKET_URL || `https://classcompanion.herokuapp.com`;
+// process.env.REACT_APP_SOCKET_URL || `http://localhost:5000`;
